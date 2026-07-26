@@ -6,8 +6,10 @@ import {
   UI_LANGUAGE_ENGLISH,
   UI_LANGUAGE_JAPANESE,
   UI_LANGUAGE_KOREAN,
+  UI_LANGUAGE_RUSSIAN,
   UI_LANGUAGE_SPANISH,
-  UI_LANGUAGE_SYSTEM
+  UI_LANGUAGE_SYSTEM,
+  UI_LANGUAGE_TURKISH
 } from './ui-language'
 
 describe('ui-locale', () => {
@@ -32,6 +34,16 @@ describe('ui-locale', () => {
     expect(normalizeSupportedUiLocale('es-ES')).toBe('es')
     expect(normalizeSupportedUiLocale('es-MX')).toBe('es')
     expect(normalizeSupportedUiLocale('es')).toBe('es')
+  })
+
+  it('normalizes Russian locale prefixes', () => {
+    expect(normalizeSupportedUiLocale('ru-RU')).toBe('ru')
+    expect(normalizeSupportedUiLocale('ru')).toBe('ru')
+  })
+
+  it('normalizes Turkish locale prefixes', () => {
+    expect(normalizeSupportedUiLocale('tr-TR')).toBe('tr')
+    expect(normalizeSupportedUiLocale('tr')).toBe('tr')
   })
 
   it('falls back unsupported locales to English', () => {
@@ -64,12 +76,22 @@ describe('ui-locale', () => {
     expect(resolveUiLocale(UI_LANGUAGE_SPANISH, 'en-US')).toBe('es')
   })
 
+  it('resolves explicit Russian independently of system locale', () => {
+    expect(resolveUiLocale(UI_LANGUAGE_RUSSIAN, 'en-US')).toBe('ru')
+  })
+
+  it('resolves explicit Turkish independently of system locale', () => {
+    expect(resolveUiLocale(UI_LANGUAGE_TURKISH, 'en-US')).toBe('tr')
+  })
+
   it('maps system locale to the closest supported locale', () => {
     expect(resolveUiLocale(UI_LANGUAGE_SYSTEM, 'en-GB')).toBe('en')
     expect(resolveUiLocale(UI_LANGUAGE_SYSTEM, 'zh-CN')).toBe('zh')
     expect(resolveUiLocale(UI_LANGUAGE_SYSTEM, 'ko-KR')).toBe('ko')
     expect(resolveUiLocale(UI_LANGUAGE_SYSTEM, 'ja-JP')).toBe('ja')
     expect(resolveUiLocale(UI_LANGUAGE_SYSTEM, 'es-MX')).toBe('es')
+    expect(resolveUiLocale(UI_LANGUAGE_SYSTEM, 'ru-RU')).toBe('ru')
+    expect(resolveUiLocale(UI_LANGUAGE_SYSTEM, 'tr-TR')).toBe('tr')
     expect(resolveUiLocale(UI_LANGUAGE_SYSTEM, 'fr-FR')).toBe('en')
   })
 
@@ -79,5 +101,7 @@ describe('ui-locale', () => {
     expect(resolveRendererUiLocale(UI_LANGUAGE_KOREAN)).toBe('ko')
     expect(resolveRendererUiLocale(UI_LANGUAGE_JAPANESE)).toBe('ja')
     expect(resolveRendererUiLocale(UI_LANGUAGE_SPANISH)).toBe('es')
+    expect(resolveRendererUiLocale(UI_LANGUAGE_RUSSIAN)).toBe('ru')
+    expect(resolveRendererUiLocale(UI_LANGUAGE_TURKISH)).toBe('tr')
   })
 })
