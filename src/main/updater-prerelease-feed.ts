@@ -1,9 +1,9 @@
 import { net } from 'electron'
 import { parse } from 'yaml'
 import { compareVersions, isPrereleaseVersion, isValidVersion } from './updater-fallback'
+const ATOM_FEED_URL = 'https://github.com/skozyatinsky/kosatka/releases.atom'
 
-const ATOM_FEED_URL = 'https://github.com/stablyai/orca/releases.atom'
-const RELEASES_DOWNLOAD_BASE = 'https://github.com/stablyai/orca/releases/download'
+const RELEASES_DOWNLOAD_BASE = 'https://github.com/skozyatinsky/kosatka/releases/download'
 const FETCH_TIMEOUT_MS = 5000
 const MAX_MANIFEST_PROBE_CANDIDATES = 6
 
