@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Plus } from 'lucide-react-native'
+import { useTranslation } from 'react-i18next'
 import { colors, spacing } from '../theme/mobile-theme'
 
 // Diameter of the phone "new workspace" floating action button. Exported so the
@@ -15,6 +16,7 @@ type NewWorkspaceFabProps = {
 // Phone-only floating "+" for creating a workspace. Absolutely positioned so it
 // never intercepts list row taps, and lifted above the home indicator.
 export function NewWorkspaceFab({ onPress, disabled }: NewWorkspaceFabProps): React.JSX.Element {
+  const { t } = useTranslation()
   const insets = useSafeAreaInsets()
   return (
     <Pressable
@@ -27,7 +29,7 @@ export function NewWorkspaceFab({ onPress, disabled }: NewWorkspaceFabProps): Re
       onPress={onPress}
       disabled={disabled}
       accessibilityRole="button"
-      accessibilityLabel="New workspace"
+      accessibilityLabel={t('newWorkspace.fabLabel')}
       hitSlop={8}
     >
       <Plus size={24} color={colors.bgBase} strokeWidth={2.75} />

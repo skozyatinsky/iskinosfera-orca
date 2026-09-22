@@ -20,6 +20,7 @@ import {
   XCircle,
   AlertTriangle
 } from 'lucide-react-native'
+import { useTranslation } from 'react-i18next'
 import { colors, spacing, typography } from '../src/theme/mobile-theme'
 import { loadHosts } from '../src/transport/host-store'
 import {
@@ -53,6 +54,7 @@ function StatusIcon({ status }: { status: CheckResult['status'] }) {
 }
 
 export default function TroubleshootScreen() {
+  const { t } = useTranslation()
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const [expandedId, setExpandedId] = useState<string | null>(null)
@@ -94,11 +96,11 @@ export default function TroubleshootScreen() {
       const hosts = await loadHosts()
       results.push(
         hosts.length > 0
-          ? { label: 'Paired hosts', status: 'pass', detail: `${hosts.length} paired` }
-          : { label: 'Paired hosts', status: 'fail', detail: 'None — scan a QR to pair' }
+          ? { label: t('troubleshooting.pairedHosts'), status: 'pass', detail: `${hosts.length} paired` }
+          : { label: t('troubleshooting.pairedHosts'), status: 'fail', detail: 'None — scan a QR to pair' }
       )
     } catch {
-      results.push({ label: 'Paired hosts', status: 'warn', detail: 'Could not read host data' })
+      results.push({ label: t('troubleshooting.pairedHosts'), status: 'warn', detail: 'Could not read host data' })
     }
 
     if (!isCurrentRun()) {
@@ -117,14 +119,14 @@ export default function TroubleshootScreen() {
       }
       results.push(
         resp.ok
-          ? { label: 'Internet', status: 'pass', detail: 'Connected' }
-          : { label: 'Internet', status: 'warn', detail: 'Unexpected response' }
+          ? { label: t('troubleshooting.internet'), status: 'pass', detail: 'Connected' }
+          : { label: t('troubleshooting.internet'), status: 'warn', detail: 'Unexpected response' }
       )
     } catch {
       if (!isCurrentRun()) {
         return
       }
-      results.push({ label: 'Internet', status: 'fail', detail: 'No connection' })
+      results.push({ label: t('troubleshooting.internet'), status: 'fail', detail: 'No connection' })
     } finally {
       internetCheck.dispose()
       if (activeInternetCheckRef.current === internetCheck) {
@@ -157,7 +159,7 @@ export default function TroubleshootScreen() {
         setChecks([...results])
       }
     } catch {
-      results.push({ label: 'Hosts', status: 'warn', detail: 'Could not test' })
+      results.push({ label: t('troubleshooting.hosts'), status: 'warn', detail: 'Could not test' })
     }
 
     if (!isCurrentRun()) {
@@ -165,7 +167,7 @@ export default function TroubleshootScreen() {
     }
 
     results.push({
-      label: 'Platform',
+      label: t('troubleshooting.platform'),
       status: 'pass',
       detail: `${Platform.OS} ${Platform.Version ?? ''}`
     })
@@ -183,7 +185,7 @@ export default function TroubleshootScreen() {
         <Pressable style={styles.backButton} onPress={() => router.back()}>
           <ChevronLeft size={22} color={colors.textSecondary} />
         </Pressable>
-        <Text style={styles.heading}>Troubleshooting</Text>
+        <Text style={styles.heading}>{t('troubleshooting.title')}</Text>
       </View>
 
       <ScrollView
@@ -207,10 +209,10 @@ export default function TroubleshootScreen() {
           )}
           <Text style={styles.diagnosticButtonLabel}>
             {diagnosticStatus === 'running'
-              ? 'Running…'
+              ? t('troubleshooting.diagnosticsRunning')
               : diagnosticStatus === 'done'
-                ? 'Run again'
-                : 'Run diagnostics'}
+                ? t('troubleshooting.runAgain')
+                : t('troubleshooting.runDiagnostics')}
           </Text>
         </Pressable>
 
@@ -222,7 +224,7 @@ export default function TroubleshootScreen() {
           onPress={() => router.push('/connection-log')}
         >
           <ScrollText size={16} color={colors.textPrimary} />
-          <Text style={styles.diagnosticButtonLabel}>View connection log</Text>
+          <Text style={styles.diagnosticButtonLabel}>{t('troubleshooting.viewConnectionLog')}</Text>
         </Pressable>
 
         {checks.length > 0 && (
@@ -244,7 +246,7 @@ export default function TroubleshootScreen() {
           </View>
         )}
 
-        <Text style={styles.sectionHeading}>Common issues</Text>
+        <Text style={styles.sectionHeading}>{t('troubleshooting.commonIssues')}</Text>
 
         <View style={styles.section}>
           {troubleshootCommonIssues.map((section, i) => (

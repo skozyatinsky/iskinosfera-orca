@@ -16,6 +16,7 @@ import { useAllHostClients } from '../src/transport/client-context'
 import type { RpcClient } from '../src/transport/rpc-client'
 import { PickerModal, type PickerOption } from '../src/components/PickerModal'
 import { TerminalShortcutSettings } from '../src/components/TerminalShortcutSettings'
+import { useTranslation } from 'react-i18next'
 import { setTerminalAutoRestoreFitMsForHost } from '../src/terminal/terminal-auto-restore-fit-state'
 import {
   loadTerminalAutocompleteEnabled,
@@ -120,6 +121,7 @@ function HostFitRow({
 }
 
 export default function TerminalSettingsScreen() {
+  const { t } = useTranslation()
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const [hosts, setHosts] = useState<HostProfile[]>([])
@@ -259,7 +261,7 @@ export default function TerminalSettingsScreen() {
         <Pressable style={styles.backButton} onPress={() => router.back()}>
           <ChevronLeft size={22} color={colors.textSecondary} />
         </Pressable>
-        <Text style={styles.heading}>Terminal</Text>
+        <Text style={styles.heading}>{t('terminal.settings.title')}</Text>
       </View>
 
       <Animated.ScrollView
@@ -272,18 +274,15 @@ export default function TerminalSettingsScreen() {
           scrollContentHeight.value = height
         }}
       >
-        <Text style={styles.groupHeading}>WHEN YOU LEAVE THE APP</Text>
+        <Text style={styles.groupHeading}>{t('terminal.settings.whenYouLeave')}</Text>
         <Text style={styles.groupDescription}>
-          While you&apos;re using a terminal on your phone, Orca shrinks it to fit your screen. When
-          you close the app or switch away, this controls whether it stays at phone size (so
-          interactive CLI tools don&apos;t reflow) or resizes back to your desktop. You can always
-          use Restore this terminal or Restore all terminals on the banner to resize manually.
+          {t('terminal.settings.whenYouLeaveDesc')}
         </Text>
 
         {hosts.length === 0 ? (
           <View style={[styles.section, styles.sectionTopGap]}>
             <Text style={styles.emptyText}>
-              No paired desktops yet. Pair one to control terminal behavior.
+              {t('terminal.settings.noDesktops')}
             </Text>
           </View>
         ) : (
@@ -305,12 +304,9 @@ export default function TerminalSettingsScreen() {
           </View>
         )}
 
-        <Text style={[styles.groupHeading, styles.inputGroupGap]}>TEXT SIZE</Text>
+        <Text style={[styles.groupHeading, styles.inputGroupGap]}>{t('terminal.settings.textSize')}</Text>
         <Text style={styles.groupDescription}>
-          Scale the terminal text. Smaller sizes fit more columns with side margins; larger sizes
-          show fewer columns — drag sideways to pan. You can also pinch to zoom in the terminal
-          itself, which updates this setting. Per-device display only; doesn&apos;t change the
-          desktop terminal.
+          {t('terminal.settings.textSizeDesc')}
         </Text>
         <View style={[styles.section, styles.sectionTopGap]}>
           <Pressable
@@ -319,25 +315,22 @@ export default function TerminalSettingsScreen() {
           >
             <Type size={16} color={colors.textSecondary} />
             <View style={styles.rowContent}>
-              <Text style={styles.rowLabel}>Text size</Text>
+              <Text style={styles.rowLabel}>{t('terminal.settings.textSizeLabel')}</Text>
               <Text style={styles.rowSublabel}>{textSizeSummary(textScale)}</Text>
             </View>
             <ChevronRight size={16} color={colors.textMuted} />
           </Pressable>
         </View>
 
-        <Text style={[styles.groupHeading, styles.inputGroupGap]}>KEYBOARD INPUT</Text>
+        <Text style={[styles.groupHeading, styles.inputGroupGap]}>{t('terminal.settings.keyboardInput')}</Text>
         <Text style={styles.groupDescription}>
-          Enable phone-style autocomplete, autocorrect, and spelling suggestions in the terminal
-          command bar. Off by default so the keyboard never rewrites commands, flags, or paths.
-          Direct keyboard input (when keys go straight to the terminal) always sends raw keystrokes,
-          so suggestions don&apos;t apply there.
+          {t('terminal.settings.keyboardInputDesc')}
         </Text>
         <View style={[styles.section, styles.sectionTopGap]}>
           <View style={styles.row}>
             <View style={styles.rowContent}>
-              <Text style={styles.rowLabel}>Autocomplete &amp; autocorrect</Text>
-              <Text style={styles.rowSublabel}>{autocompleteEnabled ? 'On' : 'Off'}</Text>
+              <Text style={styles.rowLabel}>{t('terminal.settings.autocomplete')}</Text>
+              <Text style={styles.rowSublabel}>{autocompleteEnabled ? t('common.on') : t('common.off')}</Text>
             </View>
             <Switch
               value={autocompleteEnabled}
@@ -358,7 +351,7 @@ export default function TerminalSettingsScreen() {
 
       <PickerModal<RestoreValue>
         visible={pickerHost != null}
-        title={pickerHost ? `Restore ${pickerHost.name}` : ''}
+        title={pickerHost ? t('terminal.settings.restoreLabel', { hostName: pickerHost.name }) : ''}
         options={AUTO_RESTORE_FIT_OPTIONS}
         selected={valueFromMs(pickerHost ? hostMs[pickerHost.id] : null)}
         onSelect={(v) => {
@@ -371,7 +364,7 @@ export default function TerminalSettingsScreen() {
 
       <PickerModal<TextSizeValue>
         visible={textSizePickerOpen}
-        title="Terminal text size"
+        title={t('terminal.settings.textSizeLabel')}
         options={TEXT_SIZE_OPTIONS}
         selected={textSizeValueFromScale(textScale)}
         onSelect={selectTextSize}

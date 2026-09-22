@@ -23,6 +23,7 @@ import {
   type MobileSessionView
 } from '../src/storage/session-view-preferences'
 import { savePushNotificationsEnabled } from '../src/storage/preferences'
+import { useTranslation } from 'react-i18next'
 
 const SLIDE_DURATION_MS = 280
 
@@ -50,6 +51,7 @@ function MobileOnboardingFlow({
   hostId: string | undefined
   rawSteps: string | undefined
 }) {
+  const { t } = useTranslation()
   const router = useRouter()
   const steps = useMemo(() => parseMobileOnboardingSteps(rawSteps), [rawSteps])
   const { width } = useWindowDimensions()
@@ -109,7 +111,7 @@ function MobileOnboardingFlow({
         await saveDefaultSessionView(view)
         advanceOrContinue()
       } catch {
-        setError('Your choice could not be saved. Try again.')
+        setError(t('onboarding.choiceSaveFailed'))
         setBusyChoice(null)
         choiceInFlightRef.current = false
       }
@@ -130,7 +132,7 @@ function MobileOnboardingFlow({
         await savePushNotificationsEnabled(enabled)
         advanceOrContinue()
       } catch {
-        setError('Notification settings could not be updated. Try again.')
+        setError(t('onboarding.notifUpdateFailed'))
         setBusyChoice(null)
         choiceInFlightRef.current = false
       }
@@ -144,7 +146,7 @@ function MobileOnboardingFlow({
     <SafeAreaView style={styles.container}>
       <View style={styles.brandRow}>
         <OrcaLogo size={22} />
-        <Text style={styles.brandName}>Orca</Text>
+        <Text style={styles.brandName}>{t('app.name')}</Text>
         {steps.length > 1 ? (
           <View
             accessible

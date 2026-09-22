@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import { ChevronLeft, ChevronRight, Globe } from 'lucide-react-native'
+import { useTranslation } from 'react-i18next'
 import { PickerModal, type PickerOption } from '../src/components/PickerModal'
 import {
   loadTerminalLinkOpenMode,
@@ -24,13 +25,8 @@ const LINK_MODE_OPTIONS: PickerOption<MobileTerminalLinkOpenMode>[] = [
   }
 ]
 
-function linkModeLabel(mode: MobileTerminalLinkOpenMode): string {
-  return (
-    LINK_MODE_OPTIONS.find((option) => option.value === mode)?.label ?? LINK_MODE_OPTIONS[0]!.label
-  )
-}
-
 export default function BrowserSettingsScreen(): React.JSX.Element {
+  const { t } = useTranslation()
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const [linkMode, setLinkMode] = useState<MobileTerminalLinkOpenMode>('orca-browser')
@@ -45,19 +41,37 @@ export default function BrowserSettingsScreen(): React.JSX.Element {
     void saveTerminalLinkOpenMode(mode)
   }, [])
 
+  const translatedOptions = useMemo(() =>
+    LINK_MODE_OPTIONS.map((opt) => ({
+      ...opt,
+      label:
+        opt.value === 'orca-browser'
+          ? t('browser.settings.orcaBrowser')
+          : t('browser.settings.phoneBrowser')
+    })),
+    [t]
+  )
+
+  function linkModeLabel(mode: MobileTerminalLinkOpenMode): string {
+    return (
+      translatedOptions.find((option: PickerOption) => option.value === mode)?.label ??
+      translatedOptions[0]!.label
+    )
+  }
+
   return (
     <View style={[styles.container, { paddingTop: insets.top + spacing.sm }]}>
       <View style={styles.topRow}>
         <Pressable style={styles.backButton} onPress={() => router.back()}>
           <ChevronLeft size={22} color={colors.textSecondary} />
         </Pressable>
-        <Text style={styles.heading}>Browser</Text>
+        <Text style={styles.heading}>{t('browser.settings.title')}</Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={styles.groupHeading}>LINKS</Text>
+        <Text style={styles.groupHeading}>{t('browser.settings.links')}</Text>
         <Text style={styles.groupDescription}>
-          Choose where HTTP(S) links tapped in terminal output open.
+          {t('browser.settings.linksDesc')}
         </Text>
         <View style={[styles.section, styles.sectionTopGap]}>
           <Pressable
@@ -66,7 +80,7 @@ export default function BrowserSettingsScreen(): React.JSX.Element {
           >
             <Globe size={16} color={colors.textSecondary} />
             <View style={styles.rowContent}>
-              <Text style={styles.rowLabel}>Open terminal links</Text>
+              <Text style={styles.rowLabel}>{t('browser.settings.openTerminalLinks')}</Text>
               <Text style={styles.rowSublabel}>{linkModeLabel(linkMode)}</Text>
             </View>
             <ChevronRight size={16} color={colors.textMuted} />
@@ -76,8 +90,8 @@ export default function BrowserSettingsScreen(): React.JSX.Element {
 
       <PickerModal<MobileTerminalLinkOpenMode>
         visible={pickerOpen}
-        title="Open terminal links"
-        options={LINK_MODE_OPTIONS}
+        title={t('browser.settings.openTerminalLinks')}
+        options={translatedOptions}
         selected={linkMode}
         onSelect={selectLinkMode}
         onClose={() => setPickerOpen(false)}

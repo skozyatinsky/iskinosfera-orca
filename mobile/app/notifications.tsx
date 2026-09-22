@@ -3,6 +3,7 @@ import { AppState, Linking, View, Text, StyleSheet, Pressable, Switch } from 're
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter, useFocusEffect } from 'expo-router'
 import { ChevronLeft } from 'lucide-react-native'
+import { useTranslation } from 'react-i18next'
 import { colors, spacing, typography } from '../src/theme/mobile-theme'
 import {
   loadPushNotificationsEnabled,
@@ -22,6 +23,7 @@ const DEFAULT_PERMISSION_STATE: NotificationPermissionState = {
 }
 
 export default function NotificationsScreen() {
+  const { t } = useTranslation()
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const [pushEnabled, setPushEnabled] = useState(false)
@@ -69,8 +71,8 @@ export default function NotificationsScreen() {
   const switchEnabled = pushEnabled && permissionState.granted
   const notificationsBlocked = permissionState.status === 'denied'
   const hint = notificationsBlocked
-    ? 'Notifications are disabled in system settings.'
-    : 'Get notified on this device when an agent needs your input or finishes a task.'
+    ? t('notifications.disabledInSystem')
+    : t('notifications.getNotified')
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + spacing.sm }]}>
@@ -78,12 +80,12 @@ export default function NotificationsScreen() {
         <Pressable style={styles.backButton} onPress={() => router.back()}>
           <ChevronLeft size={22} color={colors.textSecondary} />
         </Pressable>
-        <Text style={styles.heading}>Notifications</Text>
+        <Text style={styles.heading}>{t('notifications.title')}</Text>
       </View>
 
       <View style={styles.section}>
         <View style={styles.row}>
-          <Text style={styles.rowLabel}>Agent notifications</Text>
+          <Text style={styles.rowLabel}>{t('notifications.agentNotifications')}</Text>
           <Switch
             value={switchEnabled}
             disabled={notificationsBlocked}
@@ -101,7 +103,7 @@ export default function NotificationsScreen() {
             ]}
             onPress={() => void Linking.openSettings()}
           >
-            <Text style={styles.settingsButtonText}>Open Settings</Text>
+            <Text style={styles.settingsButtonText}>{t('common.openSettings')}</Text>
           </Pressable>
         )}
       </View>

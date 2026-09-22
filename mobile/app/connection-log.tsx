@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router'
 import * as Clipboard from 'expo-clipboard'
 import Constants from 'expo-constants'
 import { ChevronLeft, Copy, Check } from 'lucide-react-native'
+import { useTranslation } from 'react-i18next'
 import { colors, spacing, typography } from '../src/theme/mobile-theme'
 import { ConnectionLog } from '../src/components/ConnectionLog'
 import { loadHosts } from '../src/transport/host-store'
@@ -25,6 +26,7 @@ const EMPTY_ENTRIES: readonly ConnectionLogEntry[] = []
 // screen also *acquires* the host client — opening it kicks a dial and the
 // log fills live instead of showing a stale tail.
 export default function ConnectionLogScreen() {
+  const { t } = useTranslation()
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const [hosts, setHosts] = useState<HostProfile[]>([])
@@ -86,7 +88,7 @@ export default function ConnectionLogScreen() {
         <Pressable style={styles.backButton} onPress={() => router.back()}>
           <ChevronLeft size={22} color={colors.textSecondary} />
         </Pressable>
-        <Text style={styles.heading}>Connection log</Text>
+        <Text style={styles.heading}>{t('connectionLog.title')}</Text>
       </View>
 
       {hosts.length > 1 && (
@@ -121,19 +123,19 @@ export default function ConnectionLogScreen() {
               ) : (
                 <Copy size={14} color={colors.textSecondary} />
               )}
-              <Text style={styles.copyButtonText}>{copied ? 'Copied' : 'Copy diagnostics'}</Text>
+              <Text style={styles.copyButtonText}>{copied ? t('common.copied') : t('connectionLog.copyDiagnostics')}</Text>
             </Pressable>
           </View>
           {entries.length > 0 ? (
             <ConnectionLog entries={[...entries]} title={selected.name} />
           ) : (
             <Text style={styles.emptyText}>
-              No connection events yet this session. Events appear as the app dials this host.
+              {t('connectionLog.noEvents')}
             </Text>
           )}
         </>
       ) : (
-        <Text style={styles.emptyText}>No paired hosts.</Text>
+        <Text style={styles.emptyText}>{t('home.noHosts')}</Text>
       )}
     </View>
   )

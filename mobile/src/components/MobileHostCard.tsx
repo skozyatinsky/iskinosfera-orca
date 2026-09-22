@@ -1,5 +1,6 @@
 import { ChevronRight, Monitor } from 'lucide-react-native'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import type { ConnectionVerdict } from '../transport/connection-health'
 import { verdictDisplayLabel } from '../transport/connection-health'
 import { mobileConnectionPathLabel } from '../transport/mobile-connection-path-label'
@@ -18,9 +19,19 @@ export function MobileHostCard(props: {
   onLongPress: () => void
 }) {
   const connected = props.state === 'connected'
+  const { t } = useTranslation()
   const isError = ['warning', 'unreachable', 'auth-failed'].includes(props.verdict.kind)
   const worktreeSummary = props.worktreeCounts
-    ? `${props.worktreeCounts.total} worktree${props.worktreeCounts.total === 1 ? '' : 's'}${props.worktreeCounts.active > 0 ? ` · ${props.worktreeCounts.active} active` : ''}`
+    ? props.worktreeCounts.active > 0
+      ? t('host.detail.worktreesActive', {
+          n: props.worktreeCounts.total,
+          plural: props.worktreeCounts.total === 1 ? '' : 's',
+          active: props.worktreeCounts.active
+        })
+      : t('host.detail.worktrees', {
+          n: props.worktreeCounts.total,
+          plural: props.worktreeCounts.total === 1 ? '' : 's'
+        })
     : null
   return (
     <Pressable
@@ -53,7 +64,7 @@ export function MobileHostCard(props: {
         ) : null}
         {props.verdict.kind === 'unreachable' && !props.host.relay ? (
           <Text style={styles.discoveryHint} numberOfLines={2}>
-            Update desktop Orca and sign in to connect from anywhere
+            {t('home.desktopUpdateRequired')}
           </Text>
         ) : null}
       </View>

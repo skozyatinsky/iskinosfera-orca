@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { View, StyleSheet, PanResponder } from 'react-native'
 import { Stack, useGlobalSearchParams, usePathname } from 'expo-router'
+import { useTranslation } from 'react-i18next'
 import { colors } from '../../src/theme/mobile-theme'
 import { useResponsiveLayout } from '../../src/layout/responsive-layout'
 import {
@@ -28,6 +29,7 @@ function clampSidebarToWindow(width: number, windowWidth: number): number {
 }
 
 function HostStack({ animation }: { animation: 'none' | 'default' }) {
+  const { t } = useTranslation()
   return (
     <Stack
       screenOptions={{
@@ -39,21 +41,21 @@ function HostStack({ animation }: { animation: 'none' | 'default' }) {
         animation
       }}
     >
-      <Stack.Screen name="[hostId]/index" options={{ title: 'Host' }} />
-      <Stack.Screen name="[hostId]/edit" options={{ title: 'Edit host' }} />
-      <Stack.Screen name="[hostId]/accounts" options={{ title: 'Accounts' }} />
-      <Stack.Screen name="[hostId]/tasks" options={{ title: 'Tasks' }} />
-      <Stack.Screen name="[hostId]/session/[worktreeId]" options={{ title: 'Terminal' }} />
+      <Stack.Screen name="[hostId]/index" options={{ title: t('host.detail.title') }} />
+      <Stack.Screen name="[hostId]/edit" options={{ title: t('host.detail.editHost') }} />
+      <Stack.Screen name="[hostId]/accounts" options={{ title: t('host.detail.accounts') }} />
+      <Stack.Screen name="[hostId]/tasks" options={{ title: t('host.detail.tasks') }} />
+      <Stack.Screen name="[hostId]/session/[worktreeId]" options={{ title: t('host.detail.terminal') }} />
       <Stack.Screen
         name="[hostId]/source-control/[worktreeId]"
-        options={{ title: 'Source Control' }}
+        options={{ title: t('host.detail.sourceControl') }}
       />
       <Stack.Screen
         name="[hostId]/agent-history/[worktreeId]"
-        options={{ title: 'Agent Session History' }}
+        options={{ title: t('host.detail.agentHistory') }}
       />
-      <Stack.Screen name="[hostId]/review/[worktreeId]" options={{ title: 'Changes' }} />
-      <Stack.Screen name="[hostId]/pr/[worktreeId]" options={{ title: 'Pull Request' }} />
+      <Stack.Screen name="[hostId]/review/[worktreeId]" options={{ title: t('host.detail.changes') }} />
+      <Stack.Screen name="[hostId]/pr/[worktreeId]" options={{ title: t('host.detail.pullRequest') }} />
     </Stack>
   )
 }

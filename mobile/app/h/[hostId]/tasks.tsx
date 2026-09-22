@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   ActivityIndicator,
   FlatList,
@@ -718,6 +719,16 @@ const PROVIDER_OPTIONS: PickerOption<TaskProvider>[] = [
     )
   }
 ]
+
+function translateProviderOption(opt: PickerOption<TaskProvider>, t: (key: string) => string): PickerOption<TaskProvider> {
+  const labelKey = opt.value === 'github' ? 'tasks.github'
+    : opt.value === 'gitlab' ? 'tasks.gitlab'
+    : 'tasks.linear'
+  const subtitleKey = opt.value === 'github' ? 'tasks.issuesAndPrs'
+    : opt.value === 'gitlab' ? 'tasks.issuesAndMrs'
+    : 'tasks.assignedAndTeam'
+  return { ...opt, label: t(labelKey), subtitle: t(subtitleKey) }
+}
 
 const GITLAB_FILTER_OPTIONS: PickerOption<GitLabFilter>[] = [
   { value: 'opened', label: 'Open', subtitle: 'Open issues and merge requests' },
@@ -2135,6 +2146,7 @@ function compareTasksByRepository(
 }
 
 export default function MobileTasksScreen() {
+  const { t } = useTranslation()
   const { hostId, taskSource } = useLocalSearchParams<{ hostId: string; taskSource?: string }>()
   const router = useRouter()
   const insets = useSafeAreaInsets()
@@ -8335,12 +8347,12 @@ export default function MobileTasksScreen() {
       ? ((selectedCreateTarget as RepoSummary | null)?.displayName ?? 'Select target')
       : ((selectedCreateTarget as LinearTeam | null)?.name ?? 'Select target')
   const providerLabel =
-    provider === 'github' ? 'GitHub' : provider === 'gitlab' ? 'GitLab' : 'Linear'
+    provider === 'github' ? t('tasks.github') : provider === 'gitlab' ? t('tasks.gitlab') : t('tasks.linear')
   const showHeaderCreateTask =
     provider === 'linear' || (provider === 'github' && githubMode === 'items')
   const providerOptions = useMemo(
-    () => PROVIDER_OPTIONS.filter((option) => visibleProviders.includes(option.value)),
-    [visibleProviders]
+    () => PROVIDER_OPTIONS.filter((option) => visibleProviders.includes(option.value)).map((opt) => translateProviderOption(opt, t)),
+    [t, visibleProviders]
   )
   const selectedCreateRepo =
     provider === 'github' || provider === 'gitlab'

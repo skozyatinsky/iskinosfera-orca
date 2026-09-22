@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useFocusEffect, useLocalSearchParams, usePathname, useRouter } from 'expo-router'
+import { useTranslation } from 'react-i18next'
 import {
   Search,
   X,
@@ -127,6 +128,7 @@ export function HostScreen({
   const params = useLocalSearchParams<{ hostId: string; action?: string }>()
   const hostId = hostIdProp ?? params.hostId
   const action = actionProp ?? params.action
+  const { t } = useTranslation()
   const router = useRouter()
   const pathname = usePathname()
   const insets = useSafeAreaInsets()
@@ -1327,7 +1329,7 @@ export function HostScreen({
                       onDone: () => setActionTarget(null)
                     }),
                     {
-                      label: 'Sleep',
+                      label: t('common.sleep'),
                       icon: Moon,
                       onPress: () => {
                         if (client) {
@@ -1342,14 +1344,14 @@ export function HostScreen({
                       }
                     },
                     {
-                      label: isWorktreePinned(actionTarget, pinnedIds) ? 'Unpin' : 'Pin',
+                      label: isWorktreePinned(actionTarget, pinnedIds) ? t('common.unpin') : t('common.pin'),
                       onPress: () => {
                         togglePin(actionTarget.worktreeId)
                         setActionTarget(null)
                       }
                     },
                     {
-                      label: 'Delete',
+                      label: t('common.delete'),
                       destructive: true,
                       onPress: () => setConfirmDelete(actionTarget)
                     }
@@ -1363,9 +1365,9 @@ export function HostScreen({
       {/* Host remove confirmation */}
       <ConfirmModal
         visible={confirmRemoveHost}
-        title="Remove Host"
-        message={`Remove "${hostName}"? You can re-pair later.`}
-        confirmLabel="Remove"
+        title={t('home.removeHost')}
+        message={t('home.removeHostConfirm', { name: hostName })}
+        confirmLabel={t('common.remove')}
         destructive
         onConfirm={() => void handleRemoveHost()}
         onCancel={() => setConfirmRemoveHost(false)}

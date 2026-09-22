@@ -11,6 +11,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useFocusEffect, useRouter } from 'expo-router'
 import { ChevronLeft, ChevronRight } from 'lucide-react-native'
+import { useTranslation } from 'react-i18next'
 import { colors, radii, spacing, typography } from '../src/theme/mobile-theme'
 import { loadHosts } from '../src/transport/host-store'
 import type { HostProfile } from '../src/transport/types'
@@ -39,6 +40,7 @@ const DICTATION_MODES = [
 type ModelBusyAction = { modelId: string; type: 'download' | 'select' | 'delete' }
 
 export default function VoiceSettingsScreen(): React.JSX.Element {
+  const { t } = useTranslation()
   const router = useRouter()
   const insets = useSafeAreaInsets()
 
@@ -196,7 +198,7 @@ export default function VoiceSettingsScreen(): React.JSX.Element {
 
   const enabled = setup?.enabled ?? false
   const selectedModel = setup?.models.find((m) => m.id === setup.selectedModelId)
-  const selectedModelLabel = selectedModel?.label ?? 'None selected'
+  const selectedModelLabel = selectedModel?.label ?? t('voice.noneSelected')
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + spacing.sm }]}>
@@ -204,12 +206,12 @@ export default function VoiceSettingsScreen(): React.JSX.Element {
         <Pressable style={styles.backButton} onPress={() => router.back()}>
           <ChevronLeft size={22} color={colors.textSecondary} />
         </Pressable>
-        <Text style={styles.heading}>Voice</Text>
+        <Text style={styles.heading}>{t('voice.title')}</Text>
       </View>
 
       {!client ? (
         <View style={[styles.section, styles.sectionTopGap]}>
-          <Text style={styles.emptyText}>Connect to a desktop to manage voice settings.</Text>
+          <Text style={styles.emptyText}>{t('voice.connectDesktop')}</Text>
         </View>
       ) : loading && setup === null ? (
         <View style={styles.loading}>
@@ -217,20 +219,20 @@ export default function VoiceSettingsScreen(): React.JSX.Element {
         </View>
       ) : setup === null ? (
         <View style={[styles.section, styles.sectionTopGap]}>
-          <Text style={styles.errorText}>{error ?? 'Failed to load voice settings.'}</Text>
+          <Text style={styles.errorText}>{error ?? t('voice.failedToLoad')}</Text>
         </View>
       ) : (
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.groupHeading}>DICTATION</Text>
+          <Text style={styles.groupHeading}>{t('voice.dictation')}</Text>
           <View style={[styles.section, styles.sectionTopGap]}>
             <View style={styles.row}>
               <View style={styles.rowContent}>
-                <Text style={styles.rowLabel}>Enable Voice Dictation</Text>
+                <Text style={styles.rowLabel}>{t('voice.enableDictation')}</Text>
                 <Text style={styles.rowSublabel}>
-                  Dictate text into any focused pane on your desktop.
+                  {t('voice.dictationDesc')}
                 </Text>
               </View>
               <Switch
@@ -248,9 +250,9 @@ export default function VoiceSettingsScreen(): React.JSX.Element {
               pointerEvents={enabled ? 'auto' : 'none'}
             >
               <View style={styles.rowContent}>
-                <Text style={styles.rowLabel}>Dictation Mode</Text>
+                <Text style={styles.rowLabel}>{t('voice.dictationMode')}</Text>
                 <Text style={styles.rowSublabel}>
-                  Toggle: press once to start, again to stop. Hold: dictate while held.
+                  {setup.dictationMode === 'toggle' ? t('voice.toggleMode') : t('voice.holdMode')}
                 </Text>
               </View>
               <View style={styles.segmented}>
@@ -263,7 +265,7 @@ export default function VoiceSettingsScreen(): React.JSX.Element {
                       style={[styles.segment, active && styles.segmentActive]}
                     >
                       <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
-                        {mode.label}
+                        {mode.value === 'toggle' ? t('voice.toggle') : t('voice.hold')}
                       </Text>
                     </Pressable>
                   )
@@ -272,7 +274,7 @@ export default function VoiceSettingsScreen(): React.JSX.Element {
             </View>
           </View>
 
-          <Text style={[styles.groupHeading, styles.inputGroupGap]}>SPEECH MODEL</Text>
+          <Text style={[styles.groupHeading, styles.inputGroupGap]}>{t('voice.speechModel')}</Text>
           <View style={[styles.section, styles.sectionTopGap]}>
             <Pressable
               style={({ pressed }) => [
@@ -284,7 +286,7 @@ export default function VoiceSettingsScreen(): React.JSX.Element {
               onPress={() => setModelDrawerOpen(true)}
             >
               <View style={styles.rowContent}>
-                <Text style={styles.rowLabel}>Speech Model</Text>
+                <Text style={styles.rowLabel}>{t('voice.speechModelLabel')}</Text>
                 <Text style={styles.rowSublabel} numberOfLines={1}>
                   {selectedModelLabel}
                 </Text>
@@ -298,7 +300,7 @@ export default function VoiceSettingsScreen(): React.JSX.Element {
       )}
 
       <BottomDrawer visible={modelDrawerOpen} onClose={() => setModelDrawerOpen(false)}>
-        <Text style={styles.drawerTitle}>Speech Model</Text>
+        <Text style={styles.drawerTitle}>{t('voice.speechModelLabel')}</Text>
         {setup ? (
           <VoiceModelList
             setup={setup}

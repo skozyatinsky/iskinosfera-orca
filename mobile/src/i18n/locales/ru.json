@@ -1,0 +1,318 @@
+{
+  "app": {
+    "name": "Косатка",
+    "nameLower": "косатка",
+    "tagline": "Открытая агентная IDE для разработчиков",
+    "url": "onOrca.dev",
+    "repo": "stablyai/orca",
+    "twitter": "@orca_build",
+    "scheme": "orca"
+  },
+  "common": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "confirm": "Подтвердить",
+    "remove": "Удалить",
+    "delete": "Удалить",
+    "retry": "Повторить",
+    "close": "Закрыть",
+    "done": "Готово",
+    "back": "Назад",
+    "backToHome": "На главную",
+    "on": "Вкл",
+    "off": "Выкл",
+    "reconnect": "Переподключиться",
+    "connect": "Подключиться",
+    "disconnect": "Отключиться",
+    "edit": "Редактировать",
+    "refresh": "Обновить",
+    "copy": "Копировать",
+    "copied": "Скопировано",
+    "paste": "Вставить",
+    "continue": "Продолжить",
+    "openSettings": "Открыть настройки",
+    "tryAgain": "Попробовать снова",
+    "notNow": "Не сейчас",
+    "pair": "Сопряжение",
+    "unpin": "Открепить",
+    "pin": "Закрепить",
+    "sleep": "Спящий режим",
+    "running": "Выполняется…",
+    "connecting": "Подключение…"
+  },
+  "home": {
+    "title": "Косатка",
+    "connectDesktop": "Подключите ваш компьютер",
+    "connectDescription": "Сопрягите Косатку с компьютером, чтобы просматривать терминалы, отслеживать прогресс и управлять процессами откуда угодно.",
+    "pairDesktop": "Сопрячь с компьютером",
+    "newWorkspace": "Новое рабочее пространство",
+    "howItWorks": "Как это работает",
+    "step1Title": "Откройте Orca на компьютере",
+    "step1Desc": "Перейдите в Настройки → Mobile",
+    "step2Title": "Сканируйте код",
+    "step2Desc": "Нажмите кнопку выше и отсканируйте QR-код на экране компьютера.",
+    "step3Title": "Вы подключены",
+    "step3Desc": "Ваш компьютер появится здесь. Нажмите на него, чтобы начать.",
+    "welcomeBack": "С возвращением",
+    "statsAgentsSpawned": "Агентов запущено",
+    "statsAgentTime": "Время работы агентов",
+    "statsPRsCreated": "PR создано",
+    "desktops": "Компьютеры",
+    "resume": "Продолжить",
+    "tasks": "Задачи",
+    "noTaskSources": "Нет подключённых источников задач",
+    "quickActions": "Быстрые действия",
+    "accountUsage": "Использование аккаунта",
+    "systemDefault": "Системный",
+    "usage5h": "5ч",
+    "usage7d": "7д",
+    "removeHost": "Удалить компьютер",
+    "removeHostConfirm": "Удалить «{{name}}»? Вы сможете подключиться снова позже.",
+    "couldNotRemoveHost": "Не удалось удалить компьютер",
+    "tryAgain": "Пожалуйста, попробуйте снова.",
+    "hours": "ч",
+    "minutes": "мин",
+    "days": "д",
+    "desktopUpdateRequired": "Обновите Orca на компьютере и войдите в аккаунт для подключения откуда угодно",
+    "noHosts": "Нет сопряжённых компьютеров."
+  },
+  "settings": {
+    "title": "Настройки",
+    "terminal": "Терминал",
+    "chatUi": "Чат",
+    "browser": "Браузер",
+    "voice": "Голос",
+    "notifications": "Уведомления",
+    "troubleshooting": "Диагностика",
+    "about": "О программе",
+    "pairingCleanup": "Очистка учётных данных сопряжения",
+    "cleanupFailed": "Не удалось подтвердить очистку на некоторых компьютерах",
+    "cleanupConfirmFailed": "Не удалось подтвердить очистку для всех компьютеров",
+    "cleanupCheckFailed": "Не удалось проверить статус очистки",
+    "privacyPolicy": "Политика конфиденциальности",
+    "support": "Поддержка"
+  },
+  "about": {
+    "title": "О программе",
+    "visitSite": "onOrca.dev",
+    "viewRepo": "stablyai/orca",
+    "followTwitter": "@orca_build"
+  },
+  "onboarding": {
+    "howSessionsOpen": "Как открывать сессии?",
+    "howSessionsDesc": "Выберите, как открывать сессии агентов: в виде чата или в терминале.",
+    "stayUpdated": "Оставайтесь в курсе",
+    "stayUpdatedDesc": "Получайте уведомления на этом устройстве, когда агент завершит работу или потребует внимания.",
+    "useChatUi": "Использовать чат",
+    "keepTerminal": "Оставить терминал",
+    "enableNotifications": "Включить уведомления",
+    "choiceSaveFailed": "Не удалось сохранить выбор. Попробуйте снова.",
+    "notifUpdateFailed": "Не удалось обновить настройки уведомлений. Попробуйте снова."
+  },
+  "pair": {
+    "scan": {
+      "title": "Сопряжение с компьютером",
+      "notValidQr": "Это не QR-код Косатки",
+      "notValidCode": "Неверный код сопряжения. Убедитесь, что он начинается с «{{scheme}}://pair?code=».",
+      "scanInstructions": "Отсканируйте QR-код из Orca на компьютере",
+      "noCameraAccess": "Доступ к камере отключён",
+      "noCameraInstructions": "Разрешите доступ к камере в настройках, чтобы сканировать QR-код.",
+      "pasteInstead": "Вставить код",
+      "pasteTitle": "Вставьте код сопряжения",
+      "pasteInstructions": "Скопируйте код, показанный под QR-кодом на компьютере.",
+      "placeholder": "{{scheme}}://pair?code=... или вставьте код",
+      "step1Title": "Откройте Orca на компьютере",
+      "step1Desc": "Перейдите в Настройки → Mobile",
+      "step2Title": "Сканируйте QR-код",
+      "step2Desc": "Или вставьте код сопряжения",
+      "pairingLog": "Журнал сопряжения"
+    },
+    "confirm": {
+      "title": "Сопрячь с этим компьютером?",
+      "description": "Вы открыли ссылку сопряжения с компьютера. Убедитесь, что это ваш компьютер.",
+      "pairingLog": "Журнал сопряжения"
+    },
+    "missingCode": "Отсутствует код сопряжения"
+  },
+  "terminal": {
+    "settings": {
+      "title": "Терминал",
+      "whenYouLeave": "ПРИ ВЫХОДЕ ИЗ ПРИЛОЖЕНИЯ",
+      "whenYouLeaveDesc": "При выходе из приложения режим «по размеру экрана» перестаёт управлять строками терминала. Когда вы вернётесь, режим восстановится.",
+      "noDesktops": "Нет сопряжённых компьютеров. Подключите компьютер и выберите, как отображать текст терминала.",
+      "textSize": "РАЗМЕР ТЕКСТА",
+      "textSizeDesc": "Масштабируйте размер текста терминала на этом устройстве. Это не влияет на терминал компьютера.",
+      "textSizeLabel": "Размер текста",
+      "keyboardInput": "ВВОД С КЛАВИАТУРЫ",
+      "keyboardInputDesc": "Некоторые приложения могут вести себя иначе с включённым автодополнением и автокоррекцией.",
+      "autocomplete": "Автодополнение и автокоррекция",
+      "restoreLabel": "Восстановить {{hostName}}",
+      "smallest": "Минимальный 50%",
+      "default": "Обычный 100%",
+      "largest": "Максимальный 150%",
+      "keepPhoneSize": "Оставить как на телефоне",
+      "after1min": "Через 1 минуту",
+      "after5min": "Через 5 минут",
+      "after15min": "Через 15 минут",
+      "never": "Никогда"
+    },
+    "tab": "Терминал",
+    "browserTab": "Браузер",
+    "markdownTab": "Markdown",
+    "copyNotes": "Копировать заметки",
+    "copyPath": "Копировать путь",
+    "copyAllAndLeave": "Копировать всё и выйти",
+    "discardAndLeave": "Отменить и выйти",
+    "urlPlaceholder": "https://example.com",
+    "remove": "Удалить",
+    "couldNotLoadMarkdown": "Не удалось загрузить Markdown",
+    "saveFailed": "Не удалось сохранить",
+    "deleteFailed": "Не удалось удалить заметку",
+    "defaultDraftTitle": "Markdown",
+    "failedToSaveNote": "Не удалось сохранить заметку",
+    "failedToCreateNote": "Не удалось создать заметку",
+    "failedToCreateBrowser": "Не удалось открыть браузер",
+    "browserCommandFailed": "Команда браузера не выполнена",
+    "detectingAgents": "Поиск агентов",
+    "noEnabledAgents": "Нет доступных агентов",
+    "agentPresetsUnavailable": "Пресеты агентов недоступны",
+    "couldNotSendNotes": "Не удалось отправить заметки",
+    "untitled": "untitled.md",
+    "close": "Закрыть"
+  },
+  "chatUi": {
+    "title": "Чат",
+    "defaultView": "ВИД ПО УМОЛЧАНИЮ",
+    "defaultViewDesc": "Выберите, как открывать сессии поддерживаемых агентов: в виде чата или терминала.",
+    "openInChatUi": "Открывать сессии в чате"
+  },
+  "browser": {
+    "settings": {
+      "title": "Браузер",
+      "links": "ССЫЛКИ",
+      "linksDesc": "Выберите, где открывать HTTP(S)-ссылки при нажатии в сессиях.",
+      "openTerminalLinks": "Открывать ссылки из терминала",
+      "orcaBrowser": "Браузер Orca на компьютере",
+      "phoneBrowser": "Браузер телефона"
+    }
+  },
+  "voice": {
+    "title": "Голос",
+    "connectDesktop": "Подключитесь к компьютеру, чтобы настроить голосовые параметры.",
+    "dictation": "ДИКТОВКА",
+    "enableDictation": "Включить голосовой ввод",
+    "dictationDesc": "Диктуйте текст в любую активную панель на компьютере.",
+    "dictationMode": "Режим диктовки",
+    "toggleMode": "Переключатель: нажмите один раз, чтобы начать и остановить диктовку.",
+    "holdMode": "Удержание: диктуйте, пока удерживаете кнопку.",
+    "toggle": "Переключатель",
+    "hold": "Удержание",
+    "speechModel": "МОДЕЛЬ РАСПОЗНАВАНИЯ",
+    "speechModelLabel": "Модель распознавания",
+    "noneSelected": "Не выбрано",
+    "failedToLoad": "Не удалось загрузить настройки голоса",
+    "failedToUpdate": "Не удалось обновить настройки голоса",
+    "modelFailedToLoad": "Не удалось загрузить модели распознавания",
+    "modelFailedToUpdate": "Не удалось обновить модель распознавания"
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "agentNotifications": "Уведомления агентов",
+    "disabledInSystem": "Уведомления отключены в настройках системы.",
+    "getNotified": "Получайте уведомления на этом устройстве, когда агент завершит работу или потребует внимания."
+  },
+  "troubleshooting": {
+    "title": "Диагностика",
+    "runDiagnostics": "Запустить диагностику",
+    "runAgain": "Запустить снова",
+    "diagnosticsRunning": "Выполняется…",
+    "viewConnectionLog": "Журнал подключений",
+    "pairedHosts": "Сопряжённые компьютеры",
+    "internet": "Интернет",
+    "hosts": "Компьютеры",
+    "platform": "Платформа",
+    "commonIssues": "Частые проблемы",
+    "issues": {
+      "differentWifi": {
+        "title": "Разные сети Wi-Fi",
+        "steps": "Убедитесь, что телефон и компьютер находятся в одной сети Wi-Fi."
+      },
+      "firewall": {
+        "title": "Брандмауэр блокирует порт 6768",
+        "steps": "Проверьте настройки брандмауэра на компьютере и разрешите порт 6768."
+      },
+      "desktopNotRunning": {
+        "title": "Приложение на компьютере не запущено",
+        "steps": "Убедитесь, что Orca запущена на компьютере."
+      },
+      "connectionTimeout": {
+        "title": "Тайм-аут подключения",
+        "steps": "Время подключения истекло. Убедитесь, что устройства в одной сети, и попробуйте снова."
+      },
+      "tailscale": {
+        "title": "Tailscale недоступен",
+        "steps": "Проверьте, что Tailscale подключён на обоих устройствах и адрес указан верно."
+      },
+      "otherVpn": {
+        "title": "Помехи от другого VPN",
+        "steps": "VPN могут мешать локальному подключению. Попробуйте отключить VPN и выполнить сопряжение снова."
+      }
+    }
+  },
+  "connectionLog": {
+    "title": "Журнал подключений",
+    "copyDiagnostics": "Копировать диагностику",
+    "noEvents": "Событий подключения пока нет."
+  },
+  "host": {
+    "detail": {
+      "title": "Компьютер",
+      "editHost": "Редактировать",
+      "accounts": "Аккаунты",
+      "tasks": "Задачи",
+      "terminal": "Терминал",
+      "sourceControl": "Система контроля версий",
+      "agentHistory": "История сессий агентов",
+      "changes": "Изменения",
+      "pullRequest": "Pull Request",
+      "worktrees": "{{n}} worktree{{plural}}",
+      "worktreesActive": "{{n}} worktree{{plural}} ({{active}} активных)",
+      "authFailed": "Ошибка аутентификации — попробуйте переподключиться",
+      "rePair": "Переподключиться"
+    }
+  },
+  "sourceControl": {
+    "tabPullRequest": "Pull Request",
+    "tabChanges": "Изменения",
+    "tabHistory": "История"
+  },
+  "tasks": {
+    "github": "GitHub",
+    "gitlab": "GitLab",
+    "linear": "Linear",
+    "issuesAndPrs": "Issues и pull request'ы",
+    "issuesAndMrs": "Issues и merge request'ы",
+    "assignedAndTeam": "Назначенные и командные задачи"
+  },
+  "pr": {
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "delete": "Удалить"
+  },
+  "keyboard": {
+    "esc": "Esc",
+    "tab": "Tab",
+    "enter": "Enter",
+    "space": "Пробел",
+    "ctrlC": "Ctrl+C",
+    "ctrlD": "Ctrl+D",
+    "ctrlZ": "Ctrl+Z",
+    "up": "↑",
+    "down": "↓",
+    "left": "←",
+    "right": "→"
+  },
+  "newWorkspace": {
+    "fabLabel": "Новое рабочее пространство"
+  }
+}
