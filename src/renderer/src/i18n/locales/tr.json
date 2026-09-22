@@ -436,7 +436,7 @@
               "19c7683acf": "Seçilen aracı, oluşturulan çalışma alanında mevcut değil.",
               "8bc45efdbc": "PR kafası çözümlenemedi.",
               "agent": {
-                "ceeeb509b5": "Ajanın başlaması çok uzun sürdü. "
+                "ceeeb509b5": "Agent took too long to start. The workspace is ready — paste the {{value0}} when the agent is idle."
               }
             }
           }
@@ -2067,8 +2067,8 @@
             "23b87ba9f7": "GitHub'da aç",
             "4d2a77a119": "Dosya özelliği isteği",
             "1bf8c01c8b": "Orca'da bu projeyle çalışmak için Tablo görünümüne geçin.",
-            "55de4fb57a": "{{value0}}. ",
-            "2edf5e7e77": "{{value0}} — Orca henüz {{value1}} proje görünümünü desteklemiyor. ",
+            "55de4fb57a": "{{value0}}. {{value1}} File a feature request at {{value2}}.",
+            "2edf5e7e77": "{{value0}} — Orca doesn't support {{value1}} project views yet. File a feature request at {{value2}}.",
             "7245c3d7ac": "Aramayı temizle",
             "c5bc7ec007": "Filtreyi görüntüle: {{value0}}",
             "840c268665": "Depo ekle",
@@ -4053,7 +4053,7 @@
           "4dc5b5065b": "Kaldırmak",
           "d36883e046": "İptal etmek",
           "b79b39d865": "Projeyi Kaldır",
-          "removeDescriptionSsh": "Bu yalnızca {{name}}'yi Orca'dan kaldırır. ",
+          "removeDescriptionSsh": "This only removes {{name}} from Orca. Its files stay on {{host}} — re-add that SSH host to recover it.",
           "removeDescriptionLocal": "Bu yalnızca {{name}}'yi Orca'dan kaldırır. "
         },
         "ScrollToCurrentWorkspaceToolbarButton": {
@@ -4568,7 +4568,7 @@
               "905fc8efac": "Git bu çalışma alanını zaten kaldırdı. ",
               "0899ebdb28": "Git bu çalışma alanını zaten unuttu ancak dizini hâlâ diskte. ",
               "locked": "Bu çalışma alanı Git tarafından kilitlendi. ",
-              "lockedReason": "Bu çalışma alanı Git tarafından kilitlendi. "
+              "lockedReason": "This workspace is locked by Git. Git reported: {{value0}}. Run git worktree unlock <worktree-path> from its repository, then retry deletion."
             }
           }
         },
@@ -4677,7 +4677,7 @@
             "compact": {
               "agents": {
                 "a128d7006b": "{{value0}} {{value1}} alt {{value2}}",
-                "289a1d2ca7": "{{value0}}'ı genişletin. ",
+                "289a1d2ca7": "Expand {{value0}}. {{value1}}",
                 "0c1debfe84": "{{value0}} daralt"
               }
             }
@@ -4715,7 +4715,7 @@
           "workspacesFailed": "Bu ana bilgisayarın çalışma alanlarından {{count}} tanesi kaldırılamadı. ",
           "oneWorkspace": "1 çalışma alanı",
           "manyWorkspaces": "{{count}} çalışma alanı",
-          "hostHasWorkspacesDefault": "{{value0}} ve kimlik bilgilerini bu bilgisayardan kaldırır. ",
+          "hostHasWorkspacesDefault": "Removes {{value0}} and its credentials from this computer. Its {{value1}} stay in Orca — remote files are not touched.",
           "alsoDeleteRemote": "Ayrıca {{value1}} üzerindeki bu {{value0}}'yi de silin",
           "alsoForgetLocal": "Ayrıca bu {{value0}}'yu Orca'dan kaldırın",
           "advanced": "Gelişmiş",
@@ -4889,7 +4889,7 @@
         },
         "ForgetSshWorkspaceDialog": {
           "reconnectFailed": "Yeniden bağlantı başarısız oldu",
-          "forgetBody": "Bu çalışma alanını yalnızca Orca'dan kaldırır. ",
+          "forgetBody": "Removes this workspace from Orca only. Files, the Git worktree, and branches on {{host}} are left untouched.",
           "title": "“{{name}}” silinsin mi?",
           "disconnectedBody": "Bu çalışma alanının SSH ana bilgisayarı bağlı değil. ",
           "ghostBody": "{{host}} artık kayıtlı bir SSH ana bilgisayarı olmadığından bu çalışma alanı artık canlı bir ana bilgisayara bağlı değildir. ",
@@ -4908,7 +4908,7 @@
           "2b4efdc162": "Oturumlar sonlandırılamadı.",
           "d18f3005c2": "{{value0}} oturum{{value1}} çıkmayı reddetti.",
           "baad8cd651": "Çalışan oturum yok.",
-          "fe2ab66d45": "{{value1}} oturumdan {{value0}} tanesi sonlandırıldı. ",
+          "fe2ab66d45": "Killed {{value0}} of {{value1}} sessions. {{value2}} refused to exit.",
           "d762b41f41": "Yeniden başlatma başarısız oldu.",
           "b5954e12d3": "Yeniden başlatma başarısız oldu; günlükleri kontrol edin.",
           "0e9da1b98e": "Daemon yeniden başlatıldı.",
@@ -4917,9 +4917,9 @@
           "a2f040ac1c": "{{value0}} oturum sonlandırıldı.",
           "63520148e2": "{{value0}} oturumu çıkmayı reddetti.",
           "cc0a26cb14": "{{value0}} oturum çıkmayı reddetti.",
-          "71a8d342b0": "Terminal sekmeleri yok: {{value0}}/{{value1}}. ",
+          "71a8d342b0": "Terminal tabs absent: {{value0}}/{{value1}}. Failed close attempts: {{value2}}. Exact PTY shutdown requests accepted: {{value3}}; failed: {{value4}}.",
           "2e57c1a940": "Yönetim isteği başarısız olduğundan daemon kapatma sonucu doğrulanmadı.",
-          "993af6052c": "Daemon yönetimi çıkış yapıldığını bildirdi: {{value0}}/{{value1}}; ",
+          "993af6052c": "Daemon management reported exited: {{value0}}/{{value1}}; still present before exact cleanup: {{value2}}.",
           "1f0d8ac762": "Terminal temizliği hatalarla tamamlandı.",
           "80b6ea14cf": "Terminal temizliği uyarılarla tamamlandı.",
           "47cd2a50e9": "Hiçbir oturum veya terminal sekmesi bildirilmedi.",
@@ -5369,7 +5369,7 @@
           "be6df68384": "Dosyadan…",
           "e44c5d681e": "İtibaren",
           "67d9a53f47": "Ayrı oturum açma işlemleri için profilleri yönetin",
-          "112f70adc4": "Last imported from",
+          "112f70adc4": "Last imported from {{value0}}",
           "72d4815523": "Temsilcilerin kimliği doğrulanmış sayfalara ulaşabilmesi için mevcut oturum açma bilgilerinizi Orca'ya getirin. ",
           "2eb906706c": "Tarayıcı Çerezlerini İçe Aktar",
           "af8c83ed61": "Temsilcilerin oturum açma bilgilerinizi yeniden kullanabilmesi için Chrome, Edge veya diğer tarayıcılardan çerezleri içe aktarın.",
@@ -5697,8 +5697,8 @@
           "ceb579abaf": "Uygulama güncellemelerini kontrol edin ve daha yeni bir Orca sürümü yükleyin.",
           "d91ebfb87e": "Mevcut sürüm: {{value0}}",
           "f2b1ccc12a": "Güncellemeler",
-          "bd79d412f0": "Güncelleme kontrolü başarısız oldu. ",
-          "b9ad70c30d": "Güncelleme hatası. ",
+          "bd79d412f0": "Update check failed. {{value0}}",
+          "b9ad70c30d": "Update error. {{value0}}",
           "6405510b92": "hata",
           "a0832ccdb1": "indirildi",
           "2a48034c4c": "v{{value0}} indiriliyor... %{{value1}}",
@@ -5775,7 +5775,7 @@
           "imported_other": "{{value0}} tema içe aktarıldı",
           "import_failed": "Temalar içe aktarılamadı",
           "over_limit_one": "Bu temaların içe aktarılması, {{value0}} özel terminal teması sınırını aşacaktır. ",
-          "over_limit_other": "Bu temaların içe aktarılması, {{value0}} özel terminal teması sınırını aşacaktır. "
+          "over_limit_other": "Importing these themes would exceed the {{value0}} custom terminal theme limit. Deselect {{value1}} new themes and try again."
         },
         "YamlThemeImportButton": {
           "label": "YAML'den içe aktar"
@@ -6194,7 +6194,7 @@
           "7f14a1733c": "Gönderilen dosyayı sil",
           "2801d4ce22": "Referans kimliğini kopyala",
           "d8be621237": "Önce inceleme dosyasını açın.",
-          "61676df223": "Teşhis gönderildi. ",
+          "61676df223": "Diagnostics sent. Share this reference ID with support: {{value0}}.",
           "fd7b3891af": "İnceleme dosyasını ({{value0}}) açtınız. ",
           "62340d4439": "İnceleme dosyanız hazır ({{value0}}). ",
           "19ec5e29b3": "Son uygulama etkinliğini ve hataları, göndermeden önce inceleyebileceğiniz düzenlenmiş bir dosyada toplar. "
@@ -6420,7 +6420,7 @@
           "addPlannedHost": "Ana makine yer tutucusu ekle",
           "addPlannedHostHelp": "Bu ana bilgisayarı hatırlayın ve projeyi eklemeyi daha sonra tamamlayın.",
           "existingFolder": "Mevcut klasör",
-          "addPlannedHostToHost": "{{ana bilgisayar}} ekle",
+          "addPlannedHostToHost": "Add {{host}}",
           "addPlannedHostConfirm": "Bu yalnızca projenin bu ana bilgisayarda mevcut olması gerektiğini kaydeder. ",
           "projectRuntime": "Proje Çalışma Zamanı",
           "projectRuntimeDescription": "Bu projenin Windows'ta mı yoksa WSL'de mi çalışacağını seçin.",
@@ -6454,7 +6454,7 @@
           "show": "Göstermek",
           "hide": "Saklamak",
           "showActionsLabel": "Kaynak Kontrolü AI eylemlerini göster",
-          "visibilityHelper": "Bu depo için Kaynak Kontrolü AI düğmelerinin gösterilip gösterilmeyeceğini kontrol eder. "
+          "visibilityHelper": "Controls whether Source Control AI buttons are shown for this repository. Generation used by separate features follows those features' settings. Global default is {{value0}}."
         },
         "RepositorySourceControlAiHostedReviewDefaults": {
           "053ccfbf52": "Kapalı",
@@ -6599,7 +6599,7 @@
           "95b8be4cea": "Ağ arayüzleri yenilenemedi.",
           "1b4e0bbcc5": "Paylaşılan erişim izinleri yüklenemedi.",
           "b91e36a986": "ağ",
-          "custom-option": "{{adres}} (özel)",
+          "custom-option": "{{address}} (özel)",
           "add-custom": "Özel adres ekle…",
           "custom-title": "Özel bağlantı adresi",
           "custom-description": "Başka bir cihazın ulaşabileceği bir adresin reklamını yapın: LAN veya Tailscale ana bilgisayarı veya tam ws(s):// URL'si.",
@@ -9078,7 +9078,7 @@
           "wslUnavailable": "WSL mevcut değil. ",
           "distroMissing": "{{value0}} WSL'de yüklü değil. ",
           "distroRequired": "Bir WSL dağıtımı seçin veya bu projeyi Windows'a geçirin.",
-          "inheritedWsl": "Proje geçersiz kılma yok. ",
+          "inheritedWsl": "No project override. General settings select {{value0}} via WSL.",
           "projectWsl": "Bu proje WSL aracılığıyla {{value0}} ile çalışıyor.",
           "inheritedWindows": "Proje geçersiz kılma yok. ",
           "projectWindows": "Bu proje Windows üzerinde çalışmaktadır.",
@@ -9410,7 +9410,7 @@
           "update": "Bu sunucuyu güncelle",
           "title": "Uzak Orca Sunucularını Güncelleyin",
           "description": "Bu Orca istemcisinden eşlenen sunucuları inceleyin ve desteklenen yüklemeleri güncelleyin.",
-          "restartWarning": "Güncelleme bu sunucuları yeniden başlatır. ",
+          "restartWarning": "Updating restarts these servers. {{value0}} live tabs and {{value1}} terminal panes may briefly disconnect.",
           "checking": "Eşleştirilen sunucular kontrol ediliyor…",
           "empty": "Eşleştirilmiş Uzak Orca Sunucusu yok.",
           "checkAgain": "Sunucu Güncellemelerini Kontrol Edin",
@@ -9483,8 +9483,8 @@
             "f316a8ca2b": "Hiçbir çözümlenmemiş yorum seçilmedi.",
             "d00ebdc402": "{{value0}} Yorumu Yapay Zekayla Çözün",
             "ed3f79c031": "Bir aracıyı başlatmadan önce istemi gözden geçirin. ",
-            "f273f2271c": "Temsilciyi başlattık. ",
-            "aa95b81a3a": "Temsilciyi başlattık. ",
+            "f273f2271c": "Started the agent. Marked {{value0}} resolved, skipped {{value1}}, failed {{value2}}.",
+            "aa95b81a3a": "Started the agent. Marked {{value0}} resolved, skipped {{value1}}, failed {{value2}}.",
             "495b2f8c4b": "Temsilci başlatıldı ancak seçilen yorumlar çözümlendi olarak işaretlenemedi.",
             "3c3ad3a1d2": "Temsilciyi başlattık. ",
             "review": {
@@ -9878,9 +9878,9 @@
             "2c417432b7": "Yerel olarak çözüldü",
             "f3a8b2c1d0e5": "Bir {{value0}} başlığı girin.",
             "e2b7a1c0d9f4": "{{value0}} oluşturulamadı",
-            "hugeRepoIgnorePrompt": "Bu depoda çok fazla etkin değişiklik var. ",
+            "hugeRepoIgnorePrompt": "This repository has too many active changes. Add \"{{value0}}\" to .gitignore?",
             "hugeRepoIgnoreAction": ".gitignore'a ekle",
-            "tooManyChanges": "Çok fazla değişiklik algılandı. ",
+            "tooManyChanges": "Too many changes detected. Only the first {{value0}} changes are shown.",
             "submoduleTruncated": "Daha fazla alt modül değişikliği atlandı",
             "bf5082de46": "{{value0}} kopyalandı",
             "c06193ef57": "{{value0}} kopyalanamadı",
@@ -9973,7 +9973,7 @@
             "b0da3a4d3e": "Tarif zaten kaydedildi",
             "bff4795a6d": "Kaydedilen tarifi güncellemek için aracıyı, bağımsız değişkenleri veya bilgi istemi şablonunu değiştirin.",
             "5c75b24735": "Orca başlamadan önce temsilcinin ne alacağını özelleştirin.",
-            "repoAgentOverrideNote": "Bu depo genel varsayılanınızı ({{global}}) geçersiz kılar ve şu anda {{etkili}} çalıştırır. "
+            "repoAgentOverrideNote": "Bu depo genel varsayılanınızı ({{global}}) geçersiz kılar ve şu anda {{effective}} çalıştırır. "
           },
           "SourceControlTextGenerationDialog": {
             "c5b7fa7cb6": "Genel varsayılan olarak kaydet",
@@ -10141,7 +10141,7 @@
                 },
                 "git_error": {
                   "title": "Şube durumu kontrol edilemedi",
-                  "body": "Orca bu şubenin bu ortamdan yukarı yönde olduğunu doğrulayamadı. "
+                  "body": "Orca could not confirm this branch's upstream from this environment. Retry before publishing or creating a {{reviewLabel}}."
                 },
                 "unknown": {
                   "title": "{{reviewLabelCap}} durumu kullanılamıyor",
@@ -10164,7 +10164,7 @@
                   "body": "Orca, bu şubenin zaten bir {{reviewLabel}}'ye sahip olup olmadığını doğrulayamadı. "
                 },
                 "auth": {
-                  "title": "{{sağlayıcı}} kimlik doğrulaması başarısız oldu",
+                  "title": "{{provider}} kimlik doğrulaması başarısız oldu",
                   "body": "{{provider}} bu ortamda mevcut olan kimlik bilgilerinin kimliğini doğrulayamadı. "
                 },
                 "permission": {
@@ -10210,7 +10210,7 @@
                   "body": "Bir {{reviewLabel}} oluşturmadan önce bu dalı yukarı akışıyla senkronize edin."
                 },
                 "auth_required": {
-                  "title": "{{sağlayıcı}} ile bağlantı kurun",
+                  "title": "{{provider}} ile bağlantı kurun",
                   "body": "Orca'nın bir {{reviewLabel}} oluşturabilmesi için önce {{provider}} bu ortama bağlanmalıdır."
                 },
                 "needs_push": {
@@ -10460,7 +10460,7 @@
             "af1270b90d": "{{count}} öğe kalıcı olarak silinsin mi?",
             "dd029aa5cd": "Bu, seçilen öğeleri ve uzak ana bilgisayardaki tüm dizin içeriğini kalıcı olarak siler. ",
             "77fdc36183": "{{count}} öğe silinsin mi?",
-            "fca915a67a": "Uzak öğeler kalıcı olarak silinir ve geri alınamaz. "
+            "fca915a67a": "Remote items are permanently deleted and cannot be undone. Local items move to the {{value0}}."
           },
           "useFileExplorerHandlers": {
             "32cd9fd991": "Sembolik bağlantı hedefi açılamıyor"
@@ -11217,7 +11217,7 @@
         },
         "NetworkInterfacePicker": {
           "trigger-label": "Reklam verilecek ağ adresi",
-          "custom-option": "{{adres}} (özel)",
+          "custom-option": "{{address}} (özel)",
           "add-custom": "Özel adres ekle…"
         },
         "WindowsFirewallNotice": {
@@ -11226,13 +11226,13 @@
           "public-title": "Windows bu ağı genel olarak işaretliyor",
           "missing-title": "Windows Güvenlik Duvarı üzerinden telefon bağlantılarına izin ver",
           "public-description": "Orca Mobile bağlantılarına izin vermeden önce bu güvenilir Wi-Fi ağını Özel olarak değiştirin.",
-          "missing-description": "Windows eşleştirme sunucusunu engelleyebilir. ",
+          "missing-description": "Windows may block the pairing server. Add a rule for this Orca app and TCP port {{port}} on Private networks.",
           "open-settings": "Ağ ayarlarını aç",
           "waiting": "Windows bekleniyor…",
           "allow": "Telefon bağlantılarına izin ver",
           "repair-unverified": "Windows Güvenlik Duvarı erişimi doğrulanamadı",
           "blocked-title": "Windows Orca Mobile'ı engelliyor olabilir",
-          "blocked-description": "Mevcut bir gelen Blok kuralı, eşleştirme istisnasını geçersiz kılabilir. ",
+          "blocked-description": "An existing inbound Block rule can override the pairing exception. Repair removes conflicting TCP rules for this Orca app, then allows port {{port}} on Private networks.",
           "repair": "Güvenlik duvarı erişimini onarın"
         }
       },
@@ -11328,7 +11328,7 @@
             "c89534cbe9": "CLI ve Becerileri yükleyin"
           },
           "AiCommitPrSettingsCard": {
-            "8d4152701a": "örneğin ",
+            "8d4152701a": "e.g. ollama run llama3.1 {{value0}}",
             "9ee54037a4": "Özel komut",
             "4b2fc4b80c": "Düşünme çabası",
             "be8917699e": "Modeli",
@@ -12490,7 +12490,7 @@
         "RichMarkdownEditor": {
           "citationLinkAvailable": "{{value0}}, {{value1}}'a bağlantı. ",
           "citationFallbackLabel": "Alıntı",
-          "citationLinkUnavailable": "{{value0}}, alıntı bağlantısı mevcut değil. ",
+          "citationLinkUnavailable": "{{value0}}, citation link unavailable. {{value1}}",
           "tabForCitationActions": "Mevcut eylemler için sekme.",
           "noCitationActions": "Hiçbir bağlantı işlemi mevcut değil."
         },
@@ -12579,7 +12579,7 @@
             "8b8473c544": "Kilitlenme raporu kopyalandı.",
             "b175e90213": "Çökme raporu mevcut değil.",
             "765591798d": "Kilitlenme raporları kontrol ediliyor...",
-            "b2e36f53a1": "Kilitlenme raporu gönderilemedi. ",
+            "b2e36f53a1": "Failed to send crash report. Diagnostic ticket {{value0}} was uploaded but not linked.",
             "ead6fc0510": "Hiçbir otomatik kilitlenme raporu yakalanmadı. ",
             "b082f27490": "En son teşhis günlüklerini ekleyin",
             "e59f0b9427": "Raporla birlikte, sınırlandırılmış, düzenlenmiş bir günlük paketi gönderir."
@@ -13451,7 +13451,7 @@
               "confirm": {
                 "move": {
                   "title": "Proje taşınsın mı?",
-                  "description": "{{repoName}}'yi {{targetName}}'a taşıyın. ",
+                  "description": "Move {{repoName}} to {{targetName}}. Orca removes it from {{activeProfileName}}, keeps files in place, and relaunches into {{targetName}}.",
                   "action": "Projeyi taşı"
                 },
                 "copy": {
@@ -13781,7 +13781,7 @@
       "dialogTitle": "Yeni Oturumda Devam Et",
       "dialogDescription": "Bu durma noktasından yeni bir Agent oturumu başlatın. ",
       "untitledSession": "Geçerli oturum",
-      "originalAgent": "Orijinal Temsilci: {{acente}}",
+      "originalAgent": "Original Agent: {{agent}}",
       "agent": "Ajan",
       "selectAgent": "Bir Temsilci Seçin",
       "detectingAgents": "Bu çalışma alanı ana bilgisayarında Aracılar algılanıyor…",
