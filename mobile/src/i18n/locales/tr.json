@@ -149,161 +149,161 @@
       "restoreLabel": "Restore {{hostName}}",
       "smallest": "Smallest 50%",
       "default": "Default 100%",
-      "largest": "Largest 150%",
-      "keepPhoneSize": "Keep at phone size",
-      "after1min": "After 1 minute",
-      "after5min": "After 5 minutes",
-      "after15min": "After 15 minutes",
-      "never": "Never"
+      "largest": "En büyük %150",
+      "keepPhoneSize": "Telefon boyutunda tutun",
+      "after1min": "1 dakika sonra",
+      "after5min": "5 dakika sonra",
+      "after15min": "15 dakika sonra",
+      "never": "Asla"
     },
-    "tab": "Terminal",
-    "browserTab": "Browser",
-    "markdownTab": "Markdown Note",
-    "copyNotes": "Copy Notes",
-    "copyPath": "Copy Path",
-    "copyAllAndLeave": "Copy All & Leave",
-    "discardAndLeave": "Discard & Leave",
+    "tab": "terminal",
+    "browserTab": "Tarayıcı",
+    "markdownTab": "İndirim Notu",
+    "copyNotes": "Notları Kopyala",
+    "copyPath": "Yolu Kopyala",
+    "copyAllAndLeave": "Tümünü Kopyala ve Bırak",
+    "discardAndLeave": "At ve Bırak",
     "urlPlaceholder": "https://example.com",
-    "remove": "Remove",
-    "couldNotLoadMarkdown": "Couldn't load markdown",
-    "saveFailed": "Save failed",
-    "deleteFailed": "Failed to delete note",
-    "defaultDraftTitle": "Markdown",
-    "failedToSaveNote": "Failed to save note",
-    "failedToCreateNote": "Failed to create markdown note",
-    "failedToCreateBrowser": "Failed to create browser",
-    "browserCommandFailed": "Browser command failed",
-    "detectingAgents": "Detecting Agents",
-    "noEnabledAgents": "No Enabled Agents",
-    "agentPresetsUnavailable": "Agent Presets Unavailable",
-    "couldNotSendNotes": "Couldn't send notes",
-    "untitled": "untitled.md",
-    "close": "Close"
+    "remove": "Kaldırmak",
+    "couldNotLoadMarkdown": "İşaretleme yüklenemedi",
+    "saveFailed": "Kaydetme başarısız oldu",
+    "deleteFailed": "Not silinemedi",
+    "defaultDraftTitle": "İndirim",
+    "failedToSaveNote": "Not kaydedilemedi",
+    "failedToCreateNote": "İşaretleme notu oluşturulamadı",
+    "failedToCreateBrowser": "Tarayıcı oluşturulamadı",
+    "browserCommandFailed": "Tarayıcı komutu başarısız oldu",
+    "detectingAgents": "Ajanları Tespit Etme",
+    "noEnabledAgents": "Etkin Aracı Yok",
+    "agentPresetsUnavailable": "Aracı Ön Ayarları Kullanılamıyor",
+    "couldNotSendNotes": "Not gönderilemedi",
+    "untitled": "başlıksız.md",
+    "close": "Kapalı"
   },
   "chatUi": {
-    "title": "Chat UI",
-    "defaultView": "DEFAULT VIEW",
-    "defaultViewDesc": "Choose whether supported agent sessions open in a chat-like view or a terminal view.",
-    "openInChatUi": "Open sessions in Chat UI"
+    "title": "Sohbet arayüzü",
+    "defaultView": "VARSAYILAN GÖRÜNÜM",
+    "defaultViewDesc": "Desteklenen temsilci oturumlarının sohbet benzeri bir görünümde mi yoksa terminal görünümünde mi açılacağını seçin.",
+    "openInChatUi": "Oturumları Sohbet arayüzünde açın"
   },
   "browser": {
     "settings": {
-      "title": "Browser",
-      "links": "LINKS",
-      "linksDesc": "Choose where HTTP(S) links open when tapped in sessions.",
-      "openTerminalLinks": "Open terminal links",
-      "orcaBrowser": "Orca browser on desktop",
-      "phoneBrowser": "Phone browser"
+      "title": "Tarayıcı",
+      "links": "BAĞLANTILAR",
+      "linksDesc": "Oturumlarda dokunulduğunda HTTP(S) bağlantılarının nerede açılacağını seçin.",
+      "openTerminalLinks": "Terminal bağlantılarını aç",
+      "orcaBrowser": "Orca tarayıcısı masaüstünde",
+      "phoneBrowser": "Telefon tarayıcısı"
     }
   },
   "voice": {
-    "title": "Voice",
-    "connectDesktop": "Connect to a desktop to configure voice settings.",
-    "dictation": "DICTATION",
-    "enableDictation": "Enable Voice Dictation",
-    "dictationDesc": "Dictate text into any focused pane on your desktop.",
-    "dictationMode": "Dictation Mode",
-    "toggleMode": "Toggle: press once to start and stop dictation.",
-    "holdMode": "Hold: dictate while held.",
-    "toggle": "Toggle",
-    "hold": "Hold",
-    "speechModel": "SPEECH MODEL",
-    "speechModelLabel": "Speech Model",
-    "noneSelected": "None selected",
-    "failedToLoad": "Failed to load voice settings",
-    "failedToUpdate": "Could not update voice setting",
-    "modelFailedToLoad": "Failed to load speech models",
-    "modelFailedToUpdate": "Failed to update speech model"
+    "title": "Ses",
+    "connectDesktop": "Ses ayarlarını yapılandırmak için bir masaüstüne bağlanın.",
+    "dictation": "DİKTE",
+    "enableDictation": "Ses Diktesini Etkinleştir",
+    "dictationDesc": "Metni masaüstünüzdeki herhangi bir odaklanmış bölmeye dikte edin.",
+    "dictationMode": "Dikte Modu",
+    "toggleMode": "Geçiş: Dikteyi başlatmak ve durdurmak için bir kez basın.",
+    "holdMode": "Basılı tutun: Basılı tutulduğunda dikte edin.",
+    "toggle": "Değiştir",
+    "hold": "Tutmak",
+    "speechModel": "KONUŞMA MODELİ",
+    "speechModelLabel": "Konuşma Modeli",
+    "noneSelected": "Hiçbiri seçilmedi",
+    "failedToLoad": "Ses ayarları yüklenemedi",
+    "failedToUpdate": "Ses ayarı güncellenemedi",
+    "modelFailedToLoad": "Konuşma modelleri yüklenemedi",
+    "modelFailedToUpdate": "Konuşma modeli güncellenemedi"
   },
   "notifications": {
-    "title": "Notifications",
-    "agentNotifications": "Agent notifications",
-    "disabledInSystem": "Notifications are disabled in system settings.",
-    "getNotified": "Get notified on this device when an agent finishes or needs attention."
+    "title": "Bildirimler",
+    "agentNotifications": "Temsilci bildirimleri",
+    "disabledInSystem": "Sistem ayarlarında bildirimler devre dışı bırakıldı.",
+    "getNotified": "Bir temsilcinin işi bittiğinde veya ilgilenilmesi gerektiğinde bu cihazda bildirim alın."
   },
   "troubleshooting": {
-    "title": "Troubleshooting",
-    "runDiagnostics": "Run diagnostics",
-    "runAgain": "Run again",
-    "diagnosticsRunning": "Running…",
-    "viewConnectionLog": "View connection log",
-    "pairedHosts": "Paired hosts",
-    "internet": "Internet",
-    "hosts": "Hosts",
-    "platform": "Platform",
-    "commonIssues": "Common issues",
+    "title": "Sorun giderme",
+    "runDiagnostics": "Tanılamayı çalıştır",
+    "runAgain": "Tekrar koş",
+    "diagnosticsRunning": "Koşma…",
+    "viewConnectionLog": "Bağlantı günlüğünü görüntüle",
+    "pairedHosts": "Eşleştirilmiş ana bilgisayarlar",
+    "internet": "internet",
+    "hosts": "Toplantı sahipleri",
+    "platform": "platformu",
+    "commonIssues": "Yaygın sorunlar",
     "issues": {
       "differentWifi": {
-        "title": "Different WiFi Networks",
-        "steps": "Make sure your phone and desktop are on the same WiFi network."
+        "title": "Farklı WiFi Ağları",
+        "steps": "Telefonunuzun ve masaüstünüzün aynı WiFi ağında olduğundan emin olun."
       },
       "firewall": {
-        "title": "Firewall Blocking Port 6768",
-        "steps": "Check your desktop firewall settings and allow port 6768."
+        "title": "Güvenlik Duvarı Engelleme Bağlantı Noktası 6768",
+        "steps": "Masaüstü güvenlik duvarı ayarlarınızı kontrol edin ve 6768 numaralı bağlantı noktasına izin verin."
       },
       "desktopNotRunning": {
-        "title": "Desktop App Not Running",
-        "steps": "Make sure the Orca desktop app is open and running."
+        "title": "Masaüstü Uygulaması Çalışmıyor",
+        "steps": "Orca masaüstü uygulamasının açık ve çalışır durumda olduğundan emin olun."
       },
       "connectionTimeout": {
-        "title": "Connection Timeout",
-        "steps": "The connection timed out. Make sure your devices are on the same network and try again."
+        "title": "Bağlantı Zaman Aşımı",
+        "steps": "Bağlantı zaman aşımına uğradı. "
       },
       "tailscale": {
-        "title": "Tailscale Host Unreachable",
-        "steps": "Check that Tailscale is connected on both devices and the host address is correct."
+        "title": "Kuyruk Ölçekli Ana Bilgisayara Ulaşılamıyor",
+        "steps": "Tailscale'in her iki cihaza da bağlı olduğunu ve ana bilgisayar adresinin doğru olduğunu kontrol edin."
       },
       "otherVpn": {
-        "title": "Other VPN Interference",
-        "steps": "VPNs can interfere with local connections. Try disconnecting and pairing again."
+        "title": "Diğer VPN Girişimi",
+        "steps": "VPN'ler yerel bağlantılara müdahale edebilir. "
       }
     }
   },
   "connectionLog": {
-    "title": "Connection log",
-    "copyDiagnostics": "Copy diagnostics",
-    "noEvents": "No connection events yet this session."
+    "title": "Bağlantı günlüğü",
+    "copyDiagnostics": "Tanılamayı kopyala",
+    "noEvents": "Bu oturumda henüz bağlantı etkinliği yok."
   },
   "host": {
     "detail": {
-      "title": "Host",
-      "editHost": "Edit host",
-      "accounts": "Accounts",
-      "tasks": "Tasks",
-      "terminal": "Terminal",
-      "sourceControl": "Source Control",
-      "agentHistory": "Agent Session History",
-      "changes": "Changes",
-      "pullRequest": "Pull Request",
+      "title": "Ev sahibi",
+      "editHost": "Ana makineyi düzenle",
+      "accounts": "Hesaplar",
+      "tasks": "Görevler",
+      "terminal": "terminal",
+      "sourceControl": "Kaynak Kontrolü",
+      "agentHistory": "Temsilci Oturum Geçmişi",
+      "changes": "Değişiklikler",
+      "pullRequest": "Çekme İsteği",
       "worktrees": "{{n}} worktree{{plural}}",
       "worktreesActive": "{{n}} worktree{{plural}} ({{active}} active)",
-      "authFailed": "Authentication failed — try reconnecting first",
-      "rePair": "Re-pair"
+      "authFailed": "Kimlik doğrulama başarısız oldu; önce yeniden bağlanmayı deneyin",
+      "rePair": "Tamirat"
     }
   },
   "sourceControl": {
-    "tabPullRequest": "Pull Request",
-    "tabChanges": "Changes",
-    "tabHistory": "History"
+    "tabPullRequest": "Çekme İsteği",
+    "tabChanges": "Değişiklikler",
+    "tabHistory": "Tarih"
   },
   "tasks": {
     "github": "GitHub",
     "gitlab": "GitLab",
-    "linear": "Linear",
-    "issuesAndPrs": "Issues and pull requests",
-    "issuesAndMrs": "Issues and merge requests",
-    "assignedAndTeam": "Assigned and team issues"
+    "linear": "Doğrusal",
+    "issuesAndPrs": "Sorunlar ve çekme istekleri",
+    "issuesAndMrs": "Sorunlar ve birleştirme istekleri",
+    "assignedAndTeam": "Atanan ve ekip sorunları"
   },
   "pr": {
-    "cancel": "Cancel",
-    "save": "Save",
-    "delete": "Delete"
+    "cancel": "İptal etmek",
+    "save": "Kaydetmek",
+    "delete": "Silmek"
   },
   "keyboard": {
     "esc": "Esc",
     "tab": "Tab",
-    "enter": "Enter",
-    "space": "Space",
+    "enter": "Girmek",
+    "space": "Uzay",
     "ctrlC": "Ctrl+C",
     "ctrlD": "Ctrl+D",
     "ctrlZ": "Ctrl+Z",
@@ -313,6 +313,6 @@
     "right": "→"
   },
   "newWorkspace": {
-    "fabLabel": "New workspace"
+    "fabLabel": "Yeni çalışma alanı"
   }
 }
