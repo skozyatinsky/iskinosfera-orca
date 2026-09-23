@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "certified_linux_suite_attestation.schema.json",
+  "title": "Externally signed certified Linux full-suite attestation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "attestation_id",
+    "issuer",
+    "deployment_identity",
+    "profile_id",
+    "profile_sha256",
+    "source",
+    "environment",
+    "tests",
+    "issued_at",
+    "expires_at",
+    "key_id",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "attestation_id": { "type": "string", "minLength": 8 },
+    "issuer": { "type": "string", "minLength": 3 },
+    "deployment_identity": { "type": "string", "minLength": 3 },
+    "profile_id": { "const": "aps-formal-linux-suite-v1" },
+    "profile_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit_sha", "tree_sha", "source_manifest_sha256"],
+      "properties": {
+        "commit_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "tree_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "source_manifest_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["os", "kernel_release", "architecture", "executor_image_digest", "capabilities"],
+      "properties": {
+        "os": { "const": "Linux" },
+        "kernel_release": { "type": "string", "minLength": 3 },
+        "architecture": { "enum": ["x86_64", "aarch64"] },
+        "executor_image_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "capabilities": {
+          "type": "object",
+          "additionalProperties": { "type": "boolean" },
+          "required": [
+            "linux",
+            "user_namespace",
+            "mount_namespace",
+            "pid_namespace",
+            "pivot_root",
+            "no_new_privs",
+            "descendant_cleanup"
+          ],
+          "properties": {
+            "linux": { "const": true },
+            "user_namespace": { "const": true },
+            "mount_namespace": { "const": true },
+            "pid_namespace": { "const": true },
+            "pivot_root": { "const": true },
+            "no_new_privs": { "const": true },
+            "descendant_cleanup": { "const": true }
+          }
+        }
+      }
+    },
+    "tests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "collected",
+        "direct_junit_sha256",
+        "segmented_junit_sha256",
+        "node_ids_sha256",
+        "passed",
+        "failed",
+        "errors",
+        "unexpected_skipped",
+        "xpassed"
+      ],
+      "properties": {
+        "collected": { "type": "integer", "minimum": 1 },
+        "direct_junit_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "segmented_junit_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "node_ids_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "passed": { "type": "integer", "minimum": 1 },
+        "failed": { "const": 0 },
+        "errors": { "const": 0 },
+        "unexpected_skipped": { "const": 0 },
+        "xpassed": { "const": 0 }
+      }
+    },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "key_id": { "type": "string", "minLength": 3 },
+    "signature": { "type": "string", "minLength": 80 }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "$id": "capability_evidence.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "cases": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "applicable_profiles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "capability_id": {
+            "type": "string"
+          },
+          "case_id": {
+            "type": "string"
+          },
+          "expected_exit_code": {
+            "type": "integer"
+          },
+          "expected_finding_code": {
+            "type": ["string", "null"]
+          },
+          "polarity": {
+            "enum": ["positive", "negative", "bypass"]
+          },
+          "pytest_node_id": {
+            "type": "string"
+          },
+          "required_platforms": {
+            "items": {
+              "enum": ["darwin", "linux", "windows"]
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "rule_id": {
+            "pattern": "^APS-[A-Z0-9]+(?:-[A-Z0-9]+)+$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "case_id",
+          "capability_id",
+          "pytest_node_id",
+          "polarity",
+          "expected_exit_code",
+          "applicable_profiles"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    }
+  },
+  "required": ["schema_version", "cases"],
+  "title": "Executable capability evidence cases",
+  "type": "object"
+}

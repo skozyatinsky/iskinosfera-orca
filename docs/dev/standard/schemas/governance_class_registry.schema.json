@@ -1,0 +1,116 @@
+{
+  "$id": "governance_class_registry.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "classes": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "allow_shared_paths_with": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "allowed_patterns": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "class_id": {
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "type": "string"
+          },
+          "description": {
+            "minLength": 10,
+            "type": "string"
+          },
+          "exclusive": {
+            "type": "boolean"
+          },
+          "minimum_resolved_files": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "must_exist": {
+            "type": "boolean"
+          },
+          "must_resolve": {
+            "type": "boolean"
+          },
+          "read_by_validators": {
+            "items": {
+              "pattern": "^--check-",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "required_all_of": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "required_any_of": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "required_schema": {
+            "type": ["string", "null"]
+          }
+        },
+        "required": [
+          "class_id",
+          "description",
+          "required_all_of",
+          "required_any_of",
+          "allowed_patterns",
+          "required_schema",
+          "must_exist",
+          "must_resolve",
+          "minimum_resolved_files",
+          "exclusive",
+          "allow_shared_paths_with",
+          "read_by_validators"
+        ],
+        "type": "object"
+      },
+      "minItems": 18,
+      "type": "array"
+    },
+    "mandatory_class_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 18,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "protocol_version": {
+      "const": "2.1",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    }
+  },
+  "required": ["schema_version", "protocol_version", "mandatory_class_ids", "classes"],
+  "title": "Semantic governance class registry",
+  "type": "object"
+}

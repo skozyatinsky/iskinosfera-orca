@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "dependency_policy.schema.json",
+  "title": "Политика управления зависимостями проекта",
+  "type": "object",
+  "required": ["manager", "source_of_truth"],
+  "additionalProperties": false,
+  "properties": {
+    "manager": { "type": "string", "enum": ["uv", "pip", "poetry", "pdm", "hatch"] },
+    "source_of_truth": { "type": "string" },
+    "lockfile": { "type": "string" },
+    "fallback": { "type": "string" },
+    "requirements_txt_policy": {
+      "type": "string",
+      "enum": ["not_used", "export_only", "legacy", "deployment_only", "fallback"]
+    },
+    "ci_install_command": { "type": "string" },
+    "ci_run_prefix": { "type": "string" }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-project-standard.local/schemas/architect_tz_evidence.schema.json",
+  "title": "Architect TZ evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "evidence"],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "evidence_id",
+          "tz_id",
+          "test_node_id",
+          "command",
+          "expected_exit_code",
+          "verified_result",
+          "verified_at"
+        ],
+        "properties": {
+          "evidence_id": { "type": "string", "minLength": 1 },
+          "tz_id": { "type": "string", "pattern": "^TZ-[0-9]+$" },
+          "test_node_id": { "type": "string", "minLength": 1 },
+          "command": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "expected_exit_code": { "type": "integer" },
+          "verified_result": { "enum": ["PASS", "FAIL", "NOT_RUN", "EXEMPTED"] },
+          "verified_at": { "type": "string", "format": "date-time" },
+          "exception": { "type": ["object", "null"] }
+        }
+      }
+    }
+  }
+}

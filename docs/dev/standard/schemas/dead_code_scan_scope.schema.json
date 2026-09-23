@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-project-standard/schemas/dead_code_scan_scope.schema.json",
+  "title": "Dead code scan scope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "exclusions"],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "exclusions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["exclusion_id", "path", "category", "reason", "owner"],
+        "properties": {
+          "exclusion_id": {
+            "type": "string",
+            "pattern": "^[A-Z0-9-]+$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "vendored_tooling",
+              "archived",
+              "delivered_artifact",
+              "generated",
+              "third_party"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 10
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

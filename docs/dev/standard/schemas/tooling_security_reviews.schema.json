@@ -1,0 +1,104 @@
+{
+  "$id": "tooling_security_reviews.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "description": "Машиночитаемая история проверок Skills/MCP-серверов/плагинов перед установкой или включением в проект — по красным флагам (shell-exec, сетевые вызовы, обфускация, широкие права, неясное авторство). Опциональный слой. См. TOOLING_SECURITY_REVIEW_STANDARD.md.",
+  "properties": {
+    "reviews": {
+      "description": "по одной записи на каждый Skill/MCP-сервер/плагин, требующий ИБ-ревью",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "decision": {
+            "description": "red_flags_found непуст допускает только approved_with_waiver, не тихий approved",
+            "enum": ["approved", "rejected", "approved_with_waiver"],
+            "type": "string"
+          },
+          "kind": {
+            "enum": ["skill", "mcp_server", "plugin", "cli_tool", "library"],
+            "type": "string"
+          },
+          "name": {
+            "description": "имя skill/MCP-сервера/плагина",
+            "minLength": 1,
+            "type": "string"
+          },
+          "rationale": {
+            "description": "почему инструмент вообще нужен и почему принято такое решение",
+            "type": "string"
+          },
+          "red_flags_checked": {
+            "description": "какие пункты фиксированного чек-листа красных флагов были реально проверены",
+            "items": {
+              "enum": [
+                "shell_pipe_to_interpreter",
+                "eval_or_dynamic_code",
+                "obfuscated_content",
+                "outbound_network_calls",
+                "requests_broad_permissions",
+                "unclear_authorship",
+                "embedded_secrets"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "red_flags_found": {
+            "description": "какие из проверенных красных флагов реально сработали — непустой список требует decision=approved_with_waiver, не тихий approved",
+            "items": {
+              "enum": [
+                "shell_pipe_to_interpreter",
+                "eval_or_dynamic_code",
+                "obfuscated_content",
+                "outbound_network_calls",
+                "requests_broad_permissions",
+                "unclear_authorship",
+                "embedded_secrets"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "reviewed_at": {
+            "description": "когда проводили ИБ-ревью",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "type": "string"
+          },
+          "reviewed_by": {
+            "description": "кто/что провело ревью (человек, роль ИБшника, инструмент)",
+            "type": "string"
+          },
+          "source": {
+            "description": "package/library — свои, уже доверенные слои парка, ревью не обязательно; external/unknown требует ИБ-ревью с evidence (decision=approved/approved_with_waiver без evidence-полей — ошибка); explicit waiver (approved_with_waiver + waiver_reason) жёстко обязателен только при непустом red_flags_found — external/unknown без находок и decision=approved даёт предупреждение, не ошибку (аналогично skills.manifest.json source)",
+            "enum": ["package", "library", "external", "unknown"],
+            "type": "string",
+            "x-aps-rule": {
+              "id": "APS-SCHEMA-TOOLINGSECURITYREV-74FA-001",
+              "semantic_contract_version": 1,
+              "status": "DOCUMENTED",
+              "title": "tooling_security_reviews.schema rule 1"
+            }
+          },
+          "source_reference": {
+            "description": "откуда взят инструмент — свободный текст (repo URL, marketplace, издатель); для машинно проверяемой ссылки используй отдельное поле source_url",
+            "type": "string"
+          },
+          "source_url": {
+            "description": "структурная ссылка на источник (repo/marketplace/официальная страница) — опционально, отдельно от свободного source_reference; проверяется как URL (схема http(s):// или git+ssh://), не эвристикой по ключевым словам",
+            "type": "string"
+          },
+          "waiver_reason": {
+            "description": "обязателен при decision=approved_with_waiver — почему риск принят",
+            "type": "string"
+          }
+        },
+        "required": ["name", "kind", "source", "decision"],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": ["reviews"],
+  "title": "Журнал ИБ-ревью внешнего AI-агентного инструментария",
+  "type": "object"
+}

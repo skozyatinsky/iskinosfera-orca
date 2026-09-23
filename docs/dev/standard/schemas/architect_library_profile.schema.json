@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-project-standard.local/schemas/architect_library_profile.schema.json",
+  "title": "Architect library profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "standard_version",
+    "canonical_command",
+    "canonical_command_documents",
+    "skills_manifest",
+    "license_ledger",
+    "expected_skill_count",
+    "quarantined_skill_ids",
+    "path_classification_manifest",
+    "tz_registry",
+    "tz_evidence_registry",
+    "tz02_contract",
+    "work_materials_registry",
+    "critical_files_manifest",
+    "immutable_releases_registry",
+    "library_index",
+    "session_state",
+    "session_state_max_age_days"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "profile_id": {
+      "type": "string",
+      "const": "architect_library"
+    },
+    "standard_version": {
+      "type": "string",
+      "pattern": "^2\\.9\\.[0-9]+$"
+    },
+    "canonical_command": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canonical_command_documents": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "skills_manifest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expected_skill_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "quarantined_skill_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "path_classification_manifest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tz_registry": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tz_evidence_registry": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tz02_contract": {
+      "type": "string",
+      "minLength": 1
+    },
+    "work_materials_registry": {
+      "type": "string",
+      "minLength": 1
+    },
+    "critical_files_manifest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "immutable_releases_registry": {
+      "type": "string",
+      "minLength": 1
+    },
+    "library_index": {
+      "type": "string",
+      "minLength": 1
+    },
+    "session_state": {
+      "type": "string",
+      "minLength": 1
+    },
+    "session_state_max_age_days": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "license_ledger": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

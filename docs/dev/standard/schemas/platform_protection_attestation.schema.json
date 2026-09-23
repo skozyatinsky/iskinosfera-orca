@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "platform_protection_attestation.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provider",
+    "repository",
+    "canonical_protected_ref",
+    "fetched_at",
+    "source_api",
+    "provider_response_sha256",
+    "controls",
+    "issuer"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "provider": { "enum": ["github", "gitlab", "other"] },
+    "repository": { "type": "string", "minLength": 1 },
+    "canonical_protected_ref": { "type": "string", "pattern": "^refs/heads/.+" },
+    "fetched_at": { "type": "string" },
+    "source_api": { "type": "string", "minLength": 1 },
+    "provider_response_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "issuer": { "type": "string", "minLength": 1 },
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protected_branch",
+        "required_checks",
+        "required_reviews",
+        "force_push_disabled",
+        "workflow_changes_protected"
+      ],
+      "properties": {
+        "protected_branch": { "const": true },
+        "required_checks": { "const": true },
+        "required_reviews": { "const": true },
+        "force_push_disabled": { "const": true },
+        "workflow_changes_protected": { "const": true }
+      }
+    }
+  }
+}

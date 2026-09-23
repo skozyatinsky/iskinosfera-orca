@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "constants.schema.json",
+  "title": "Реестр код-констант",
+  "description": "Именованные константы кода (exit-коды, имена метрик, версии схем, CLI-дефолты) — «ведро constant» из NO_HARDCODE_POLICY §8. Опциональный реестр.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["name", "kind", "path"],
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "имя константы (UPPER_SNAKE)",
+        "pattern": "^[A-Z][A-Z0-9_]*$"
+      },
+      "kind": {
+        "type": "string",
+        "description": "категория: exit_code / metric_name / schema_version / cli_default / …"
+      },
+      "path": {
+        "type": "string",
+        "description": "путь к файлу-владельцу"
+      },
+      "value": {
+        "description": "значение константы; опц."
+      },
+      "owner_module": {
+        "type": "string",
+        "description": "модуль-владелец; опц."
+      },
+      "summary": {
+        "type": "string",
+        "description": "краткое описание; опц."
+      }
+    }
+  }
+}

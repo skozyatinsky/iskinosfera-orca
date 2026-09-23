@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "endpoints.schema.json",
+  "title": "Реестр HTTP-эндпойнтов",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["method", "path"],
+    "additionalProperties": false,
+    "properties": {
+      "method": {
+        "type": "string",
+        "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+      },
+      "path": { "type": "string" },
+      "auth": { "type": "string", "description": "способ авторизации или none" },
+      "request": { "type": "string", "description": "схема запроса или ссылка на неё" },
+      "response": { "type": "string", "description": "схема ответа или ссылка на неё" },
+      "errors": { "type": "array", "items": { "type": "string" } },
+      "stability": {
+        "type": "string",
+        "enum": ["stable", "beta", "experimental", "internal", "deprecated"]
+      }
+    }
+  }
+}

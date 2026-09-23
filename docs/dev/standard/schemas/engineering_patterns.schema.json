@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "engineering_patterns.schema.json",
+  "title": "Реестр инженерных паттернов (память удачных/плохих решений)",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "title", "kind", "status"],
+    "additionalProperties": false,
+    "properties": {
+      "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+      "title": { "type": "string", "minLength": 3 },
+      "kind": { "type": "string", "enum": ["success", "anti"] },
+      "status": {
+        "type": "string",
+        "enum": ["CANDIDATE", "APPROVED", "RECOMMENDED", "FORBIDDEN", "DEPRECATED"]
+      },
+      "problem": { "type": "string" },
+      "solution": { "type": "string" },
+      "good_example": { "type": "string" },
+      "bad_example": { "type": "string" },
+      "forbidden_example": { "type": "string" },
+      "applies_to": { "type": "array", "items": { "type": "string" } },
+      "enforcement_refs": { "type": "array", "items": { "type": "string" } },
+      "source": { "type": "string" }
+    }
+  }
+}

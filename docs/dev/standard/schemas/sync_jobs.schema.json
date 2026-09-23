@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sync_jobs.schema.json",
+  "title": "Каналы синхронизации ноутбук/сервер по классам данных",
+  "type": "object",
+  "required": ["transport", "jobs"],
+  "additionalProperties": false,
+  "properties": {
+    "transport": {
+      "type": "string"
+    },
+    "transport_exception": {
+      "type": "string",
+      "description": "почему не tailscale (если transport иной)"
+    },
+    "devices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "role"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "tailscale_name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "jobs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "class", "tool", "mode"],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string",
+            "enum": ["code", "documents", "large_data", "backup", "secrets"]
+          },
+          "tool": {
+            "type": "string",
+            "enum": ["git", "syncthing", "rsync", "restic"]
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["bidirectional", "one_way", "snapshot"]
+          },
+          "direction": {
+            "type": "string"
+          },
+          "local_path": {
+            "type": "string"
+          },
+          "server_path": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "repository": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exclude": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "versioning_required": {
+            "type": "boolean"
+          },
+          "delete": {
+            "type": "boolean"
+          },
+          "dry_run_required_before_first_run": {
+            "type": "boolean"
+          },
+          "retention": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "daily": {
+                "type": "integer"
+              },
+              "weekly": {
+                "type": "integer"
+              },
+              "monthly": {
+                "type": "integer"
+              }
+            }
+          },
+          "check_required": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "trusted_verification_record.schema.json",
+  "title": "Signed trusted verification record",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "request_id",
+    "run_id",
+    "repository_id",
+    "task_id",
+    "candidate_identity_id",
+    "expected_candidate_sha",
+    "status",
+    "recorded_at",
+    "expires_at",
+    "attestation_inputs",
+    "trusted_test_evidence_ids",
+    "tool_identity",
+    "record_sha256",
+    "signature"
+  ],
+  "properties": {
+    "request_id": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "repository_id": { "type": "string", "minLength": 1 },
+    "task_id": { "type": "string", "minLength": 1 },
+    "candidate_identity_id": { "type": "string", "minLength": 1 },
+    "expected_candidate_sha": { "type": "string", "pattern": "^[0-9a-f]{40,64}$" },
+    "status": { "enum": ["VERIFIED", "BLOCKED"] },
+    "recorded_at": { "type": "string" },
+    "expires_at": { "type": "string" },
+    "attestation_inputs": { "type": "object" },
+    "trusted_test_evidence_ids": {
+      "type": "object",
+      "required": ["targeted_tests", "affected_tests", "full_regression"],
+      "additionalProperties": false,
+      "properties": {
+        "targeted_tests": { "type": "string", "minLength": 1 },
+        "affected_tests": { "type": "string", "minLength": 1 },
+        "full_regression": { "type": "string", "minLength": 1 }
+      }
+    },
+    "tool_identity": { "type": "object" },
+    "record_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "signature": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "work_package_graph.schema.json",
+  "title": "Граф зависимостей work package",
+  "description": "Машиночитаемый граф зависимостей между work package: какие можно запускать параллельно, какие ждут завершения других. Опциональный слой. Статусный словарь переиспользует SOFTWARE_DEVELOPMENT_LIFECYCLE_STANDARD.md §9.1 (TODO/WIP/BLOCKED/DONE) + FAILED. См. MODULE_BOUNDARIES_STANDARD.md §10.3.",
+  "type": "object",
+  "required": ["work_packages"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "work_packages": {
+      "type": "array",
+      "description": "по одной записи на каждый work package",
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "depends_on"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$",
+            "description": "уникальный идентификатор work package, напр. WP-CATALOG"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["TODO", "WIP", "BLOCKED", "DONE", "FAILED"]
+          },
+          "depends_on": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "uniqueItems": true,
+            "description": "id других work package, которые должны завершиться (DONE) раньше этого"
+          }
+        }
+      }
+    }
+  }
+}

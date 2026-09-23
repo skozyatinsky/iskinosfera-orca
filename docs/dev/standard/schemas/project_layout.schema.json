@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project_layout.schema.json",
+  "title": "Ожидаемая раскладка проекта (для проверки/описания отклонений)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "package_name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+    "entrypoint": { "type": "string" },
+    "required_dirs": { "type": "array", "items": { "type": "string" } },
+    "deviations": { "type": "array", "items": { "type": "object" } }
+  }
+}

@@ -1,0 +1,243 @@
+{
+  "$id": "git_workspace_hygiene.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "branch_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "changes_enter_main_only_via_pr": {
+          "type": "boolean"
+        },
+        "delete_merged_local_branch": {
+          "type": "string"
+        },
+        "delete_unmerged_branch": {
+          "description": "жёстко forbidden — unmerged ветка не удаляется автоматически",
+          "enum": ["forbidden"],
+          "type": "string"
+        },
+        "feature_branch_patterns": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "force_delete_requires_human_confirmation": {
+          "description": "должен быть true — git branch -D без подтверждения человека запрещён",
+          "type": "boolean",
+          "x-aps-rule": {
+            "id": "APS-SCHEMA-GITWORKSPACEHYGIEN-D191-003",
+            "semantic_contract_version": 1,
+            "status": "DOCUMENTED",
+            "title": "git_workspace_hygiene.schema rule 3"
+          }
+        },
+        "new_work_requires_branch": {
+          "type": "boolean"
+        },
+        "protected_branch_patterns": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "protected_branch_patterns",
+        "delete_unmerged_branch",
+        "force_delete_requires_human_confirmation"
+      ],
+      "type": "object"
+    },
+    "post_merge_cleanup": {
+      "additionalProperties": false,
+      "properties": {
+        "remote_prune_requires_dry_run_first": {
+          "description": "должен быть true — git remote prune origin сначала dry-run",
+          "type": "boolean",
+          "x-aps-rule": {
+            "id": "APS-SCHEMA-GITWORKSPACEHYGIEN-D191-006",
+            "semantic_contract_version": 1,
+            "status": "DOCUMENTED",
+            "title": "git_workspace_hygiene.schema rule 6"
+          }
+        },
+        "require_clean_status_after_cleanup": {
+          "type": "boolean"
+        },
+        "required": {
+          "description": "должен быть true — уборка после merge не опциональна",
+          "type": "boolean",
+          "x-aps-rule": {
+            "id": "APS-SCHEMA-GITWORKSPACEHYGIEN-D191-005",
+            "semantic_contract_version": 1,
+            "status": "DOCUMENTED",
+            "title": "git_workspace_hygiene.schema rule 5"
+          }
+        },
+        "steps": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "when": {
+          "type": "string"
+        }
+      },
+      "required": ["required", "remote_prune_requires_dry_run_first"],
+      "type": "object"
+    },
+    "primary_workspace": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_detached_head": {
+          "description": "должен быть false",
+          "type": "boolean",
+          "x-aps-rule": {
+            "id": "APS-SCHEMA-GITWORKSPACEHYGIEN-D191-002",
+            "semantic_contract_version": 1,
+            "status": "DOCUMENTED",
+            "title": "git_workspace_hygiene.schema rule 2"
+          }
+        },
+        "allow_dirty_status": {
+          "type": "boolean"
+        },
+        "branch": {
+          "description": "ветка, на которой должна жить основная папка проекта — обычно main",
+          "minLength": 1,
+          "type": "string"
+        },
+        "direct_development_allowed": {
+          "description": "должен быть false — в основной папке не ведут feature-разработку",
+          "type": "boolean",
+          "x-aps-rule": {
+            "id": "APS-SCHEMA-GITWORKSPACEHYGIEN-D191-001",
+            "semantic_contract_version": 1,
+            "status": "DOCUMENTED",
+            "title": "git_workspace_hygiene.schema rule 1"
+          }
+        },
+        "must_remain_on_branch": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "branch",
+        "must_remain_on_branch",
+        "direct_development_allowed",
+        "allow_detached_head"
+      ],
+      "type": "object"
+    },
+    "scheduled_checks": {
+      "additionalProperties": false,
+      "properties": {
+        "destructive_cleanup": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "requires_human_confirmation": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "monthly_cleanup_dry_run": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "mode": {
+              "type": "string"
+            },
+            "orchestrator": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "weekly_inventory": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "mode": {
+              "type": "string"
+            },
+            "orchestrator": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "staleness_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "merged_branch_cleanup_grace_hours": {
+          "type": "integer"
+        },
+        "merged_worktree_cleanup_grace_hours": {
+          "type": "integer"
+        },
+        "stale_branch_days": {
+          "type": "integer"
+        },
+        "stale_worktree_days": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "worktree_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "force_remove_requires_human_confirmation": {
+          "description": "должен быть true — git worktree remove --force без подтверждения запрещён",
+          "type": "boolean",
+          "x-aps-rule": {
+            "id": "APS-SCHEMA-GITWORKSPACEHYGIEN-D191-004",
+            "semantic_contract_version": 1,
+            "status": "DOCUMENTED",
+            "title": "git_workspace_hygiene.schema rule 4"
+          }
+        },
+        "one_task_per_worktree": {
+          "type": "boolean"
+        },
+        "parallel_agent_work_requires_worktree": {
+          "type": "boolean"
+        },
+        "remove_after_merge": {
+          "type": "boolean"
+        },
+        "remove_dirty_worktree": {
+          "description": "жёстко forbidden — dirty worktree не удаляется автоматически",
+          "enum": ["forbidden"],
+          "type": "string"
+        },
+        "worktree_roots": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["remove_dirty_worktree", "force_remove_requires_human_confirmation"],
+      "type": "object"
+    }
+  },
+  "required": ["primary_workspace", "branch_policy", "worktree_policy", "post_merge_cleanup"],
+  "title": "Политика жизненного цикла веток/worktree (Git Workspace Hygiene)",
+  "type": "object"
+}

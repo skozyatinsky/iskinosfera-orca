@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "trusted_verification_request.schema.json",
+  "title": "Minimal trusted verification request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_id",
+    "candidate_identity_id",
+    "repository_id",
+    "task_id",
+    "expected_candidate_sha"
+  ],
+  "properties": {
+    "request_id": { "type": "string", "minLength": 1 },
+    "candidate_identity_id": { "type": "string", "minLength": 1 },
+    "repository_id": { "type": "string", "minLength": 1 },
+    "task_id": { "type": "string", "minLength": 1 },
+    "expected_candidate_sha": { "type": "string", "pattern": "^[0-9a-f]{40,64}$" }
+  }
+}

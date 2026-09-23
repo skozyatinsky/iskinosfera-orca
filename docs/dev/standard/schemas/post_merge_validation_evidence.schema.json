@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "post_merge_validation_evidence.schema.json",
+  "title": "Signed controlled automatic merge post-merge evidence",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "evidence_id",
+    "operation_id",
+    "merge_request_id",
+    "repository_id",
+    "task_id",
+    "candidate_commit_sha",
+    "merge_commit_sha",
+    "target_protected_ref",
+    "registry_commit_sha",
+    "checks",
+    "issued_at",
+    "expires_at",
+    "validator_service_identity",
+    "validator_deployment_identity",
+    "key_id",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "checks": { "type": "object", "additionalProperties": { "type": "boolean" } },
+    "signature": { "type": "string", "minLength": 80 }
+  }
+}

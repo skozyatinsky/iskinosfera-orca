@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-project-standard.local/schemas/architect_license_ledger.schema.json",
+  "title": "Architect skill license ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "skills"],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "skill_id",
+          "source",
+          "version",
+          "license_status",
+          "installable",
+          "client_distribution_allowed",
+          "notes"
+        ],
+        "properties": {
+          "skill_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "license_status": {
+            "enum": ["APPROVED", "KNOWN", "INTERNAL", "UNKNOWN", "QUARANTINED"]
+          },
+          "installable": {
+            "type": "boolean"
+          },
+          "client_distribution_allowed": {
+            "type": "boolean"
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 1
+          },
+          "canonical_path": {
+            "type": "string",
+            "description": "Путь к SKILL.md, если скил лежит вне каталога выставленных скилов. Нужен для карантинных: их нельзя выставлять, но в манифесте они обязаны быть.",
+            "x-aps-rule": {
+              "id": "APS-SCHEMA-ARCHITECTLICENSELEDGERSCHEMA-2012-001",
+              "semantic_contract_version": 1,
+              "status": "DOCUMENTED",
+              "title": "architect_license_ledger.schema rule 1"
+            }
+          }
+        }
+      }
+    }
+  }
+}

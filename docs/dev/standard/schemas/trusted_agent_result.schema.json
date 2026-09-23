@@ -1,0 +1,218 @@
+{
+  "$id": "trusted_agent_result.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "actual_changed_files": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "agent_identity": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "approved_target_ref": {
+      "pattern": "^refs/(heads|remotes)/.+",
+      "type": "string"
+    },
+    "attestation_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "attestation_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "base_commit_sha": {
+      "pattern": "^[0-9a-f]{40,64}$",
+      "type": "string"
+    },
+    "blocking_caveats": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "candidate_branch": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "candidate_identity_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "candidate_ref_tip_sha": {
+      "pattern": "^[0-9a-f]{40,64}$",
+      "type": "string"
+    },
+    "dependency_state": {
+      "type": "string"
+    },
+    "diff_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "evidence_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "execution_completed_at": {
+      "type": "string"
+    },
+    "fencing_token": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "file_modes": {
+      "type": "object"
+    },
+    "findings": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "head_commit_sha": {
+      "pattern": "^[0-9a-f]{40,64}$",
+      "type": "string"
+    },
+    "head_tree_sha": {
+      "pattern": "^[0-9a-f]{40,64}$",
+      "type": "string"
+    },
+    "issued_at": {
+      "type": "string"
+    },
+    "issuer": {
+      "const": "trusted-signer"
+    },
+    "key_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "lease_allowed_paths": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "lease_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "leased_branch": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "mandatory_check_evidence": {
+      "items": {
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "module_boundary_compliance": {
+      "type": "boolean"
+    },
+    "ownership_allowed_paths": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "ownership_compliance": {
+      "type": "boolean"
+    },
+    "readiness_status": {
+      "enum": ["READY_TO_MERGE", "REJECTED"]
+    },
+    "request_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "run_id": {
+      "minLength": 16,
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "3.0.0"
+    },
+    "scope_compliance": {
+      "type": "boolean"
+    },
+    "signature": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "signer_identity": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "task_allowed_paths": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "task_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "trusted_test_evidence_ids": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_tests": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "full_regression": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "targeted_tests": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": ["targeted_tests", "affected_tests", "full_regression"],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "request_id",
+    "candidate_identity_id",
+    "task_id",
+    "base_commit_sha",
+    "head_commit_sha",
+    "head_tree_sha",
+    "diff_sha256",
+    "candidate_branch",
+    "leased_branch",
+    "candidate_ref_tip_sha",
+    "approved_target_ref",
+    "actual_changed_files",
+    "task_allowed_paths",
+    "lease_allowed_paths",
+    "ownership_allowed_paths",
+    "mandatory_check_evidence",
+    "trusted_test_evidence_ids",
+    "lease_id",
+    "fencing_token",
+    "issuer",
+    "readiness_status",
+    "findings",
+    "attestation_id",
+    "issued_at",
+    "key_id",
+    "signer_identity",
+    "attestation_sha256",
+    "signature"
+  ],
+  "title": "Signed trusted candidate attestation v3",
+  "type": "object"
+}

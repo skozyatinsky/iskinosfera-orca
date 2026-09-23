@@ -1,0 +1,682 @@
+{
+  "$id": "release_receipt.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "artifact": {
+      "additionalProperties": false,
+      "properties": {
+        "file_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "path": {
+          "type": ["string", "null"]
+        },
+        "published": {
+          "type": "boolean"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": ["string", "null"]
+        },
+        "source_manifest_matches": {
+          "type": "boolean"
+        }
+      },
+      "required": ["path", "published", "sha256", "source_manifest_matches", "file_count"],
+      "type": "object"
+    },
+    "created_at": {
+      "minLength": 20,
+      "type": "string"
+    },
+    "environment": {
+      "additionalProperties": false,
+      "properties": {
+        "platform": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "pytest_plugin_autoload": {
+          "const": "disabled"
+        },
+        "python": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "python_executable": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "working_directory": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "python",
+        "platform",
+        "python_executable",
+        "pytest_plugin_autoload",
+        "working_directory"
+      ],
+      "type": "object"
+    },
+    "evidence_bundle": {
+      "additionalProperties": false,
+      "properties": {
+        "file_count": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "manifest_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "published": {
+          "type": "boolean"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": ["path", "sha256", "file_count", "manifest_sha256", "published"],
+      "type": ["object", "null"]
+    },
+    "identity_binding": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "const": "release_identity.json"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "source_git_bundle_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": ["string", "null"]
+        },
+        "verified": {
+          "type": "boolean"
+        }
+      },
+      "required": ["path", "sha256", "source_git_bundle_sha256", "verified"],
+      "type": "object"
+    },
+    "not_applicable_gates": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "gate": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "reason": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": ["gate", "reason"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "policy": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_skips": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "external_controls": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "mandatory_steps": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "missing_steps": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "observed_steps": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "mandatory_steps",
+        "observed_steps",
+        "missing_steps",
+        "allowed_skips",
+        "external_controls"
+      ],
+      "type": "object"
+    },
+    "profile": {
+      "enum": [
+        "development",
+        "diagnostic",
+        "human_supervised",
+        "parallel_ai_reference_pilot",
+        "parallel_ai",
+        "controlled_automatic_merge",
+        "autonomous_ai",
+        "release",
+        "self_attested"
+      ]
+    },
+    "prompt_catalog": {
+      "additionalProperties": false,
+      "properties": {
+        "catalogued_prompts": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "prompt_catalog_orphans": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "prompt_file_orphans": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "prompt_id_duplicates": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "prompts_with_tests": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "prompts_with_valid_digest": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "read_only_prompts": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "total_prompts": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "total_prompts",
+        "catalogued_prompts",
+        "read_only_prompts",
+        "prompts_with_valid_digest",
+        "prompts_with_tests",
+        "prompt_id_duplicates",
+        "prompt_catalog_orphans",
+        "prompt_file_orphans"
+      ],
+      "type": "object"
+    },
+    "receipt_schema_version": {
+      "const": "4.0.0"
+    },
+    "reproducibility": {
+      "additionalProperties": false,
+      "properties": {
+        "all_passed": {
+          "type": "boolean"
+        },
+        "cross_extraction_rebuild": {
+          "type": "boolean"
+        },
+        "fresh_snapshot_rebuild": {
+          "type": "boolean"
+        },
+        "hashes": {
+          "additionalProperties": {
+            "type": ["string", "null"]
+          },
+          "type": "object"
+        },
+        "same_tree_rebuild": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "same_tree_rebuild",
+        "fresh_snapshot_rebuild",
+        "cross_extraction_rebuild",
+        "all_passed",
+        "hashes"
+      ],
+      "type": "object"
+    },
+    "rule_traceability": {
+      "additionalProperties": false,
+      "properties": {
+        "behavioral_tests_required_rules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "deprecated_rules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "documented_rules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "duplicate_rule_ids": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "external_control_required_rules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "implemented_rules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "implemented_rules_with_complete_test_triad": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "missing_structured_diagnostics": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "nonimplemented_rules_with_tests": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "orphan_registry_rules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "partially_implemented_rules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "removed_published_rules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "reused_rule_ids": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "rules_with_bypass_tests": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "rules_with_negative_tests": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "rules_with_passing_tests": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "rules_with_positive_tests": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "rules_without_tests": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "rules_without_tests_by_design": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "semantic_drift_findings": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "superseded_rules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "total_human_rule_blocks": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "total_registry_rules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "unknown_implementation_symbols": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "unregistered_human_rules": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "untested_implemented_rules": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "total_human_rule_blocks",
+        "total_registry_rules",
+        "implemented_rules",
+        "partially_implemented_rules",
+        "documented_rules",
+        "deprecated_rules",
+        "superseded_rules",
+        "external_control_required_rules",
+        "rules_with_passing_tests",
+        "rules_with_positive_tests",
+        "rules_with_negative_tests",
+        "rules_with_bypass_tests",
+        "rules_without_tests",
+        "unregistered_human_rules",
+        "orphan_registry_rules",
+        "duplicate_rule_ids",
+        "unknown_implementation_symbols",
+        "missing_structured_diagnostics",
+        "semantic_drift_findings",
+        "removed_published_rules",
+        "reused_rule_ids",
+        "behavioral_tests_required_rules",
+        "implemented_rules_with_complete_test_triad",
+        "untested_implemented_rules",
+        "rules_without_tests_by_design",
+        "nonimplemented_rules_with_tests"
+      ],
+      "type": "object"
+    },
+    "source": {
+      "additionalProperties": false,
+      "properties": {
+        "commit_sha": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": ["string", "null"]
+        },
+        "file_count": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "git_clean": {
+          "type": ["boolean", "null"]
+        },
+        "git_repository": {
+          "type": "boolean"
+        },
+        "manifest_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "records": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "mode": {
+                "pattern": "^0[0-7]{3}$",
+                "type": "string"
+              },
+              "path": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "sha256": {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "size": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "symlink_target": {
+                "type": ["string", "null"]
+              },
+              "type": {
+                "enum": ["file", "symlink"]
+              }
+            },
+            "required": ["path", "type", "sha256", "size", "mode", "symlink_target"],
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "snapshot_method": {
+          "enum": ["canonical_copy", "git_tree_plus_canonical_copy"]
+        },
+        "source_unchanged": {
+          "type": "boolean"
+        },
+        "tree_sha": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": ["string", "null"]
+        }
+      },
+      "required": [
+        "git_repository",
+        "git_clean",
+        "commit_sha",
+        "tree_sha",
+        "manifest_sha256",
+        "file_count",
+        "snapshot_method",
+        "source_unchanged",
+        "records"
+      ],
+      "type": "object"
+    },
+    "standard_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "status": {
+      "enum": ["PASS", "FAIL", "INCOMPLETE", "DIAGNOSTIC_ONLY", "SELF_ATTESTED"]
+    },
+    "steps": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "command": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "duration_seconds": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "exit_code": {
+            "type": "integer"
+          },
+          "findings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "input_hashes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "junit_xml": {
+            "minLength": 1,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$",
+            "type": "string"
+          },
+          "output_hashes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "started_at": {
+            "minLength": 20,
+            "type": "string"
+          },
+          "status": {
+            "enum": ["PASS", "FAIL", "SKIPPED"]
+          },
+          "stderr_log": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "stderr_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "stdout_log": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "stdout_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "test_summary": {
+            "additionalProperties": false,
+            "properties": {
+              "accounted": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "completed": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "duration_seconds": {
+                "minimum": 0,
+                "type": "number"
+              },
+              "errors": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "failed": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "passed": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "skipped": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "status": {
+                "enum": ["PASS", "FAIL", "TIMEOUT"]
+              },
+              "total": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "unexpected_skipped": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "xfailed": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "xpassed": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "outcome_contradictions": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "total",
+              "completed",
+              "accounted",
+              "passed",
+              "failed",
+              "skipped",
+              "xfailed",
+              "xpassed",
+              "errors",
+              "unexpected_skipped",
+              "status",
+              "duration_seconds"
+            ],
+            "type": "object"
+          },
+          "working_directory": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "command",
+          "working_directory",
+          "started_at",
+          "duration_seconds",
+          "exit_code",
+          "status",
+          "stdout_sha256",
+          "stderr_sha256",
+          "stdout_log",
+          "stderr_log",
+          "input_hashes",
+          "output_hashes"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "receipt_schema_version",
+    "standard_version",
+    "profile",
+    "status",
+    "created_at",
+    "environment",
+    "source",
+    "steps",
+    "not_applicable_gates",
+    "artifact",
+    "reproducibility",
+    "evidence_bundle",
+    "prompt_catalog",
+    "policy",
+    "rule_traceability",
+    "identity_binding"
+  ],
+  "title": "Release evidence receipt",
+  "type": "object"
+}

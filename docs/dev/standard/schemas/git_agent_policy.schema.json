@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "git_agent_policy.schema.json",
+  "title": "Политика git-поведения AI-агента (commit/push)",
+  "type": "object",
+  "required": ["protected_branches", "commit_policy", "push_policy"],
+  "additionalProperties": false,
+  "properties": {
+    "protected_branches": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "custom_branch_policy_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "commit_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "auto_commit_after_green": {
+          "type": "boolean"
+        },
+        "commit_only_on_feature_branch": {
+          "type": "boolean"
+        },
+        "commit_message_required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "push_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["forbid_force_push", "forbid_push_to_protected_branches"],
+      "properties": {
+        "auto_push_after_green": {
+          "type": "boolean"
+        },
+        "push_requires_explicit_user_approval": {
+          "type": "boolean"
+        },
+        "forbid_push_to_protected_branches": {
+          "type": "boolean"
+        },
+        "forbid_force_push": {
+          "type": "boolean"
+        },
+        "waiver_reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "merge_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "auto_merge_after_gate_pass": {
+          "type": "boolean",
+          "description": "по умолчанию отсутствует/false — мерж в защищённую ветку требует человека. true разрешает автомерж ПОСЛЕ прохождения детерминированного гейта, только для контролируемой autonomy-среды (v2.9.93)"
+        },
+        "merge_only_via_reviewable_pr": {
+          "type": "boolean",
+          "description": "true — автомерж идёт только через PR (проверяемая история, обратимо через revert), не прямой push в защищённую ветку. Обязателен, если auto_merge_after_gate_pass=true"
+        },
+        "merge_requires_explicit_user_approval": {
+          "type": "boolean"
+        },
+        "waiver_reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

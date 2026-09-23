@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "installation_receipt.schema.json",
+  "title": "Release installation receipt",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "status",
+    "assurance_level",
+    "formal_installation_verified",
+    "artifact_sha256",
+    "release_receipt_sha256",
+    "evidence_bundle_sha256",
+    "destination",
+    "source_manifest_sha256",
+    "installed_file_count",
+    "regular_file_modes_restored",
+    "trusted_tool_identity",
+    "static_validation_exit_code"
+  ],
+  "properties": {
+    "schema_version": { "const": "2.0.0" },
+    "status": { "enum": ["PASS", "CONTRACT_READY"] },
+    "assurance_level": { "enum": ["AUTHENTICITY_AND_INTEGRITY", "INTEGRITY_ONLY"] },
+    "formal_installation_verified": { "type": "boolean" },
+    "artifact_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "release_receipt_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "evidence_bundle_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "source_manifest_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "installed_file_count": { "type": "integer", "minimum": 1 },
+    "regular_file_modes_restored": { "type": "integer", "minimum": 1 },
+    "static_validation_exit_code": { "const": 0 },
+    "trusted_tool_identity": {
+      "type": "object",
+      "required": [
+        "manifest_sha256",
+        "external_manifest_pin",
+        "runtime_artifact_digest",
+        "verified_tools"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "PASS" } } },
+      "then": {
+        "properties": {
+          "assurance_level": { "const": "AUTHENTICITY_AND_INTEGRITY" },
+          "formal_installation_verified": { "const": true },
+          "trusted_tool_identity": {
+            "properties": {
+              "external_manifest_pin": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "runtime_artifact_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "CONTRACT_READY" } } },
+      "then": {
+        "properties": {
+          "assurance_level": { "const": "INTEGRITY_ONLY" },
+          "formal_installation_verified": { "const": false }
+        }
+      }
+    }
+  ]
+}

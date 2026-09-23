@@ -1,0 +1,81 @@
+{
+  "$id": "entitlements.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "description": "Проект декларирует, что лицензируется через License Hub, и какие модули продукта что закрывают. ОТОБРАЖЕНИЕ, не управление: источник правды — БД Hub, манифест — помеченное зеркало (REFERENCE_DATA). Опциональный слой.",
+  "properties": {
+    "hub_url_env": {
+      "description": "имя env-переменной с адресом Hub (UPPER_SNAKE); НЕ литеральный URL",
+      "type": "string"
+    },
+    "mirror_of": {
+      "description": "пометка зеркала: что зеркалит (например Product.entitlement_schema_json в Hub). ОБЯЗАТЕЛЬНО",
+      "type": "string",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-ENTITLEMENTSSCHEMA-BFB4-002",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "entitlements.schema rule 2"
+      }
+    },
+    "modules": {
+      "description": "каталог модулей продукта",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "covers": {
+            "description": "id пользовательских функций (user_functions.json), которые открывает модуль",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "default": {
+            "description": "входит в базовую поставку продукта",
+            "type": "boolean"
+          },
+          "module_code": {
+            "description": "код модуля (совпадает с каталогом Hub)",
+            "pattern": "^[a-z][a-z0-9_\\-]*$",
+            "type": "string"
+          },
+          "title": {
+            "description": "человеко-читаемое имя модуля",
+            "type": "string"
+          }
+        },
+        "required": ["module_code"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "product_code": {
+      "description": "код продукта в License Hub (например BESTPRICE)",
+      "type": "string"
+    },
+    "provider": {
+      "description": "поставщик прав (например license-hub)",
+      "type": "string"
+    },
+    "source_of_truth": {
+      "description": "где источник правды (например license-hub-db); манифест — зеркало. ОБЯЗАТЕЛЬНО: непомеченное зеркало становится вторым источником правды",
+      "type": "string",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-ENTITLEMENTSSCHEMA-BFB4-001",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "entitlements.schema rule 1"
+      }
+    }
+  },
+  "required": [
+    "provider",
+    "product_code",
+    "hub_url_env",
+    "source_of_truth",
+    "mirror_of",
+    "modules"
+  ],
+  "title": "Отображающий манифест лицензионных прав",
+  "type": "object"
+}

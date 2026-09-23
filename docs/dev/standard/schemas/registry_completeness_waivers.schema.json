@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "registry_completeness_waivers.schema.json",
+  "title": "Waiver-список для --check-registry-completeness",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["path", "symbol", "reason"],
+    "additionalProperties": false,
+    "properties": {
+      "path": {
+        "type": "string",
+        "minLength": 1,
+        "description": "путь к файлу относительно корня проекта, как в functions.json"
+      },
+      "symbol": {
+        "type": "string",
+        "minLength": 1,
+        "description": "имя публичного function/class, которое сознательно не регистрируется"
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "description": "почему символ публичный по форме, но не часть заявленного контракта"
+      }
+    }
+  }
+}

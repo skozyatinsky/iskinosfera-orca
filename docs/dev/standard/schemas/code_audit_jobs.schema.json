@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "code_audit_jobs.schema.json",
+  "title": "Три момента проверки кода: after-task, CI, scheduled",
+  "type": "object",
+  "required": ["after_task", "ci", "scheduled"],
+  "additionalProperties": false,
+  "properties": {
+    "after_task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commands"],
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "enum": [true]
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "ci": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["on"],
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "enum": [true]
+        },
+        "on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "warnings_as_errors_on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "scheduled": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["orchestrator"],
+      "properties": {
+        "orchestrator": {
+          "type": "string"
+        },
+        "daily": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "command", "notify_on_failure"],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "command": {
+                "type": "string"
+              },
+              "notify_on_failure": {
+                "type": "boolean",
+                "enum": [true]
+              }
+            }
+          }
+        },
+        "weekly": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "command", "notify_on_failure"],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "command": {
+                "type": "string"
+              },
+              "notify_on_failure": {
+                "type": "boolean",
+                "enum": [true]
+              }
+            }
+          }
+        }
+      }
+    },
+    "external_tools": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["optional_adapter", "required"]
+          },
+          "role": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "required_audits": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["hardcode", "data_in_code"]
+      }
+    }
+  }
+}

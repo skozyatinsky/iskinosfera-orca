@@ -1,0 +1,43 @@
+{
+  "$id": "https://agent-project-standard.local/schemas/memory_technology_catalog.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Memory technology candidate catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "standard_version", "reviewed_at", "entries"],
+  "properties": {
+    "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "standard_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "reviewed_at": { "type": "string", "format": "date" },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "technology",
+          "category",
+          "reference_status",
+          "recommended_for",
+          "not_recommended_for",
+          "official_source",
+          "selection_notes"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$" },
+          "technology": { "type": "string", "minLength": 2 },
+          "category": { "type": "string", "minLength": 2 },
+          "reference_status": {
+            "enum": ["BASELINE", "REFERENCE_OPTION", "PILOT_CANDIDATE", "CONCEPT_ONLY", "DEFERRED"]
+          },
+          "recommended_for": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "not_recommended_for": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "official_source": { "type": "string", "pattern": "^https://" },
+          "selection_notes": { "type": "string", "minLength": 10 }
+        }
+      }
+    }
+  }
+}

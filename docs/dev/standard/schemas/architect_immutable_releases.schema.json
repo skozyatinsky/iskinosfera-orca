@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-project-standard.local/schemas/architect_immutable_releases.schema.json",
+  "title": "Architect immutable releases",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "releases"],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "releases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "version",
+          "zip_path",
+          "source_directory",
+          "sha256",
+          "zip_entries",
+          "crc_required",
+          "require_source_matches_archive",
+          "expected_tests",
+          "strict_gate_status"
+        ],
+        "properties": {
+          "version": { "type": "string" },
+          "zip_path": { "type": "string", "minLength": 1 },
+          "source_directory": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "zip_entries": { "type": "integer", "minimum": 1 },
+          "crc_required": { "type": "boolean" },
+          "require_source_matches_archive": { "type": "boolean" },
+          "expected_tests": { "type": "integer", "minimum": 1 },
+          "strict_gate_status": { "enum": ["PASS", "FAIL", "NOT_RUN"] }
+        }
+      }
+    }
+  }
+}

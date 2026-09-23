@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "unsigned_candidate_evidence.schema.json",
+  "title": "Unsigned candidate evidence bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["attestation", "test_evidence"],
+  "properties": {
+    "attestation": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "run_id",
+        "request_id",
+        "candidate_identity_id",
+        "task_id",
+        "base_commit_sha",
+        "head_commit_sha",
+        "head_tree_sha",
+        "diff_sha256",
+        "candidate_branch",
+        "leased_branch",
+        "candidate_ref_tip_sha",
+        "approved_target_ref",
+        "actual_changed_files",
+        "task_allowed_paths",
+        "lease_allowed_paths",
+        "ownership_allowed_paths",
+        "mandatory_check_evidence",
+        "trusted_test_evidence_ids",
+        "lease_id",
+        "fencing_token",
+        "issuer",
+        "execution_completed_at",
+        "readiness_status",
+        "findings"
+      ],
+      "properties": {
+        "schema_version": { "const": "3.0.0" },
+        "run_id": { "type": "string", "minLength": 16 },
+        "request_id": { "type": "string", "minLength": 1 },
+        "candidate_identity_id": { "type": "string", "minLength": 1 },
+        "task_id": { "type": "string", "minLength": 1 },
+        "base_commit_sha": { "type": "string", "pattern": "^[0-9a-f]{40,64}$" },
+        "head_commit_sha": { "type": "string", "pattern": "^[0-9a-f]{40,64}$" },
+        "head_tree_sha": { "type": "string", "pattern": "^[0-9a-f]{40,64}$" },
+        "diff_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "candidate_branch": { "type": "string", "minLength": 1 },
+        "leased_branch": { "type": "string", "minLength": 1 },
+        "candidate_ref_tip_sha": { "type": "string", "pattern": "^[0-9a-f]{40,64}$" },
+        "approved_target_ref": { "type": "string", "pattern": "^refs/(heads|remotes)/.+" },
+        "actual_changed_files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "file_modes": { "type": "object" },
+        "task_allowed_paths": { "type": "array", "items": { "type": "string" } },
+        "lease_allowed_paths": { "type": "array", "items": { "type": "string" } },
+        "ownership_allowed_paths": { "type": "array", "items": { "type": "string" } },
+        "scope_compliance": { "type": "boolean" },
+        "ownership_compliance": { "type": "boolean" },
+        "module_boundary_compliance": { "type": "boolean" },
+        "mandatory_check_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "object" }
+        },
+        "trusted_test_evidence_ids": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["targeted_tests", "affected_tests", "full_regression"],
+          "properties": {
+            "targeted_tests": { "type": "string", "minLength": 1 },
+            "affected_tests": { "type": "string", "minLength": 1 },
+            "full_regression": { "type": "string", "minLength": 1 }
+          }
+        },
+        "evidence_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "blocking_caveats": { "type": "array", "items": { "type": "string" } },
+        "dependency_state": { "type": "string" },
+        "lease_id": { "type": "string", "minLength": 1 },
+        "fencing_token": { "type": "integer", "minimum": 1 },
+        "agent_identity": { "type": "string", "minLength": 1 },
+        "issuer": { "const": "trusted-candidate-runner" },
+        "execution_completed_at": { "type": "string" },
+        "readiness_status": { "enum": ["VERIFIED_UNSIGNED", "REJECTED"] },
+        "findings": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "test_evidence": { "type": "array", "items": { "type": "object" } }
+  }
+}

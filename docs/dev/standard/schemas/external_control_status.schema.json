@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-project-standard.invalid/schemas/external_control_status.schema.json",
+  "title": "External control status",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "standard_version",
+    "formal_release_status",
+    "trust_root_claims",
+    "certified_linux_suite",
+    "external_project_adoption",
+    "controlled_automatic_merge",
+    "autonomous_ai"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "standard_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "formal_release_status": { "enum": ["NOT_READY", "READY"] },
+    "trust_root_claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deployment_supplied_external_trust_root_required",
+        "builder_controlled_default_trust_root_rejected",
+        "cryptographic_builder_key_separation",
+        "builder_key_denylist_enforced",
+        "independent_key_provenance_verified",
+        "claim_basis",
+        "evidence_refs"
+      ],
+      "properties": {
+        "deployment_supplied_external_trust_root_required": { "type": "boolean" },
+        "builder_controlled_default_trust_root_rejected": { "type": "boolean" },
+        "cryptographic_builder_key_separation": { "type": "boolean" },
+        "builder_key_denylist_enforced": { "type": "boolean" },
+        "independent_key_provenance_verified": { "type": "boolean" },
+        "claim_basis": { "type": "string", "minLength": 1 },
+        "evidence_refs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "certified_linux_suite": { "enum": ["EVIDENCE_NOT_PROVIDED", "VERIFIED"] },
+    "external_project_adoption": { "enum": ["NOT_VERIFIED", "VERIFIED"] },
+    "controlled_automatic_merge": { "enum": ["NOT_READY", "CONTRACT_READY", "VERIFIED"] },
+    "autonomous_ai": { "enum": ["DISABLED", "CONTRACT_READY", "VERIFIED"] }
+  }
+}

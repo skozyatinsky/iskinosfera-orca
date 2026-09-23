@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "knowledge_index.schema.json",
+  "title": "Индекс знаний проекта: summary -> digests -> vector (эскалация)",
+  "type": "object",
+  "required": ["summary_first"],
+  "additionalProperties": false,
+  "properties": {
+    "summary_first": { "type": "array", "items": { "type": "string" } },
+    "digests": { "type": "array", "items": { "type": "string" } },
+    "vector": {
+      "type": "object",
+      "required": ["provider", "collection"],
+      "additionalProperties": false,
+      "properties": {
+        "provider": { "type": "string" },
+        "collection": { "type": "string" },
+        "url_env": { "type": "string" },
+        "mcp": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "server": { "type": "string" },
+            "tools": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "required": { "type": "boolean" },
+        "freshness_sla_hours": { "type": "number" },
+        "return_sources": { "type": "boolean" }
+      }
+    },
+    "knowledge_access": {
+      "type": "object",
+      "required": ["mode", "reason"],
+      "additionalProperties": false,
+      "properties": {
+        "mode": { "type": "string", "enum": ["direct", "indexed_search", "rag"] },
+        "reason": { "type": "string", "minLength": 1 },
+        "reviewed_at": { "type": "string" },
+        "reviewed_by": { "type": "string" },
+        "source_of_truth": { "type": "string" },
+        "fallback": { "enum": ["indexed_search", "direct", null] }
+      }
+    }
+  }
+}

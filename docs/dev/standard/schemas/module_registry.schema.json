@@ -1,0 +1,130 @@
+{
+  "$id": "module_registry.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "description": "Машиночитаемый реестр предметных модулей: границы, владение данными, разрешённые/запрещённые импорты. Опциональный слой для проектов с несколькими независимыми модулями. См. MODULE_BOUNDARIES_STANDARD.md §10.1.",
+  "properties": {
+    "modules": {
+      "description": "по одной записи на каждый независимый модуль",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "composition_owner": {
+            "description": "work package / роль, которой принадлежит связывание этого модуля в composition root",
+            "minLength": 1,
+            "type": "string"
+          },
+          "id": {
+            "description": "уникальный идентификатор модуля, напр. catalog, matching",
+            "minLength": 1,
+            "pattern": "^[a-z0-9][a-z0-9._-]*$",
+            "type": "string"
+          },
+          "layer_external_imports": {
+            "additionalProperties": {
+              "additionalProperties": false,
+              "properties": {
+                "allowed_external_imports": {
+                  "description": "опционально, opt-in enforced allowlist (v2.9.118, §10.1 внешнего аудита v2.9.117): если непустой, КАЖДЫЙ абсолютный внешний импорт этого слоя (включая stdlib — см. пример 'dataclasses, typing, decimal, enum' для строгого domain) обязан совпадать (точно или как более глубокий подпуть) хотя бы с одной записью, иначе --check-module-boundaries считает это нарушением. Единственное исключение без явного перечисления — импорт СОБСТВЕННОГО пакета модуля (module.package) — он не 'внешний' по определению, отдельно классифицировать stdlib/third-party/чужой код не требуется. Относительные импорты (from . import x) под allowlist не подпадают вовсе — они по определению внутренние (см. MODULE_BOUNDARIES_STANDARD.md §11).",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "x-aps-rule": {
+                    "id": "APS-SCHEMA-MODULEREGISTRYSCHE-343C-001",
+                    "semantic_contract_version": 1,
+                    "status": "DOCUMENTED",
+                    "title": "module_registry.schema rule 1"
+                  }
+                },
+                "forbidden_external_imports": {
+                  "description": "dotted-имена внешних пакетов, запрещённые этому слою (напр. flask, sqlalchemy, django) — enforced через AST-скан, та же логика сравнения, что у must_not_import",
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "description": "опционально (v2.9.117, P1 внешнего ревью v2.9.116: 'external framework imports into domain not caught' — Dependency Rule проверял только межслойные импорты ВНУТРИ модуля, но не запрещал стабильному слою напрямую импортировать внешний framework, напр. domain, импортирующий flask/sqlalchemy). Ключ — имя слоя из layers[] этого же модуля (сверяется в check_module_registry). forbidden_external_imports и allowed_external_imports enforced статически в --check-module-boundaries (AST), оба — та же логика сравнения, что у must_not_import (точный dotted-путь или строго глубже него). Оба режима независимы и АДДИТИВНЫ (v2.9.118, §10.1 внешнего аудита v2.9.117: 'allowlist для строгого domain, denylist как дополнительную защиту') — можно задать только denylist (как раньше), только allowlist, или оба сразу для одного слоя.",
+            "type": "object"
+          },
+          "layers": {
+            "description": "опционально (v2.9.116, Dependency Rule из Clean Architecture): упорядоченный список поддиректорий root от самой стабильной (индекс 0, напр. domain) до самой нестабильной (напр. adapters) — каждая запись должна быть именем реальной поддиректории root. Требует также заданного package (иначе --check-module-boundaries не может сопоставить dotted-путь импорта со слоем — не резолвится, не проверяется). Модули без layers Dependency Rule не проверяются (профиль minimal, MODULE_BOUNDARIES_STANDARD.md §4)",
+            "items": {
+              "minLength": 1,
+              "pattern": "^[a-z0-9][a-z0-9_-]*$",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "may_import": {
+            "description": "dotted-пути пакетов, которые модулю разрешено импортировать (обычно contracts/shared kernel)",
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "must_not_import": {
+            "description": "dotted-пути internal-пакетов других модулей, импорт которых запрещён — статически проверяется реальным AST-сканом кода модуля, см. --check-module-boundaries (MODULE_BOUNDARIES_STANDARD.md §11)",
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "owned_data": {
+            "description": "данные, которыми владеет модуль — таблицы/схемы БД (glob, напр. catalog.*) или иные ресурсы",
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "package": {
+            "description": "опционально (v2.9.115): dotted Python package-префикс, соответствующий root (напр. project.modules.catalog для root src/project/modules/catalog). Без него относительные импорты (from . import x) в --check-module-boundaries не резолвятся — see MODULE_BOUNDARIES_STANDARD.md §11",
+            "minLength": 1,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$",
+            "type": "string"
+          },
+          "public_api": {
+            "description": "пути к файлам, публикующим контракт модуля (interfaces/DTO/ports)",
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "related_paths": {
+            "description": "опционально (v2.9.115): дополнительные пути-деревья вне root, которые тоже принадлежат модулю (напр. tests/catalog/**, docs/catalog/**) — agent_task_contract.module_id проверяет allowed_paths задачи против root + related_paths",
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "root": {
+            "description": "корневой путь модуля внутри проекта, напр. src/project/modules/catalog",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": ["id", "root"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "version": {
+      "description": "версия самого реестра (не контрактов внутри него)",
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": ["modules"],
+  "title": "Реестр независимых модулей",
+  "type": "object"
+}

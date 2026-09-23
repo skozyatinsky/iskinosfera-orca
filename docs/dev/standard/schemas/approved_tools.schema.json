@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "approved_tools.schema.json",
+  "title": "Реестр утверждённых и закреплённых инструментов",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tools"],
+  "properties": {
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "category",
+          "version",
+          "commit",
+          "installation",
+          "supported_profiles",
+          "security_review",
+          "update_policy",
+          "status",
+          "approved_by",
+          "approved_at"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^TOOL-[A-Za-z0-9._-]+$" },
+          "name": { "type": "string", "minLength": 1 },
+          "category": { "type": "string", "minLength": 1 },
+          "version": { "type": "string", "minLength": 1 },
+          "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+          "installation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["method", "package", "hashes"],
+            "properties": {
+              "method": {
+                "enum": ["pip", "npm", "cargo", "system", "binary", "download", "builtin"]
+              },
+              "package": { "type": "string", "minLength": 1 },
+              "hashes": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "supported_profiles": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "enum": ["FAST", "ASSURED", "CRITICAL"] }
+          },
+          "default_for_languages": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "security_review": { "type": "string", "minLength": 1 },
+          "update_policy": { "enum": ["reviewed_update", "security_only"] },
+          "status": {
+            "enum": ["APPROVED", "PINNED", "AVAILABLE", "DEFAULT", "OPTIONAL", "DEPRECATED"]
+          },
+          "approved_by": { "type": "string", "minLength": 1 },
+          "approved_at": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$"
+          }
+        }
+      }
+    }
+  }
+}

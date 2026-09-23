@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "skill.schema.json",
+  "title": "AI-agent skill front matter",
+  "description": "Обязательное ядро универсально. Остальные поля — родные поля Claude Code (adapter-specific, см. adapters/claude-code/); они разрешены, но не выдуманы: перечень закрыт и повторяет документацию среды. Незадокументированное поле по-прежнему отклоняется — allowlist не превращается в «пропускай всё».",
+  "type": "object",
+  "required": ["name", "invocation", "description"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "invocation": {
+      "type": "string",
+      "enum": ["user", "model"],
+      "description": "Намерение стандарта: кем скил задуман к вызову. Механикой управляют поля среды ниже; они не должны противоречить намерению."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10
+    },
+    "allowed-tools": {
+      "description": "Claude Code: инструменты, доступные без запроса разрешения."
+    },
+    "argument-hint": {
+      "type": "string",
+      "description": "Claude Code: подсказка автодополнения аргументов."
+    },
+    "disable-model-invocation": {
+      "type": "boolean",
+      "description": "Claude Code: модель не вызывает скил сама."
+    },
+    "user-invocable": {
+      "type": "boolean",
+      "description": "Claude Code: показывать ли скил в меню команд."
+    },
+    "model": {
+      "type": "string",
+      "description": "Claude Code: переопределение модели на время скила."
+    },
+    "context": {
+      "type": "string",
+      "enum": ["fork"],
+      "description": "Claude Code: запуск в изолированном субагенте."
+    },
+    "agent": {
+      "type": "string",
+      "description": "Claude Code: тип субагента при context: fork."
+    },
+    "paths": {
+      "description": "Claude Code: glob, ограничивающий активацию скила."
+    },
+    "effort": {
+      "type": "string",
+      "description": "Claude Code: переопределение уровня рассуждений."
+    }
+  }
+}

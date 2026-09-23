@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-project-standard.local/schemas/architect_skills_manifest.schema.json",
+  "title": "Architect skills manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "skills"],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "skill_id",
+          "canonical_path",
+          "root_exposure_path",
+          "source",
+          "version",
+          "license_status",
+          "installable",
+          "client_distribution_allowed",
+          "sha256"
+        ],
+        "properties": {
+          "skill_id": { "type": "string", "minLength": 1 },
+          "canonical_path": { "type": "string", "minLength": 1 },
+          "root_exposure_path": { "type": "string", "minLength": 1 },
+          "source": { "type": "string", "minLength": 1 },
+          "version": { "type": "string", "minLength": 1 },
+          "license_status": { "enum": ["APPROVED", "KNOWN", "INTERNAL", "UNKNOWN", "QUARANTINED"] },
+          "installable": { "type": "boolean" },
+          "client_distribution_allowed": { "type": "boolean" },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    }
+  }
+}

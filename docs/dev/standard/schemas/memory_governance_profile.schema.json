@@ -1,0 +1,236 @@
+{
+  "$id": "https://agent-project-standard.local/schemas/memory_governance_profile.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Memory and context governance profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "standard_version",
+    "profile_id",
+    "memory_types",
+    "knowledge_layers",
+    "trust_boundary",
+    "temporal_model",
+    "isolation",
+    "code_graph",
+    "degraded_mode",
+    "technology_selections"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "standard_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "profile_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$" },
+    "memory_types": {
+      "type": "array",
+      "minItems": 9,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "class",
+          "status",
+          "persistence",
+          "authority",
+          "owner",
+          "source_of_truth",
+          "retention_policy",
+          "tenant_scope",
+          "agent_scope"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,127}$" },
+          "class": {
+            "enum": [
+              "USER_PROFILE_MEMORY",
+              "EPISODIC_MEMORY",
+              "TEMPORAL_FACT_MEMORY",
+              "WORKING_MEMORY",
+              "SHARED_AGENT_MEMORY",
+              "KNOWLEDGE_MEMORY",
+              "CODE_GRAPH_MEMORY",
+              "EXECUTION_STATE",
+              "RELEASE_EVIDENCE"
+            ]
+          },
+          "status": { "enum": ["IMPLEMENTED", "PLANNED", "NOT_APPLICABLE", "EXTERNAL_SOURCE"] },
+          "persistence": { "enum": ["VOLATILE", "PERSISTENT", "EXTERNAL", "NOT_APPLICABLE"] },
+          "authority": {
+            "enum": ["UNTRUSTED_DATA", "DERIVED_DATA", "TRUSTED_RECORD", "NOT_APPLICABLE"]
+          },
+          "owner": { "type": "string", "minLength": 2 },
+          "source_of_truth": { "type": "boolean" },
+          "retention_policy": { "type": "string", "minLength": 2 },
+          "tenant_scope": { "type": "string", "minLength": 2 },
+          "agent_scope": { "type": "string", "minLength": 2 }
+        }
+      }
+    },
+    "knowledge_layers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raw", "derived_wiki", "schema", "operation_log"],
+      "properties": {
+        "raw": { "$ref": "#/$defs/layer" },
+        "derived_wiki": { "$ref": "#/$defs/layer" },
+        "schema": { "$ref": "#/$defs/layer" },
+        "operation_log": { "$ref": "#/$defs/layer" }
+      }
+    },
+    "trust_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "retrieved_content_authority",
+        "instruction_execution_from_memory",
+        "tool_invocation_from_memory",
+        "quarantine_required",
+        "self_promotion_allowed",
+        "secret_scan_required",
+        "provenance_required"
+      ],
+      "properties": {
+        "retrieved_content_authority": { "const": "DATA_ONLY" },
+        "instruction_execution_from_memory": { "const": false },
+        "tool_invocation_from_memory": { "const": false },
+        "quarantine_required": { "const": true },
+        "self_promotion_allowed": { "const": false },
+        "secret_scan_required": { "const": true },
+        "provenance_required": { "const": true }
+      }
+    },
+    "temporal_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "required_fields", "conflict_strategy"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "required_fields": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "conflict_strategy": { "enum": ["SUPERSEDE_WITH_HISTORY", "NOT_APPLICABLE"] }
+      }
+    },
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tenant_id_required",
+        "project_id_required",
+        "default_cross_tenant",
+        "shared_memory_requires_contract"
+      ],
+      "properties": {
+        "tenant_id_required": { "const": true },
+        "project_id_required": { "const": true },
+        "default_cross_tenant": { "const": "DENY" },
+        "shared_memory_requires_contract": { "const": true }
+      }
+    },
+    "code_graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "exact_commit_required",
+        "exact_tree_required",
+        "source_manifest_sha256_required",
+        "edge_provenance",
+        "stale_graph_policy"
+      ],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "exact_commit_required": { "const": true },
+        "exact_tree_required": { "const": true },
+        "source_manifest_sha256_required": { "const": true },
+        "edge_provenance": {
+          "type": "array",
+          "contains": { "const": "EXTRACTED" },
+          "minContains": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["EXTRACTED", "INFERRED"] }
+        },
+        "stale_graph_policy": { "const": "REJECT" }
+      }
+    },
+    "degraded_mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "must_be_visible",
+        "persistent_to_volatile_status",
+        "capability_report_required",
+        "restart_persistence_must_be_declared"
+      ],
+      "properties": {
+        "must_be_visible": { "const": true },
+        "persistent_to_volatile_status": { "const": "DEGRADED" },
+        "capability_report_required": { "const": true },
+        "restart_persistence_must_be_declared": { "const": true }
+      }
+    },
+    "technology_selections": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/technology" }
+    }
+  },
+  "$defs": {
+    "layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "immutable", "source_of_truth", "derived", "rebuildable", "append_only"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "immutable": { "type": "boolean" },
+        "source_of_truth": { "type": "boolean" },
+        "derived": { "type": "boolean" },
+        "rebuildable": { "type": "boolean" },
+        "append_only": { "type": "boolean" }
+      }
+    },
+    "technology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability_id",
+        "technology",
+        "role",
+        "status",
+        "canonical_store",
+        "source_url",
+        "license_review",
+        "data_egress",
+        "offline_mode",
+        "adr_path",
+        "rationale",
+        "alternatives_considered",
+        "rollback",
+        "security_review_status"
+      ],
+      "properties": {
+        "capability_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$" },
+        "technology": { "type": "string", "minLength": 2 },
+        "role": { "type": "string", "minLength": 2 },
+        "status": {
+          "enum": ["APPROVED", "PILOT", "REFERENCE_OPTION", "CONCEPT_ONLY", "DEFERRED", "REJECTED"]
+        },
+        "canonical_store": { "type": "boolean" },
+        "exact_version": { "type": ["string", "null"] },
+        "source_url": { "type": "string", "pattern": "^https://" },
+        "license_review": { "enum": ["PASS", "REQUIRED", "NOT_APPLICABLE"] },
+        "data_egress": { "enum": ["NONE", "CONFIGURABLE", "EXTERNAL_REQUIRED", "UNKNOWN"] },
+        "offline_mode": { "enum": ["SUPPORTED", "PARTIAL", "NOT_SUPPORTED", "UNKNOWN"] },
+        "adr_path": { "type": "string", "minLength": 2 },
+        "rationale": { "type": "string", "minLength": 10 },
+        "alternatives_considered": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 2 }
+        },
+        "rollback": { "type": "string", "minLength": 5 },
+        "evaluation_evidence": { "type": ["string", "null"] },
+        "security_review_status": { "enum": ["PASS", "REQUIRED", "NOT_APPLICABLE"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "$id": "https://agent-project-standard.local/schemas/agent_response_policy.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "exemptions": {
+      "additionalProperties": false,
+      "properties": {
+        "code_fence_languages": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "commands": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "file_suffixes": {
+          "items": {
+            "pattern": "^\\.[A-Za-z0-9]+$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "products_and_standards": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "technical_terms": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "products_and_standards",
+        "technical_terms",
+        "commands",
+        "fields",
+        "code_fence_languages",
+        "file_suffixes"
+      ],
+      "type": "object"
+    },
+    "failure_mode": {
+      "const": "block"
+    },
+    "language_profile": {
+      "enum": ["ru_internal", "en_public", "mixed"]
+    },
+    "max_diagnostics": {
+      "maximum": 100,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "mixed_language_mode": {
+      "enum": ["auto", "ru", "en"]
+    },
+    "required_translations": {
+      "additionalProperties": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "properties": {
+        "candidate": {
+          "const": "проверяемая версия"
+        },
+        "evidence": {
+          "const": "доказательства"
+        },
+        "reachability": {
+          "const": "фактическая доступность"
+        },
+        "runtime inventory": {
+          "const": "перечень реально запущенных компонентов"
+        }
+      },
+      "required": ["evidence", "reachability", "runtime inventory", "candidate"],
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "standard_version": {
+      "const": "3.0.0"
+    }
+  },
+  "required": [
+    "schema_version",
+    "standard_version",
+    "language_profile",
+    "mixed_language_mode",
+    "failure_mode",
+    "max_diagnostics",
+    "required_translations",
+    "exemptions"
+  ],
+  "type": "object"
+}

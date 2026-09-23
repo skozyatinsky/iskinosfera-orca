@@ -1,0 +1,82 @@
+{
+  "$id": "sandbox_certification.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "certification_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "conformance_suite_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "deployment_identity": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "executor_identity": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "executor_image_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "expires_at": {
+      "type": "string"
+    },
+    "issued_at": {
+      "type": "string"
+    },
+    "issuer": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "kernel_runtime_profile": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "key_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "profile_id": {
+      "enum": ["parallel_ai", "autonomous_ai", "controlled_automatic_merge"]
+    },
+    "sandbox_profile_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "sandbox_profile_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "signature": {
+      "minLength": 80,
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "certification_id",
+    "issuer",
+    "profile_id",
+    "sandbox_profile_id",
+    "sandbox_profile_digest",
+    "executor_image_digest",
+    "executor_identity",
+    "deployment_identity",
+    "kernel_runtime_profile",
+    "conformance_suite_digest",
+    "issued_at",
+    "expires_at",
+    "key_id",
+    "signature"
+  ],
+  "title": "Externally signed production sandbox certification",
+  "type": "object"
+}

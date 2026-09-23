@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "automation_jobs.schema.json",
+  "title": "Реестр job-дисциплины automation_server (lock/redact/notify/retention)",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "type", "command"],
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": ["sync", "backup", "project_job", "health_check"]
+      },
+      "tool": {
+        "type": "string"
+      },
+      "schedule": {
+        "type": "string"
+      },
+      "trigger": {
+        "type": "string"
+      },
+      "command": {
+        "type": "string"
+      },
+      "lock": {
+        "type": "boolean"
+      },
+      "redact_logs": {
+        "type": "boolean"
+      },
+      "notify_on_failure": {
+        "type": "boolean"
+      },
+      "dry_run_before_first_run": {
+        "type": "boolean"
+      },
+      "env_source": {
+        "type": "string"
+      },
+      "retention": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "daily": {
+            "type": "integer"
+          },
+          "weekly": {
+            "type": "integer"
+          },
+          "monthly": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

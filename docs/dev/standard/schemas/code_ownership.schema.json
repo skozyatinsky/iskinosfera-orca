@@ -1,0 +1,47 @@
+{
+  "$id": "code_ownership.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "description": "Машиночитаемое сопоставление путей проекта и work package/агентов, которым они принадлежат. Опциональный слой. См. MODULE_BOUNDARIES_STANDARD.md §10.2, AI_AGENT_WORK_ALLOCATION_STANDARD.md §8.",
+  "properties": {
+    "ownership": {
+      "description": "по одной записи на каждую зону владения",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "access": {
+            "description": "read_write — владелец; read_only — виден всем, менять нельзя; read_only_for_implementation — implementation agents читают, менять могут только Contract/Integration/Release/Architect agent (AI_AGENT_WORK_ALLOCATION_STANDARD.md §9)",
+            "enum": ["read_write", "read_only", "read_only_for_implementation"],
+            "type": "string",
+            "x-aps-rule": {
+              "id": "APS-SCHEMA-CODEOWNERSHIPSCHEM-CD6C-001",
+              "semantic_contract_version": 1,
+              "status": "DOCUMENTED",
+              "title": "code_ownership.schema rule 1"
+            }
+          },
+          "owner": {
+            "description": "work package id или роль-владелец, напр. WP-CATALOG",
+            "minLength": 1,
+            "type": "string"
+          },
+          "path": {
+            "description": "путь или glob внутри проекта, напр. src/project/modules/catalog/**",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": ["path", "owner", "access"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "version": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": ["ownership"],
+  "title": "Реестр владения кодом",
+  "type": "object"
+}

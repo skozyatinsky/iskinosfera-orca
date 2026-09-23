@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-project-standard/schemas/security_audit_profile.schema.json",
+  "title": "Security audit profile",
+  "description": "Профиль стадии 40. Стандарт промта безопасности не поставляет — стадия делегируется внешнему органу, и этот файл объявляет, какому именно. Пока файла нет, стадия считается неисполненной, а вердикт стадии 90 — частичным.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "authority",
+    "independent_of_implementer",
+    "performed_at",
+    "revision",
+    "assessment_basis",
+    "scope",
+    "verdict"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "assessment_basis": {
+            "enum": ["STAND", "RUNTIME"]
+          }
+        },
+        "required": ["assessment_basis"]
+      },
+      "then": {
+        "required": ["observed_environment"]
+      }
+    }
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0.0",
+      "description": "Версия 2.0.0 добавляет обязательное основание выводов и описание наблюдаемой среды."
+    },
+    "authority": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Кто проводил аудит: имя органа, команды или подрядчика. Самоназвание исполнителя работ допустимо только вместе с independent_of_implementer=false."
+    },
+    "independent_of_implementer": {
+      "type": "boolean",
+      "description": "Независим ли орган проверки от того, кто писал код. false — честное объявление самопроверки, а не отказ: скрытая самопроверка хуже объявленной."
+    },
+    "performed_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 7,
+      "description": "Точная ревизия, на которой проведён аудит. Набор аудитов относится к одной ревизии (APS-TZ-AUDIT-SEQUENCE-001)."
+    },
+    "assessment_basis": {
+      "type": "string",
+      "enum": ["REPOSITORY", "STAND", "RUNTIME"],
+      "description": "Основание выводов. REPOSITORY не подтверждает фактическое состояние или внешнюю доступность работающей службы."
+    },
+    "observed_environment": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Конкретная среда, конфигурация и время наблюдения для STAND или RUNTIME."
+    },
+    "scope": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Что именно попало под проверку. Объявленная область — не подразумеваемая.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "out_of_scope": {
+      "type": "array",
+      "description": "Что намеренно не проверялось и почему.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "reason"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["PASS", "PASS_WITH_FINDINGS", "FAIL"]
+    },
+    "report_path": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Отчёт, закоммиченный в репозиторий. Машинно проверяется только существование файла; соответствие содержимого — ревью человеком."
+    },
+    "open_findings": {
+      "type": "array",
+      "description": "Незакрытое на момент вердикта.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["finding_id", "severity", "summary"],
+        "properties": {
+          "finding_id": { "type": "string", "pattern": "^[A-Z0-9-]+$" },
+          "severity": { "type": "string", "enum": ["BLOCKING", "MAJOR", "MINOR"] },
+          "summary": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

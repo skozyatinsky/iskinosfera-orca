@@ -58,3 +58,11 @@ Source-control and review changes must consider GitLab and other supported git p
 ## GitHub CLI Usage
 
 Be mindful of the user's `gh` CLI API rate limit — batch requests where possible and avoid unnecessary calls. All code, commands, and scripts must be compatible with macOS, Linux, and Windows.
+
+## Ecosystem Standard (agent_project_standard)
+
+This project adopts `agent_project_standard` in `tool_pinned` mode (v3.1.3):
+- Standard tools & conventions: `docs/dev/standard/`
+- Structure validation: `python docs/dev/standard/tools/validate_structure.py --root . --profile target-project --language-profile mixed --schemas-root docs/dev/standard/schemas --check-paths --check-registry --check-schemas --check-project-snapshot`
+- Project snapshot: `docs/PROJECT_SNAPSHOT.md` and `docs/registry/project_snapshot.json`
+- CI: `.github/workflows/validate-standard.yml`
