@@ -1,0 +1,370 @@
+{
+  "$id": "agent_task_contract.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "acceptance_criteria": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "allowed_paths": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "alternatives_considered": {
+      "description": "обязательно при task_type=architecture (v2.9.116): рассмотренные и отклонённые варианты.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-004",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_task_contract.schema rule 4"
+      }
+    },
+    "behavior_baseline": {
+      "description": "обязательно при task_type=refactoring (v2.9.116): что именно из наблюдаемого поведения не должно измениться. См. REFACTORING_SAFETY_STANDARD.md §2.",
+      "minLength": 1,
+      "type": "string",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-002",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_task_contract.schema rule 2"
+      }
+    },
+    "branch": {
+      "type": "string"
+    },
+    "business_meaning": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "consequences": {
+      "description": "обязательно при task_type=architecture (v2.9.116): последствия выбранного решения — технический долг, ограничения, риски.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-005",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_task_contract.schema rule 5"
+      }
+    },
+    "context": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "creates_technical_functions": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "creates_user_functions": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "depends_on": {
+      "description": "v2.9.118 (P1 внешнего аудита v2.9.117): при одновременно заданном docs/registry/work_package_graph.json с узлом этого же task_id должен совпадать (как множество, порядок не важен) с graph.node.depends_on — граф остаётся единственным источником истины зависимостей, это поле — согласованный snapshot, не независимая декларация. См. check_agent_task_contracts().",
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true,
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-009",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_task_contract.schema rule 9"
+      }
+    },
+    "deprecates_functions": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "forbidden_actions": {
+      "description": "v2.9.117 (P2 внешнего ревью v2.9.116): обязан быть непустым. Не исчерпывающий список всех действующих запретов (общие запреты пакета действуют всегда, см. AI_TO_AI_COMMUNICATION_STANDARD.md §6) — но задача обязана явно назвать хотя бы один task-специфичный запрет, даже если это просто повтор самого частого (change_business_rule).",
+      "items": {
+        "enum": [
+          "change_business_rule",
+          "add_hardcode",
+          "add_silent_fallback",
+          "swallow_exception",
+          "disable_test",
+          "mark_test_skip_or_xfail",
+          "change_test_expectation_without_basis",
+          "hide_limitation",
+          "report_done_without_checks",
+          "expand_public_api_without_agreement",
+          "edit_outside_scope",
+          "create_workaround_without_waiver"
+        ],
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true,
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-010",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_task_contract.schema rule 10"
+      }
+    },
+    "forbidden_paths": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "goal": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "invariants": {
+      "description": "v2.9.117 (P2 внешнего ревью v2.9.116): обязан быть непустым — задача без единого инварианта, вероятно, недоспецифицирована. Хотя бы «поведение существующих тестов не меняется» — легитимный минимальный инвариант, если более содержательного нет.",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true,
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-008",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_task_contract.schema rule 8"
+      }
+    },
+    "migration_plan": {
+      "description": "обязательно при task_type=architecture (v2.9.116): как перейти от текущего состояния к целевому.",
+      "minLength": 1,
+      "type": "string",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-006",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_task_contract.schema rule 6"
+      }
+    },
+    "modifies_technical_functions": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "modifies_user_functions": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "module_id": {
+      "description": "опционально (v2.9.114): id модуля из docs/registry/module_registry.json, если задача привязана к отдельному предметному модулю (MODULE_BOUNDARIES_STANDARD.md). Не дублирует owned_data/forbidden_imports/public_api модуля — они читаются из module_registry.json по этой ссылке, не копируются в контракт задачи.",
+      "minLength": 1,
+      "type": "string"
+    },
+    "on_ambiguity": {
+      "enum": ["BLOCKED"],
+      "type": "string"
+    },
+    "policy_refs": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "registry_discovery_evidence": {
+      "type": "object"
+    },
+    "required_checks": {
+      "description": "v2.9.118 (P0 внешнего аудита v2.9.117, ломающее изменение — было array[string] свободнотекстовых shell-команд): структурированный объект вместо строки — задача требовала конкретную команду, а результат мог подтвердить себя ЛЮБЫМ другим тестом, потому что связи между ними не было вовсе. check_id agent_result'а теперь обязан совпасть с required_checks[].id для каждой проверки. v2.9.119 (P0 внешнего аудита v2.9.118, ломающее изменение): удалено required_for_statuses — каждый required_check обязателен для ОБОИХ статусов COMPLETED и COMPLETED_WITH_CAVEATS без исключений (поле позволяло объявить проверку 'обязательной' только для более слабого статуса, и тогда более сильный COMPLETED проходил вовсе без evidence — прямо воспроизведено). См. MIGRATION_GUIDE / CHANGELOG v2.9.119.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "argv": {
+            "description": "Legacy-путь (см. check_ref для нового кода) — команда как массив аргументов (argv), НЕ shell-строка — subprocess.run(argv, shell=False) не парсит shell-метасимволы внутри токена. Это НЕ делает argv безопасным для автоматического исполнения само по себе: argv[0]=интерпретатор (bash/sh/python/node/...) с inline-флагом (-c/-e/--eval/-Command/...) исполняет произвольный код без единого shell-метасимвола. check_agent_task_contracts() (v2.9.119, P1 внешнего аудита v2.9.118) отклоняет оба паттерна: shell-метасимволы в токене И известный интерпретатор+inline-флаг (после разворачивания wrapper-команд, v2.9.120/121) — но это эвристика defense-in-depth, не полноценный sandbox; следующий wrapper/флаг снова потребует патча. check_ref (см. выше) закрывает класс целиком, а не догоняет очередной обход. Схема по-прежнему НЕ исполняет argv — это декларация для внешнего исполнителя/оркестратора, который обязан применять те же ограничения (или строже) перед реальным запуском.",
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "x-aps-rule": {
+              "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-013",
+              "semantic_contract_version": 1,
+              "status": "DOCUMENTED",
+              "title": "agent_task_contract.schema rule 13"
+            }
+          },
+          "check_ref": {
+            "description": "v2.9.122 (P1 внешнего аудита v2.9.121 §9, третий цикл подряд с новыми argv-обходами blocklist-эвристики — env -u/timeout --signal/chrt/ionice/doas/bare xargs): ссылка на id в docs/registry/check_registry.json (schemas/check_registry.schema.json) — ВМЕСТО свободного argv. Ровно одно из argv/check_ref обязательно (проверяется кодом check_agent_task_contracts(), схема не умеет XOR). Task contract выбирает УЖЕ утверждённую команду, не изобретает новую на лету; при check_ref заданы argv/cwd/timeout_seconds/expected_exit_codes НЕ должны — они берутся из утверждённой записи реестра, не переопределяются per-task.",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$",
+            "type": "string",
+            "x-aps-rule": {
+              "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-012",
+              "semantic_contract_version": 1,
+              "status": "DOCUMENTED",
+              "title": "agent_task_contract.schema rule 12"
+            }
+          },
+          "cwd": {
+            "description": "опционально, по умолчанию корень проекта — рабочая директория для запуска argv. Обязан оставаться внутри --root: check_agent_task_contracts() (v2.9.119) отклоняет абсолютные пути и escape через .. (тот же принцип, что и allowed_paths/sources_of_truth).",
+            "minLength": 1,
+            "type": "string",
+            "x-aps-rule": {
+              "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-014",
+              "semantic_contract_version": 1,
+              "status": "DOCUMENTED",
+              "title": "agent_task_contract.schema rule 14"
+            }
+          },
+          "expected_exit_codes": {
+            "description": "опционально, по умолчанию [0] — какие exit code считаются успехом (напр. grep-подобные инструменты иногда используют 0/1 оба как «не ошибка»). Целое число — реальный process exit code не бывает дробным (v2.9.119, P2 внешнего аудита v2.9.118).",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "id": {
+            "description": "Уникальный в пределах этой задачи идентификатор проверки — result[].check_id agent_result'а ссылается на него. Дубли отклоняются кодом (schema не умеет uniqueness по вложенному полю).",
+            "pattern": "^[a-z0-9][a-z0-9_-]*$",
+            "type": "string"
+          },
+          "timeout_seconds": {
+            "description": "опционально — предельное время выполнения. Схема не исполняет команду, это декларация ожидания для исполнителя/оркестратора.",
+            "exclusiveMinimum": 0,
+            "type": "number"
+          }
+        },
+        "required": ["id"],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-011",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_task_contract.schema rule 11"
+      }
+    },
+    "required_evidence": {
+      "description": "v2.9.117 (P2 внешнего ревью v2.9.116): теперь обязательное поле схемы (было опционально) — задача обязана явно перечислить, какой evidence подтвердит выполнение (changed_files/test_commands/test_results и т.п.), не оставлять это исполнителю на усмотрение.",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true,
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-015",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_task_contract.schema rule 15"
+      }
+    },
+    "sources_of_truth": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "task_id": {
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$",
+      "type": "string"
+    },
+    "task_type": {
+      "description": "опционально по духу, обязательно по схеме (v2.9.116): тип задачи определяет условно-обязательные поля, проверяемые check_agent_task_contracts() (схема сама не умеет if/then) — refactoring требует behavior_baseline+tests_before, architecture требует alternatives_considered+consequences+migration_plan+verification_plan. См. REFACTORING_SAFETY_STANDARD.md §7.",
+      "enum": [
+        "implementation",
+        "bugfix",
+        "refactoring",
+        "architecture",
+        "documentation",
+        "integration",
+        "release"
+      ],
+      "type": "string",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-001",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_task_contract.schema rule 1"
+      }
+    },
+    "tests_before": {
+      "description": "обязательно при task_type=refactoring (v2.9.116): test_ref'ы или проверки, подтверждающие текущее поведение до начала работы. См. REFACTORING_SAFETY_STANDARD.md §2-3.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-003",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_task_contract.schema rule 3"
+      }
+    },
+    "verification_plan": {
+      "description": "обязательно при task_type=architecture (v2.9.116): как будет проверено, что архитектурное решение работает.",
+      "minLength": 1,
+      "type": "string",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTTASKCONTRACTS-EB11-007",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_task_contract.schema rule 7"
+      }
+    },
+    "verification_profile": {
+      "description": "Назначенный до реализации профиль доказательности FAST, ASSURED или CRITICAL.",
+      "enum": ["FAST", "ASSURED", "CRITICAL"],
+      "type": "string"
+    }
+  },
+  "required": [
+    "task_id",
+    "task_type",
+    "goal",
+    "context",
+    "business_meaning",
+    "sources_of_truth",
+    "invariants",
+    "allowed_paths",
+    "forbidden_actions",
+    "acceptance_criteria",
+    "required_checks",
+    "required_evidence",
+    "on_ambiguity"
+  ],
+  "title": "Машинный контракт задачи AI -> AI (структурированная передача исполнителю)",
+  "type": "object"
+}

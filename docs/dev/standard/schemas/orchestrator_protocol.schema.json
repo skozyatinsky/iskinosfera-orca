@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "orchestrator_protocol.schema.json",
+  "title": "External transactional orchestrator protocol v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "backend",
+    "lease_contract",
+    "conflict_classes",
+    "trusted_writer",
+    "candidate_execution_contract",
+    "trusted_signer_contract",
+    "trusted_attestation_contract",
+    "trusted_test_evidence_contract",
+    "repository_policy_contract",
+    "post_merge_contract"
+  ],
+  "properties": {
+    "schema_version": { "const": "2.0.0" },
+    "backend": { "const": "sqlite_reference" },
+    "lease_contract": {
+      "type": "object",
+      "required": [
+        "required_fields",
+        "fencing_token_monotonic",
+        "renewal_scope_immutable",
+        "expired_result_forbidden",
+        "write_scope_exclusive",
+        "transaction_mode"
+      ]
+    },
+    "conflict_classes": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": { "type": "string" }
+    },
+    "trusted_writer": {
+      "type": "object",
+      "required": [
+        "environment_guard",
+        "implementation_agent_direct_write_forbidden",
+        "event_log_append_only",
+        "database_must_be_external",
+        "database_mode_posix"
+      ]
+    },
+    "candidate_execution_contract": {
+      "type": "object",
+      "required": [
+        "entrypoint",
+        "environment_policy",
+        "signing_material_forbidden",
+        "trusted_writer_marker_forbidden",
+        "trusted_database_masked",
+        "host_proc_hidden",
+        "network_namespace",
+        "detached_descendant_cleanup",
+        "candidate_temp_isolated",
+        "candidate_commit_exact"
+      ]
+    },
+    "trusted_signer_contract": {
+      "type": "object",
+      "required": [
+        "entrypoint",
+        "runs_after_candidate_exit",
+        "unsigned_bundle_input",
+        "signer_identity_required",
+        "key_id_required",
+        "revocation_supported",
+        "request_id_idempotency",
+        "multiple_runs_per_candidate"
+      ]
+    },
+    "trusted_attestation_contract": {
+      "type": "object",
+      "required": [
+        "storage",
+        "identity",
+        "required_binding",
+        "merge_input",
+        "arbitrary_json_forbidden"
+      ]
+    },
+    "trusted_test_evidence_contract": {
+      "type": "object",
+      "required": ["roles", "required_fields", "inline_pass_object_forbidden"]
+    },
+    "repository_policy_contract": {
+      "type": "object",
+      "required": [
+        "storage",
+        "canonical_protected_ref_caller_control_forbidden",
+        "automatic_merge_default",
+        "platform_protection_attestation_required"
+      ]
+    },
+    "post_merge_contract": {
+      "type": "object",
+      "required": [
+        "entrypoint",
+        "requires_canonical_protected_ref_from_trusted_db",
+        "requires_signed_attestation",
+        "transaction_model",
+        "actions",
+        "compensation_on_git_failure",
+        "recovery_entrypoint"
+      ]
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "$id": "qai_fabric_policy.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "description": "validate_structure.py проверяет инженерную дисциплину репозитория (структура/стиль/hardcode/registry/тесты). QAI Fabric — отдельный внешний адаптер для глубокой QA-оценки поведения продукта (API-контракты, RAG/retrieval quality, LLM generation quality, classification/ranking, nightly regression). Один не заменяет другой. Опциональный слой.",
+  "properties": {
+    "ci": {
+      "additionalProperties": false,
+      "properties": {
+        "profile": {
+          "description": "какая из commands гоняется в CI — smoke/validate, не nightly (дорогой прогон не на каждый PR)",
+          "enum": ["validate", "smoke"],
+          "type": "string"
+        },
+        "run_on_pull_request": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "commands": {
+      "additionalProperties": false,
+      "description": "команды QAI Fabric; обязательны validate + (smoke или nightly), если enabled=true",
+      "properties": {
+        "nightly": {
+          "description": "полный regression-прогон по расписанию (не на каждый PR)",
+          "type": "string"
+        },
+        "smoke": {
+          "description": "быстрый детерминированный прогон для CI/PR — без дорогих LLM-judge оценок",
+          "type": "string"
+        },
+        "validate": {
+          "description": "проверка синтаксиса сценария (dry-run, без реального прогона)",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "enabled": {
+      "description": "включён ли QAI Fabric для этого проекта",
+      "type": "boolean"
+    },
+    "failure_policy": {
+      "additionalProperties": false,
+      "description": "как трактовать exit code QAI Fabric",
+      "properties": {
+        "exit_code_1": {
+          "type": "string"
+        },
+        "exit_code_2": {
+          "description": "должен описывать провал quality-порога (threshold), не инфраструктурный сбой",
+          "type": "string",
+          "x-aps-rule": {
+            "id": "APS-SCHEMA-QAIFABRICPOLICYSCH-DF0E-002",
+            "semantic_contract_version": 1,
+            "status": "DOCUMENTED",
+            "title": "qai_fabric_policy.schema rule 2"
+          }
+        }
+      },
+      "type": "object"
+    },
+    "mode": {
+      "description": "optional_adapter — стандарт не требует внешний QA-инструмент; required — осознанно для конкретного проекта",
+      "enum": ["optional_adapter", "required"],
+      "type": "string",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-QAIFABRICPOLICYSCH-DF0E-001",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "qai_fabric_policy.schema rule 1"
+      }
+    },
+    "quality_profile": {
+      "description": "какие классы качества у проекта есть; standard_engineering — только структура+тесты, остальные — классы, требующие QAI Fabric",
+      "items": {
+        "enum": [
+          "standard_engineering",
+          "api_contract",
+          "rag_quality",
+          "llm_generation_quality",
+          "classification_quality",
+          "nightly_regression"
+        ],
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "report_path_waiver_reason": {
+      "description": "обязателен, если пути отчётов --json/--markdown лежат вне reports/ — почему (например: CI выгружает артефакты из /tmp)",
+      "minLength": 1,
+      "type": "string"
+    },
+    "reports": {
+      "additionalProperties": false,
+      "properties": {
+        "json": {
+          "type": "boolean"
+        },
+        "markdown": {
+          "type": "boolean"
+        },
+        "required": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "scheduled": {
+      "additionalProperties": false,
+      "properties": {
+        "notify_on_failure": {
+          "enum": [true],
+          "type": "boolean"
+        },
+        "orchestrator": {
+          "description": "только automation_server (AUTOMATION_SERVER_SYNC_STANDARD) — иначе теряется lock/notify/retention",
+          "enum": ["automation_server"],
+          "type": "string"
+        },
+        "profile": {
+          "enum": ["validate", "smoke", "nightly"],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": ["quality_profile", "enabled"],
+  "title": "Политика подключения QAI Fabric — когда и как включать внешний QA-адаптер",
+  "type": "object"
+}

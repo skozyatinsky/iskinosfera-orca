@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project_health_audit.schema.json",
+  "title": "Manual and scheduled project health audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "audit_id",
+    "audit_type",
+    "profile",
+    "mode",
+    "candidate_context",
+    "root_commit",
+    "started_at",
+    "completed_at",
+    "status",
+    "checks",
+    "findings",
+    "evidence"
+  ],
+  "properties": {
+    "audit_id": {
+      "type": "string"
+    },
+    "audit_type": {
+      "enum": ["MANUAL", "SCHEDULED"]
+    },
+    "profile": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "string"
+    },
+    "root_commit": {
+      "type": ["string", "null"]
+    },
+    "protected_main_commit": {
+      "type": ["string", "null"]
+    },
+    "started_at": {
+      "type": "string"
+    },
+    "completed_at": {
+      "type": "string"
+    },
+    "status": {
+      "enum": ["PASS", "FAIL", "INCOMPLETE"]
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "evidence": {
+      "type": "object"
+    },
+    "candidate_context": {
+      "enum": ["WORKSPACE", "EXPECTED_DETACHED_CANDIDATE"]
+    }
+  }
+}

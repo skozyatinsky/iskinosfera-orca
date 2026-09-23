@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "automatic_merge_deployment_policy.schema.json",
+  "title": "External controlled automatic merge deployment policy",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "policy_id",
+    "profile_id",
+    "enabled",
+    "failure_mode",
+    "repository_id",
+    "repository_provider_id",
+    "account_id",
+    "provider",
+    "target_protected_ref",
+    "policy_version",
+    "policy_issuer",
+    "deployment_identity",
+    "controls",
+    "issued_at",
+    "expires_at",
+    "key_id",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "profile_id": { "const": "controlled_automatic_merge" },
+    "enabled": { "type": "boolean" },
+    "failure_mode": { "const": "fail_closed" },
+    "provider": { "enum": ["github", "gitlab"] },
+    "target_protected_ref": { "type": "string", "pattern": "^refs/heads/" },
+    "controls": {
+      "type": "object",
+      "additionalProperties": { "type": "boolean" }
+    },
+    "signature": { "type": "string", "minLength": 80 }
+  }
+}

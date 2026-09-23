@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "communication_policy.schema.json",
+  "title": "Настройка режима общения агента с пользователем проекта",
+  "type": "object",
+  "required": ["default_mode"],
+  "additionalProperties": false,
+  "properties": {
+    "default_mode": { "type": "string", "enum": ["plain", "business", "technical"] },
+    "domain": {},
+    "show_mode_note": { "type": "boolean" },
+    "allowed_domain_terms": { "type": "array", "items": { "type": "string" } }
+  }
+}

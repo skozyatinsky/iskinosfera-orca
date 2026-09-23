@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "key_management_policy.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "reference_algorithm",
+    "minimum_key_bytes",
+    "key_source",
+    "candidate_access",
+    "key_id_required",
+    "signer_identity_required",
+    "rotation",
+    "revocation",
+    "production_recommendation"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "reference_algorithm": { "const": "HMAC-SHA256" },
+    "minimum_key_bytes": { "type": "integer", "minimum": 32 },
+    "key_source": { "type": "string" },
+    "candidate_access": { "const": "FORBIDDEN" },
+    "key_id_required": { "const": true },
+    "signer_identity_required": { "const": true },
+    "rotation": { "type": "object" },
+    "revocation": { "type": "object" },
+    "production_recommendation": { "type": "string" }
+  }
+}

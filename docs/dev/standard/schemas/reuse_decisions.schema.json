@@ -1,0 +1,221 @@
+{
+  "$id": "reuse_decisions.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Локальные решения проекта о переиспользовании. Файл не содержит копию центрального реестра канонов и не регистрирует потребителей.",
+  "properties": {
+    "decisions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "capability": {
+            "minLength": 3,
+            "type": "string"
+          },
+          "canon_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "class": {
+            "enum": [
+              "action",
+              "pure_function",
+              "domain",
+              "contract",
+              "agent_skill",
+              "ui_component",
+              "service",
+              "product_port"
+            ],
+            "type": "string"
+          },
+          "decision_id": {
+            "pattern": "^[a-z0-9][a-z0-9._-]*$",
+            "type": "string"
+          },
+          "dependency": {
+            "additionalProperties": false,
+            "properties": {
+              "declaration": {
+                "minLength": 3,
+                "type": "string"
+              },
+              "manifest_path": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "pin": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "enum": ["sha256", "git_commit"],
+                    "type": "string"
+                  },
+                  "value": {
+                    "minLength": 7,
+                    "type": "string"
+                  }
+                },
+                "required": ["kind", "value"],
+                "type": "object"
+              },
+              "version": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": ["manifest_path", "declaration", "version", "pin"],
+            "type": "object"
+          },
+          "evidence": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "integration_test": {
+            "additionalProperties": false,
+            "properties": {
+              "canon_marker": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "command": {
+                "minLength": 3,
+                "type": "string"
+              },
+              "path": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": ["path", "command", "canon_marker"],
+            "type": "object"
+          },
+          "machine_contract": {
+            "additionalProperties": false,
+            "properties": {
+              "generator": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "local_path": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "mode": {
+                "enum": ["owner_reference", "package", "generated"],
+                "type": "string"
+              },
+              "owner_path": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "owner_repository": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "source_sha256": {
+                "pattern": "^[a-fA-F0-9]{64}$",
+                "type": "string"
+              }
+            },
+            "required": ["mode", "owner_repository", "owner_path", "source_sha256"],
+            "type": "object"
+          },
+          "proposal_adr": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "rationale": {
+            "minLength": 5,
+            "type": "string"
+          },
+          "required_version": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "status": {
+            "enum": ["adopted", "expected", "local", "waiver", "proposed"],
+            "type": "string"
+          },
+          "waiver": {
+            "additionalProperties": false,
+            "properties": {
+              "adr": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "expires_on": {
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "type": "string"
+              },
+              "owner": {
+                "minLength": 2,
+                "type": "string"
+              },
+              "reason": {
+                "minLength": 10,
+                "type": "string"
+              },
+              "removal_condition": {
+                "minLength": 5,
+                "type": "string"
+              }
+            },
+            "required": ["adr", "owner", "expires_on", "reason", "removal_condition"],
+            "type": "object"
+          }
+        },
+        "required": ["decision_id", "capability", "class", "status", "rationale", "evidence"],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "project_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "registry_source": {
+      "additionalProperties": false,
+      "properties": {
+        "commit": {
+          "pattern": "^[a-fA-F0-9]{7,64}$",
+          "type": "string"
+        },
+        "mode": {
+          "const": "canonical_reference",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "repository": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-fA-F0-9]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": ["mode", "repository", "path", "version", "commit", "sha256"],
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "type": "string"
+    }
+  },
+  "required": ["schema_version", "project_id", "registry_source", "decisions"],
+  "title": "Локальные решения о переиспользовании экосистемы",
+  "type": "object"
+}

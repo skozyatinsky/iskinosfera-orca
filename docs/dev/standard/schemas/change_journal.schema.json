@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "change_journal.schema.json",
+  "title": "Append-only change journal line",
+  "type": "object",
+  "additionalProperties": true,
+  "anyOf": [
+    { "required": ["date", "action", "symbol"] },
+    { "required": ["timestamp", "change_type", "entry_id"] },
+    {
+      "required": [
+        "event_id",
+        "timestamp",
+        "task_id",
+        "agent_id",
+        "entity_type",
+        "entity_id",
+        "action",
+        "to_state"
+      ]
+    }
+  ],
+  "properties": {
+    "event_id": { "type": "string" },
+    "timestamp": { "type": "string" },
+    "task_id": { "type": "string" },
+    "agent_id": { "type": "string" },
+    "entity_type": {
+      "type": "string",
+      "enum": [
+        "user_function",
+        "technical_function",
+        "work_package",
+        "task",
+        "lease",
+        "attestation"
+      ]
+    },
+    "entity_id": { "type": "string" },
+    "action": { "type": "string" },
+    "from_state": { "type": ["string", "null"] },
+    "to_state": { "type": "string" },
+    "commit_sha": { "type": ["string", "null"] },
+    "attestation_id": { "type": ["string", "null"] },
+    "date": { "type": "string" },
+    "symbol": { "type": "string" },
+    "by": { "type": "string" },
+    "note": { "type": "string" },
+    "actor": { "type": "string" },
+    "change_type": { "type": "string" },
+    "target_registry": { "type": "string" },
+    "entry_id": { "type": "string" },
+    "summary": { "type": "string" }
+  }
+}

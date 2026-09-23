@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Каталог команд продукта",
+  "description": "Машинный перечень команд, которыми продукт вызывается извне — прежде всего нейропомощником. Форма взята не из головы: она снята с работающего каталога командного слоя (8 команд, своя версия схемы, проверка на дубликаты), а не спроектирована впрок. Записи entry_points с kind=assistant ссылаются сюда по имени команды.",
+  "type": "object",
+  "required": ["schema_version", "commands"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Версия формата каталога."
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "kind"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Имя команды. На него ссылается entry_points[].ref при kind=assistant."
+          },
+          "kind": {
+            "enum": ["mutation", "read"],
+            "description": "Меняет состояние или только читает. Разделение нужно помощнику: читать можно свободно, менять — по праву."
+          },
+          "permission": {
+            "type": "string",
+            "description": "Право, требуемое для вызова."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Одна строка о том, что команда делает."
+          },
+          "transport": {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "enum": ["GET", "POST"] },
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Маршрут. Адрес стенда сюда не пишется — он в test_runner.json, иначе теряется переносимость между стендами."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

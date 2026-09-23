@@ -1,0 +1,129 @@
+{
+  "$id": "release_profiles.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "profiles": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "agent_mandatory_steps": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "allowed_receipt_statuses": {
+            "items": {
+              "enum": ["PASS", "FAIL", "INCOMPLETE", "DIAGNOSTIC_ONLY", "SELF_ATTESTED"]
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "allowed_skips": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "artifact_allowed": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "entrypoint": {
+            "pattern": "^tools/.+\\.py$",
+            "type": "string"
+          },
+          "executable": {
+            "type": "boolean"
+          },
+          "external_controls": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "fail_closed": {
+            "type": "boolean"
+          },
+          "failure_mode": {
+            "enum": ["fail_closed", "diagnostic"]
+          },
+          "mandatory_steps": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "owner": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "profile_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "requires_clean_working_tree": {
+            "enum": ["always", "if_git", "no"]
+          },
+          "requires_git_repository": {
+            "type": "boolean"
+          },
+          "requires_protected_base": {
+            "type": "boolean"
+          },
+          "trusted_inputs": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "independent_verification": {
+            "type": "boolean",
+            "description": "Подтверждает ли прогон по этому профилю независимая сторона. Условия — APS-RELEASE-SELF-ATTESTATION-001."
+          }
+        },
+        "required": [
+          "mandatory_steps",
+          "trusted_inputs",
+          "allowed_skips",
+          "external_controls",
+          "allowed_receipt_statuses",
+          "requires_git_repository",
+          "requires_clean_working_tree",
+          "requires_protected_base",
+          "artifact_allowed",
+          "fail_closed",
+          "profile_id",
+          "executable",
+          "entrypoint",
+          "failure_mode",
+          "owner",
+          "independent_verification"
+        ],
+        "type": "object"
+      },
+      "minProperties": 6,
+      "type": "object"
+    },
+    "schema_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    }
+  },
+  "required": ["schema_version", "profiles"],
+  "title": "Execution and release profiles",
+  "type": "object"
+}

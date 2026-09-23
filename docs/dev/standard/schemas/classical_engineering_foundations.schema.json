@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "classical_engineering_foundations.schema.json",
+  "title": "Трассировка классических принципов программной инженерии (Code Complete, Design Patterns, Clean Architecture, Clean Code, Refactoring) в этот стандарт",
+  "description": "reference/CLASSICAL_ENGINEERING_FOUNDATIONS.md — машинная сторона матрицы трассировки. Файл package-self-referential: описывает принципы САМОГО стандарта, не проекта-потребителя, поэтому живёт в reference/, не в docs/registry/ (см. check_classical_engineering_foundations()).",
+  "type": "object",
+  "required": ["version", "principles"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "string", "minLength": 1 },
+    "principles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "classification", "principle", "implemented_in", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9]*(-[A-Z0-9]+)+$",
+            "description": "Уникальный ID вида PREFIX-SLUG (напр. CC-NAMING-INTENT, CA-DEPENDENCY-RULE). Дубли отклоняются кодом (schema не умеет uniqueness по вложенному полю)."
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Автор и книга (или книга + смежный источник для составных принципов, напр. characterization tests — Фаулер + Физерс)."
+          },
+          "classification": {
+            "type": "string",
+            "enum": [
+              "FOUNDATIONAL",
+              "CONTEXT_DEPENDENT",
+              "HEURISTIC",
+              "OUTDATED_IN_LITERAL_FORM",
+              "AI_SPECIFIC_ADAPTATION_REQUIRED",
+              "NOT_ADOPTED"
+            ]
+          },
+          "principle": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Краткая формулировка принципа своими словами — не цитата из книги."
+          },
+          "implemented_in": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 },
+            "description": "Пути (относительно корня пакета) к документу(ам), где принцип реализован или где зафиксирован отказ от него. Существование на диске проверяется кодом."
+          },
+          "ai_adaptation": {
+            "type": "string",
+            "description": "В чём AI-агент типично ошибается иначе, чем человек. Пусто/отсутствует допустимо только для classification=NOT_ADOPTED."
+          },
+          "enforced_by": {
+            "type": "array",
+            "uniqueItems": true,
+            "description": "v2.9.118 (§11.1 внешнего аудита v2.9.117): типизированные объекты вместо свободнотекстовых строк — какой механизм реально проверяет принцип машинно, либо review_only для судебных принципов. Пусто допустимо для NOT_ADOPTED. Существование path/check проверяется кодом, не схемой — см. check_classical_engineering_foundations().",
+            "items": {
+              "type": "object",
+              "required": ["kind"],
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": ["validator_flag", "schema", "test", "ci_workflow", "review_only"],
+                  "description": "validator_flag — CLI-флаг tools/validate_structure.py (требует path+check); schema — JSON Schema файл (требует path); test — тестовый файл/кейс, демонстрирующий принцип (требует path); ci_workflow — CI workflow-файл (требует path); review_only — судебный принцип, машинно не проверяется (path опционален — может ссылаться на template/конвенцию)."
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "путь относительно корня пакета — обязателен для validator_flag/schema/test/ci_workflow, опционален для review_only. Существование на диске проверяется кодом."
+                },
+                "check": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^--[a-z][a-z0-9-]*$",
+                  "description": "CLI-флаг вида --check-module-boundaries — обязателен для kind=validator_flag. Проверяется кодом на реальное существование среди зарегистрированных флагов tools/validate_structure.py (не просто синтаксис)."
+                },
+                "note": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "опциональное уточнение — какое именно поле/аспект path проверяет, или что именно остаётся review-only при частичном enforcement."
+                }
+              }
+            }
+          },
+          "fully_enforced": {
+            "type": "boolean",
+            "description": "v2.9.118 (§11.1 внешнего аудита v2.9.117): опциональная явная заявка «принцип проверяется машинно целиком, не только частично/review-only». true не может опираться ИСКЛЮЧИТЕЛЬНО на enforced_by-записи с kind=review_only (или на пустой enforced_by) — проверяется кодом. Отсутствие поля — не заявляется ни то, ни другое (не «false» по умолчанию как отрицательное утверждение, а честное «не оценивалось»)."
+          },
+          "since_version": {
+            "type": "string",
+            "minLength": 1,
+            "description": "\"pre-existing\" — принцип уже действовал до цикла v2.9.116 (здесь только классифицирован); иначе версия, в которой принцип добавлен."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ADOPTED", "NOT_ADOPTED"]
+          },
+          "modern_evidence": {
+            "type": "array",
+            "uniqueItems": true,
+            "description": "v2.9.117 (P1 внешнего ревью v2.9.116: 'почти нет конкретных современных GitHub evidence — только цитаты книг'). Реальные примеры из современных open-source проектов, подтверждающие, что принцип продолжает применяться сегодня, не только у авторов книги — каждый пункт получен через WebFetch/curl/gh CLI В РАМКАХ исследовательской сессии, не восстановлен по памяти. Обязателен для status=ADOPTED (проверяется кодом, не схемой — см. check_classical_engineering_foundations()); для status=NOT_ADOPTED не имеет смысла — принцип сознательно не принят, современный пример его применения не нужен. v2.9.118 (§11.2 внешнего аудита v2.9.117): repository/commit/path — структурированное разложение url для commit-pinned источников (не для всех — статья/стандарт/блог не раскладываются); evidence_level — структурная (не содержательная) классификация: E1 закреплён на конкретный commit SHA (repository+commit; path — опциональное уточнение файла внутри, не обязателен — коммит без указания конкретного файла тоже E1), E2 идентифицирует репозиторий без commit-пиннинга (branch/issue/PR/bare-repo ссылка — commit отсутствует), E3 — источник вне GitHub (repository не задан вовсе). Локальный release-gate проверяет ТОЛЬКО структуру (полнота, commit-format, path, hash-format, допустимый уровень) — НЕ ходит в интернет; периодический benchmark-аудит (не этот код) проверяет содержимое online.",
+            "items": {
+              "type": "object",
+              "required": [
+                "project",
+                "url",
+                "mechanism",
+                "confidence",
+                "evidence_level",
+                "verified_at",
+                "example_status"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "project": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "org/repo или название проекта, напр. \"psf/requests\""
+                },
+                "url": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^https://",
+                  "description": "permalink, по возможности закреплённый на commit SHA (не на branch) — чтобы не разошёлся с mechanism при будущих изменениях репозитория"
+                },
+                "mechanism": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "что конкретно показывает пример и почему это применение принципа — не пересказ URL, не общая характеристика проекта"
+                },
+                "applicability": {
+                  "type": "string",
+                  "description": "опционально — чем это специфично полезно именно AI-агенту (не только человеку-разработчику)"
+                },
+                "confidence": {
+                  "type": "string",
+                  "enum": ["FETCHED_VERIFIED", "FETCHED_LOWER_CONFIDENCE"],
+                  "description": "FETCHED_VERIFIED — первичный источник, получен и сверен построчно/по цитате в рамках исследовательской сессии. FETCHED_LOWER_CONFIDENCE — реальный, но менее строго проверенный источник (вторичная/корроборирующая ссылка, рендеринг через суммаризирующий инструмент вместо прямого fetch и т.п.) — включён с явной честной пометкой, не выдаётся за первичный."
+                },
+                "repository": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$",
+                  "description": "опционально (v2.9.118) — \"owner/repo\", извлекаемо только когда url — GitHub-ссылка; для не-GitHub источников (статья, стандарт, блог) отсутствует, не выдумывается."
+                },
+                "commit": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$",
+                  "description": "опционально (v2.9.118) — полный 40-символьный commit SHA, ТОЛЬКО если url реально закреплён на нём (blob/commit с hex SHA в пути, не branch-имя вроде main/master — иначе поле отсутствует, не подставляется branch как псевдо-commit)."
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "опционально (v2.9.118) — путь к файлу внутри repository, для commit-pinned blob-ссылок. Существование НЕ проверяется (внешний репозиторий, не этот пакет) — только присутствие при заданных repository/commit."
+                },
+                "evidence_level": {
+                  "type": "string",
+                  "enum": ["E1", "E2", "E3"],
+                  "description": "структурная классификация (v2.9.118, §11.2 внешнего аудита v2.9.117), не содержательная: E1 = repository+commit заданы (commit-pinned, path опционален — уточняет конкретный файл, но коммит без него тоже E1); E2 = repository задан, commit — нет (branch-ссылка, issue/PR, bare-repo); E3 = repository не задан (источник не на GitHub или не раскладывается). Проверяется кодом на согласованность с фактически заполненными repository/commit — см. check_classical_engineering_foundations()."
+                },
+                "verified_at": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                  "description": "дата (не время — ISO 8601 YYYY-MM-DD), когда evidence был реально получен/сверен в рамках исследовательской сессии — не дата последнего редактирования JSON-файла."
+                },
+                "content_hash": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "description": "опционально (v2.9.118) — sha256 фактического содержимого по url/path на момент verified_at, для обнаружения дрейфа контента при периодическом benchmark-аудите. Отсутствует, если контент не был побайтово хэширован в рамках сессии — не вычисляется задним числом из mechanism/цитаты."
+                },
+                "example_status": {
+                  "type": "string",
+                  "enum": [
+                    "MODERN_EXAMPLE",
+                    "STRONG_IMPLEMENTATION",
+                    "BENCHMARK_CANDIDATE",
+                    "BEST_IN_CLASS_CONFIRMED"
+                  ],
+                  "description": "v2.9.118 (§11.3 внешнего аудита v2.9.117: 'не путать examples и best-in-class'). Возрастающая по строгости заявка: MODERN_EXAMPLE — просто реальный современный пример применения (базовый, значение по умолчанию для большинства записей); STRONG_IMPLEMENTATION — особенно чистая/показательная реализация, но без формального сравнения с альтернативами; BENCHMARK_CANDIDATE — рассматривается как потенциально лучший в классе, отбор не завершён; BEST_IN_CLASS_CONFIRMED — формально подтверждённый лучший пример, требует evidence_level=E1 (commit-pinned) И существования reference/BENCHMARK_SELECTION.md с критериями/кандидатами/причинами выбора/контрпримерами (проверяется кодом, не схемой — см. check_classical_engineering_foundations()). Не путать со status принципа (ADOPTED/NOT_ADOPTED) — это отдельная ось про качество ОДНОГО evidence-примера, не про судьбу принципа."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

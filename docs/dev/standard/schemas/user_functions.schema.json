@@ -1,0 +1,286 @@
+{
+  "$id": "user_functions.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "items": {
+    "additionalProperties": true,
+    "anyOf": [
+      {
+        "required": ["id"]
+      },
+      {
+        "required": ["function_id"]
+      }
+    ],
+    "properties": {
+      "acceptance_criteria": {
+        "items": {
+          "minLength": 3,
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "affected_paths": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "approved_reviewer": {
+        "type": "string"
+      },
+      "architectural_decision": {
+        "type": "string"
+      },
+      "area": {
+        "type": "string"
+      },
+      "automation": {
+        "type": "object",
+        "description": "Чем функция проверяется машинно. `additionalProperties` не закрыт: в парке встречаются записи с runner/trigger/workflow, и запрет сломал бы их без нужды — ограничена только форма test_refs.",
+        "properties": {
+          "test_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "pytest node id, каждый реально запускается раннером."
+          },
+          "runner": {
+            "type": "string"
+          }
+        }
+      },
+      "dependencies": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "description": {
+        "type": "string"
+      },
+      "duplicate_class": {
+        "enum": ["INTENTIONAL_ALIAS", "APPROVED_REPLACEMENT", "NO_DUPLICATE", null],
+        "type": ["string", "null"]
+      },
+      "duplicate_owner": {
+        "type": "string"
+      },
+      "duplicate_rationale": {
+        "type": "string"
+      },
+      "entry_points": {
+        "type": "array",
+        "description": "Двери в функцию. У решений экосистемы их две: визуальная (человек тыкает мышкой) и через нейропомощника. До v2.9.173 поле было массивом произвольных объектов, и парк разошёлся: 23 записи писали {cmd}, 7 — {command, type}, обе означали одно.",
+        "items": {
+          "type": "object",
+          "required": ["kind", "ref"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "enum": ["ui", "assistant", "cli"],
+              "description": "ui — экран и элемент, куда нажимает человек; assistant — имя команды в каталоге команд продукта, которой вызывает нейропомощник; cli — команда оболочки. Список намеренно короткий: значения добавляются по факту появления, не впрок."
+            },
+            "ref": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Как именно вызвать: путь экрана, имя команды или строка запуска."
+            },
+            "label": {
+              "type": "string",
+              "description": "Человеческое имя элемента, если ref нечитаем."
+            },
+            "permission": {
+              "type": "string",
+              "description": "Право, требуемое для вызова."
+            }
+          }
+        }
+      },
+      "expected_result": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "fencing_token": {
+        "minimum": 1,
+        "type": ["integer", "null"]
+      },
+      "function_id": {
+        "pattern": "^[a-z0-9][a-z0-9._-]*$",
+        "type": "string"
+      },
+      "id": {
+        "pattern": "^[a-z0-9][a-z0-9._-]*$",
+        "type": "string"
+      },
+      "implementation_commit": {
+        "type": ["string", "null"]
+      },
+      "introduced_by_task": {
+        "type": ["string", "null"]
+      },
+      "introduced_in": {
+        "type": "string"
+      },
+      "introduced_in_version": {
+        "type": ["string", "null"]
+      },
+      "last_changed": {
+        "type": "string"
+      },
+      "lease_id": {
+        "type": ["string", "null"]
+      },
+      "lifecycle_state": {
+        "enum": [
+          "PLANNED",
+          "APPROVED",
+          "WIP",
+          "IMPLEMENTED",
+          "TESTED_TARGETED",
+          "TESTED_AFFECTED",
+          "TESTED_FULL",
+          "READY_FOR_REVIEW",
+          "READY_FOR_MERGE",
+          "MERGED",
+          "DONE",
+          "BLOCKED",
+          "FAILED",
+          "DEPRECATED",
+          "REMOVED"
+        ],
+        "type": "string"
+      },
+      "manual_steps": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "merged_commit": {
+        "type": ["string", "null"]
+      },
+      "migration_plan": {
+        "type": "string"
+      },
+      "negative_checks": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "owner_module": {
+        "type": "string"
+      },
+      "post_merge_validation": {
+        "enum": ["PASS", "FAIL", null],
+        "type": ["string", "null"]
+      },
+      "preconditions": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "previous_lifecycle_state": {
+        "type": ["string", "null"]
+      },
+      "priority": {
+        "enum": ["critical", "high", "normal", "low"],
+        "type": "string"
+      },
+      "public_entrypoints": {
+        "items": {
+          "type": ["string", "object"]
+        },
+        "type": "array"
+      },
+      "regression_policy": {
+        "type": "object"
+      },
+      "related_code": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "related_functions": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "related_registry": {
+        "type": "object"
+      },
+      "risk_level": {
+        "type": "string"
+      },
+      "status": {
+        "enum": ["ACTIVE", "WIP", "PLANNED", "DEPRECATED", "REMOVED", "DONE"],
+        "type": "string"
+      },
+      "summary": {
+        "minLength": 5,
+        "type": "string"
+      },
+      "tags": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "task_id": {
+        "type": ["string", "null"]
+      },
+      "test_data": {
+        "type": "object"
+      },
+      "test_refs": {
+        "type": "object"
+      },
+      "title": {
+        "minLength": 3,
+        "type": "string"
+      },
+      "trusted_test_evidence": {
+        "type": "object"
+      },
+      "trusted_test_evidence_ids": {
+        "additionalProperties": false,
+        "properties": {
+          "affected_tests": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "full_regression": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "post_merge_validation": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "targeted_tests": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": {
+        "type": "string"
+      },
+      "verified_attestation": {
+        "type": ["string", "null"]
+      }
+    },
+    "required": ["title", "status", "summary"],
+    "type": "object"
+  },
+  "title": "User-function inventory and lifecycle",
+  "type": "array"
+}

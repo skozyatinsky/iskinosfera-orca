@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "trusted_tool_manifest.schema.json",
+  "title": "Externally anchored trusted executable identity manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "standard_version",
+    "build_provenance",
+    "execution_environment_identity",
+    "key_policy_version",
+    "signature_algorithm",
+    "signing_key_id",
+    "signing_public_key",
+    "tools",
+    "manifest_body_sha256",
+    "manifest_signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "2.0.0" },
+    "standard_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "build_provenance": { "type": "string", "minLength": 1 },
+    "execution_environment_identity": { "type": "string", "minLength": 1 },
+    "key_policy_version": { "type": "string", "minLength": 1 },
+    "signature_algorithm": { "const": "ed25519" },
+    "signing_key_id": { "type": "string", "minLength": 1 },
+    "signing_public_key": { "type": "string", "minLength": 40 },
+    "manifest_body_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "manifest_signature": { "type": "string", "minLength": 80 },
+    "tools": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "version", "build_provenance", "sha256", "size", "mode"],
+        "properties": {
+          "path": { "type": "string", "pattern": "^tools/.+\\.py$" },
+          "version": { "type": "string" },
+          "build_provenance": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "size": { "type": "integer", "minimum": 1 },
+          "mode": { "type": "string", "pattern": "^0[0-7]{3}$" }
+        }
+      }
+    }
+  }
+}

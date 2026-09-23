@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "skills_manifest.schema.json",
+  "title": "Выбор скилов под проект (из Библиотеки скилов)",
+  "type": "object",
+  "required": ["skills"],
+  "additionalProperties": false,
+  "properties": {
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "source": {
+            "type": "string",
+            "enum": ["package", "library", "external"]
+          }
+        }
+      }
+    }
+  }
+}

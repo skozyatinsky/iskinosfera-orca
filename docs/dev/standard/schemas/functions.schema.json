@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "functions.schema.json",
+  "title": "Public technical symbol registry",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": true,
+    "required": ["symbol", "kind", "path"],
+    "anyOf": [{ "required": ["id"] }, { "required": ["function_id"] }],
+    "properties": {
+      "id": { "type": "string" },
+      "function_id": { "type": "string" },
+      "symbol": { "type": "string", "minLength": 1 },
+      "qualified_symbol": { "type": "string" },
+      "qualified_name": { "type": "string" },
+      "kind": {
+        "type": "string",
+        "enum": [
+          "function",
+          "class",
+          "method",
+          "constant",
+          "api_handler",
+          "cli_command",
+          "service",
+          "adapter",
+          "extension_point"
+        ]
+      },
+      "native_kind": { "type": "string" },
+      "path": { "type": "string" },
+      "signature": { "type": "string" },
+      "visibility": { "type": "string", "enum": ["public", "internal", "private"] },
+      "public": { "type": "boolean" },
+      "stability": {
+        "type": "string",
+        "enum": ["stable", "beta", "experimental", "internal", "deprecated"]
+      },
+      "owner_module": { "type": "string" },
+      "user_function_ids": { "type": "array", "items": { "type": "string" } },
+      "task_id": { "type": ["string", "null"] },
+      "lease_id": { "type": ["string", "null"] },
+      "tests": { "type": "array", "items": { "type": "string" } },
+      "status": {
+        "type": "string",
+        "enum": ["ACTIVE", "WIP", "PLANNED", "REMOVED", "NEEDS_CONFIRMATION", "DEPRECATED", "DONE"]
+      },
+      "lifecycle_state": { "type": "string" },
+      "previous_lifecycle_state": { "type": ["string", "null"] },
+      "introduced_in_commit": { "type": ["string", "null"] },
+      "merged_commit": { "type": ["string", "null"] },
+      "deprecated_by": { "type": ["string", "null"] },
+      "replacement": { "type": ["string", "null"] },
+      "route": { "type": ["string", "null"] },
+      "cli_command": { "type": ["string", "null"] },
+      "duplicate_class": { "type": ["string", "null"] },
+      "duplicate_rationale": { "type": "string" },
+      "duplicate_owner": { "type": "string" },
+      "architectural_decision": { "type": "string" },
+      "migration_plan": { "type": "string" },
+      "approved_reviewer": { "type": "string" },
+      "summary": { "type": "string" },
+      "module": { "type": "string" }
+    }
+  }
+}

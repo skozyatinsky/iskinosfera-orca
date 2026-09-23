@@ -1,0 +1,424 @@
+{
+  "$id": "https://agent-project-standard.local/schemas/dead_code_report.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "diagnostics": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "findings": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "allowlist_id": {
+            "type": ["string", "null"]
+          },
+          "category": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "enum": ["LOW", "MEDIUM", "HIGH"]
+          },
+          "diagnostic_code": {
+            "pattern": "^APS_DEAD_CODE_",
+            "type": "string"
+          },
+          "disposition": {
+            "enum": ["OPEN", "ALLOWLISTED", "FIXED", "NOT_APPLICABLE"]
+          },
+          "entrypoint_paths": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "evidence": {
+            "type": "object"
+          },
+          "finding_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "line": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "production_reachable": {
+            "type": "boolean"
+          },
+          "reason": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "recommended_action": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "rule_id": {
+            "pattern": "^APS-",
+            "type": "string"
+          },
+          "severity": {
+            "enum": ["INFO", "WARNING", "ERROR"]
+          },
+          "symbol": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "symbol_kind": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "test_reachable": {
+            "type": "boolean"
+          },
+          "origin": {
+            "type": "string",
+            "enum": ["introduced", "pre_existing"],
+            "description": "Появилась ли находка вместе с рассматриваемой правкой. Условия разметки — APS-DEAD-CODE-ORIGIN-001."
+          }
+        },
+        "required": [
+          "finding_id",
+          "rule_id",
+          "diagnostic_code",
+          "severity",
+          "category",
+          "confidence",
+          "path",
+          "line",
+          "symbol",
+          "symbol_kind",
+          "production_reachable",
+          "test_reachable",
+          "entrypoint_paths",
+          "evidence",
+          "reason",
+          "recommended_action",
+          "disposition",
+          "allowlist_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "production_entrypoints": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "profile": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "public_api_contracts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "api_id": {
+            "pattern": "^APS-DC-API-[A-Z0-9-]+$",
+            "type": "string"
+          },
+          "contract_kind": {
+            "enum": ["compatibility_api", "plugin_hook", "library_api", "external_contract"]
+          },
+          "evidence": {
+            "items": {
+              "oneOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "contract_type": {
+                      "enum": [
+                        "entrypoint",
+                        "public_api",
+                        "migration",
+                        "deprecation",
+                        "trusted_manifest",
+                        "behavioral_test"
+                      ]
+                    },
+                    "kind": {
+                      "const": "json_pointer"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "pointer": {
+                      "pattern": "^(/.*)?$",
+                      "type": "string"
+                    },
+                    "subject": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "not": {
+                            "pattern": "\\*|(^|/)\\.\\.(/|$)|^/|\\\\"
+                          },
+                          "type": "string"
+                        },
+                        "symbol": {
+                          "minLength": 1,
+                          "not": {
+                            "pattern": "\\*"
+                          },
+                          "type": "string"
+                        }
+                      },
+                      "required": ["path", "symbol"],
+                      "type": "object"
+                    }
+                  },
+                  "required": ["kind", "contract_type", "subject", "path", "pointer"],
+                  "type": "object"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "anchor": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "contract_type": {
+                      "enum": [
+                        "entrypoint",
+                        "public_api",
+                        "migration",
+                        "deprecation",
+                        "trusted_manifest",
+                        "behavioral_test"
+                      ]
+                    },
+                    "kind": {
+                      "const": "markdown_anchor"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "subject": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "not": {
+                            "pattern": "\\*|(^|/)\\.\\.(/|$)|^/|\\\\"
+                          },
+                          "type": "string"
+                        },
+                        "symbol": {
+                          "minLength": 1,
+                          "not": {
+                            "pattern": "\\*"
+                          },
+                          "type": "string"
+                        }
+                      },
+                      "required": ["path", "symbol"],
+                      "type": "object"
+                    }
+                  },
+                  "required": ["kind", "contract_type", "subject", "path", "anchor"],
+                  "type": "object"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "contract_type": {
+                      "const": "behavioral_test"
+                    },
+                    "kind": {
+                      "const": "test_node"
+                    },
+                    "node_id": {
+                      "pattern": "^tests/[^\\[]+::[A-Za-z_][A-Za-z0-9_:]*$",
+                      "type": "string"
+                    },
+                    "subject": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "not": {
+                            "pattern": "\\*|(^|/)\\.\\.(/|$)|^/|\\\\"
+                          },
+                          "type": "string"
+                        },
+                        "symbol": {
+                          "minLength": 1,
+                          "not": {
+                            "pattern": "\\*"
+                          },
+                          "type": "string"
+                        }
+                      },
+                      "required": ["path", "symbol"],
+                      "type": "object"
+                    }
+                  },
+                  "required": ["kind", "contract_type", "subject", "node_id"],
+                  "type": "object"
+                }
+              ]
+            },
+            "minItems": 2,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "owner": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "symbol": {
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+            "type": "string"
+          }
+        },
+        "required": ["api_id", "path", "symbol", "contract_kind", "owner", "evidence"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "root": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "REVIEW_REQUIRED",
+        "ENVIRONMENT_NOT_CAPABLE",
+        "VERIFICATION_INCOMPLETE"
+      ]
+    },
+    "summary": {
+      "additionalProperties": false,
+      "properties": {
+        "allowlisted_findings": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "categories": {
+          "additionalProperties": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "type": "object"
+        },
+        "files_scanned": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "high_confidence_findings": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "invalid_allowlist_entries": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "review_required_findings": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "symbols_scanned": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "unknown_entrypoints": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "files_scanned",
+        "symbols_scanned",
+        "high_confidence_findings",
+        "review_required_findings",
+        "allowlisted_findings",
+        "invalid_allowlist_entries",
+        "unknown_entrypoints",
+        "categories"
+      ],
+      "type": "object"
+    },
+    "scan_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exclusions", "files_excluded"],
+      "properties": {
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "files_excluded": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "baseline": {
+      "type": "object",
+      "required": ["ref", "resolved_sha", "status", "reason"],
+      "additionalProperties": false,
+      "properties": {
+        "ref": {
+          "type": ["string", "null"]
+        },
+        "resolved_sha": {
+          "type": ["string", "null"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["APPLIED", "UNAVAILABLE", "NOT_DECLARED"]
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "description": "Базовая ревизия, против которой размечено происхождение находок. Условия — APS-DEAD-CODE-ORIGIN-001."
+    }
+  },
+  "required": [
+    "findings",
+    "limitations",
+    "production_entrypoints",
+    "profile",
+    "public_api_contracts",
+    "root",
+    "scan_scope",
+    "schema_version",
+    "status",
+    "summary"
+  ],
+  "title": "Dead Code and Reachability Report",
+  "type": "object"
+}

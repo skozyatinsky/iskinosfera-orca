@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "merge_transaction.schema.json",
+  "title": "Controlled automatic merge transaction",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "operation_id",
+    "merge_request_id",
+    "delivery_id",
+    "execution_id",
+    "request_nonce",
+    "repository_id",
+    "task_id",
+    "lease_id",
+    "fencing_token",
+    "provider",
+    "provider_pr_mr_id",
+    "target_ref",
+    "base_sha",
+    "candidate_sha",
+    "candidate_tree_sha",
+    "state",
+    "request_sha256",
+    "task_state",
+    "lease_closed"
+  ],
+  "properties": {
+    "operation_id": { "type": "string", "minLength": 1 },
+    "merge_request_id": { "type": "string", "minLength": 1 },
+    "delivery_id": { "type": "string", "minLength": 1 },
+    "execution_id": { "type": "string", "minLength": 1 },
+    "request_nonce": { "type": "string", "minLength": 16 },
+    "state": {
+      "enum": [
+        "CREATED",
+        "VALIDATING",
+        "READY_FOR_QUEUE",
+        "QUEUED",
+        "MERGE_REQUESTED",
+        "MERGE_CONFIRMED",
+        "POST_MERGE_VALIDATING",
+        "COMPLETED",
+        "BLOCKED",
+        "EXPIRED",
+        "CANCELLED",
+        "RECOVERY_REQUIRED",
+        "COMPENSATED"
+      ]
+    },
+    "request_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "provider_response_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+    "merge_commit_sha": { "type": ["string", "null"] },
+    "task_state": { "enum": ["MERGE_PENDING", "DONE"] },
+    "lease_closed": { "enum": [0, 1] }
+  }
+}

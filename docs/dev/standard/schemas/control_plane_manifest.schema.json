@@ -1,0 +1,268 @@
+{
+  "$id": "control_plane_manifest.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "branch_protection_assumptions": {
+      "additionalProperties": false,
+      "properties": {
+        "prevent_force_push": {
+          "const": true
+        },
+        "protected_default_branch": {
+          "const": true
+        },
+        "required_checks": {
+          "const": true
+        },
+        "workflow_changes_reviewed": {
+          "const": true
+        }
+      },
+      "required": [
+        "protected_default_branch",
+        "required_checks",
+        "prevent_force_push",
+        "workflow_changes_reviewed"
+      ],
+      "type": "object"
+    },
+    "change_policy": {
+      "enum": ["separate_governance_pr", "trusted_intent_plus_controlled_activation"]
+    },
+    "controlled_activation_paths": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "governance_classes": {
+      "additionalProperties": false,
+      "properties": {
+        "active_leases": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "agent_results_policy": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "agent_task_contracts": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "capability_registry": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "check_registry": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "approved_tools_registry": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "ci_workflows": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "code_ownership": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "control_plane_manifest": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "critical_schemas": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "function_registries": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "governance_class_registry": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "module_registry": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "project_profile": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "release_gate": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "release_receipt_policy": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "test_runner": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "validator_tools": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "work_package_graph": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "project_profile",
+        "control_plane_manifest",
+        "governance_class_registry",
+        "module_registry",
+        "code_ownership",
+        "work_package_graph",
+        "active_leases",
+        "check_registry",
+        "approved_tools_registry",
+        "agent_task_contracts",
+        "agent_results_policy",
+        "function_registries",
+        "critical_schemas",
+        "validator_tools",
+        "release_gate",
+        "test_runner",
+        "ci_workflows",
+        "capability_registry",
+        "release_receipt_policy"
+      ],
+      "type": "object"
+    },
+    "governance_paths": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 18,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "protocol_version": {
+      "enum": ["1.1", "2.0", "2.1"],
+      "type": "string"
+    },
+    "version": {
+      "const": "2.1",
+      "type": "string"
+    }
+  },
+  "required": [
+    "version",
+    "protocol_version",
+    "governance_paths",
+    "governance_classes",
+    "change_policy",
+    "branch_protection_assumptions",
+    "controlled_activation_paths"
+  ],
+  "title": "Semantic trusted control plane manifest",
+  "type": "object"
+}

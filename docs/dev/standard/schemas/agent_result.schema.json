@@ -1,0 +1,333 @@
+{
+  "$id": "agent_result.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "base_commit": {
+      "type": "string"
+    },
+    "behavior_baseline": {
+      "description": "обязательно при task_type=refactoring (v2.9.116): что из наблюдаемого поведения фактически не изменилось. Связанная задача определяется тем же <id>, что и в имени файла результата (docs/registry/agent_tasks/<id>.json — §14 AI_TO_AI_COMMUNICATION_STANDARD.md, без отдельного поля-ссылки). См. REFACTORING_SAFETY_STANDARD.md §2, §7.",
+      "minLength": 1,
+      "type": "string",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTRESULTSCHEMA-2012-009",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_result.schema rule 9"
+      }
+    },
+    "blocked_reason": {
+      "description": "обязателен, если status=BLOCKED или FAILED",
+      "minLength": 1,
+      "type": "string"
+    },
+    "blocking_caveats": {
+      "description": "v2.9.121 (P1 внешнего аудита v2.9.120, третий раз подряд — дважды осознанно отложено как «не в объёме цикла»): подмножество unverified_claims, которое ДОЛЖНО помешать downstream work package начаться, даже при status=COMPLETED_WITH_CAVEATS (напр. «совместимость публичного API не проверена», «миграция БД не протестирована на реальных данных»). Непустой blocking_caveats блокирует graph DONE для этого узла (check_agent_workflow_integrity), пока кто-то не пересмотрит caveat и не уберёт его отсюда. v2.9.123 (P1 внешнего аудита v2.9.122, A-3): каждый элемент unverified_claims теперь обязан появиться РОВНО ОДИН раз — либо здесь (дословное совпадение строки), либо как non_blocking_caveats[].claim — классификация больше не опциональна (см. non_blocking_caveats и check_agent_results()).",
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTRESULTSCHEMA-2012-005",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_result.schema rule 5"
+      }
+    },
+    "changed_files": {
+      "description": "Заявленный набор изменённых файлов. v2.9.118 (P0 внешнего аудита v2.9.117): --check-active-task-diff (при указанных --task-id/--base-ref) сверяет это множество с фактическим git diff — расхождение допускается только через generated_files/ignored_diff_entries ниже, не молчаливо.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true,
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTRESULTSCHEMA-2012-003",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_result.schema rule 3"
+      }
+    },
+    "checks": {
+      "description": "Проверки шире pytest-теста (линтер, validate_structure.py и т.п.) — tests[] остаётся для узла pytest, checks[] для произвольной команды (v2.9.110). v2.9.118 (P0 внешнего аудита v2.9.117, ломающее изменение): check_id теперь обязан совпасть с required_checks[].id соответствующей задачи — check_agent_results() требует по одной записи на каждый required_checks[] с result=passed и допустимым exit_code. v2.9.119 (P0 внешнего аудита v2.9.118): required_for_statuses удалён из agent_task_contract — required_checks[] теперь обязателен для ОБОИХ статусов COMPLETED и COMPLETED_WITH_CAVEATS без исключений. result — строгий enum, не свободный текст (важно: результат больше нельзя подтвердить проверкой, которую задача не requestовала, что и было исходной дырой).",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "check_id": {
+            "description": "должен совпадать с id одной из required_checks[] связанной задачи (docs/registry/agent_tasks/<тот же stem>.json).",
+            "minLength": 1,
+            "type": "string",
+            "x-aps-rule": {
+              "id": "APS-SCHEMA-AGENTRESULTSCHEMA-2012-008",
+              "semantic_contract_version": 1,
+              "status": "DOCUMENTED",
+              "title": "agent_result.schema rule 8"
+            }
+          },
+          "command": {
+            "description": "опционально — человекочитаемое отображение фактически выполненной команды. Не заменяет check_id как связующее поле.",
+            "type": "string"
+          },
+          "evidence": {
+            "description": "путь/описание артефакта (напр. лог) — обычно рантайм-артефакт вне committed-дерева, поэтому НЕ проверяется на существование на диске (в отличие от implemented_in-подобных полей, ссылающихся на committed-документы).",
+            "minLength": 1,
+            "type": "string"
+          },
+          "exit_code": {
+            "description": "реальный process exit code — целое число, не дробное (v2.9.119, P2 внешнего аудита v2.9.118).",
+            "type": "integer"
+          },
+          "finished_at": {
+            "description": "см. started_at — тот же формат/принцип.",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
+            "type": "string"
+          },
+          "result": {
+            "description": "строгий словарь (v2.9.118) — 'not run'/'unknown'/'maybe passed'/'FAILED' и т.п. свободные написания отклоняются схемой. skipped/not_run НЕ подтверждают готовность (не считаются evidence для COMPLETED).",
+            "enum": ["passed", "failed", "skipped", "not_run"],
+            "type": "string"
+          },
+          "started_at": {
+            "description": "ISO-8601 с обязательным timezone (Z или ±HH:MM), заякорено на конце строки — v2.9.119 (P2 внешнего аудита v2.9.118): предыдущий pattern без $ пропускал произвольный мусор после валидного префикса (напр. '2026-07-19T12:00:00GARBAGE').",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
+            "type": "string"
+          }
+        },
+        "required": ["check_id", "result"],
+        "type": "object"
+      },
+      "type": "array",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTRESULTSCHEMA-2012-007",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_result.schema rule 7"
+      }
+    },
+    "commit": {
+      "type": "string"
+    },
+    "deviations": {
+      "description": "Отклонения от исходного контракта задачи, согласованные по ходу выполнения (см. AI_TO_AI_COMMUNICATION_STANDARD.md §14, v2.9.110)",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "fencing_token": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "generated_files": {
+      "description": "v2.9.118 (v2.9.119: path/generator структурированы, см. properties.generator): файлы, сгенерированные в рамках задачи (не редактировались вручную) — часть фактического git diff, но не обязаны быть в changed_files дословно, если changed_files описывает смысловые правки, а не полный список артефактов сборки.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "generator": {
+            "description": "чем сгенерирован файл (напр. имя команды/скрипта/build-инструмента: 'build_release_zip.py', 'webpack', 'pytest --cov'). v2.9.119 (P2 внешнего аудита v2.9.118): раньше generated_files был array[string] с нулевым обоснованием — любой файл можно было объявить 'сгенерированным' без единого доказательства, в отличие от ignored_diff_entries (path/reason/approved_by). generator НЕ требует одобрения человека (в отличие от ignored_diff_entries.approved_by) — генерируемые файлы рутинны, не исключение; но требует НАЗВАТЬ, чем именно сгенерирован, что даёт последующему ревью зацепку для проверки правдоподобности.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": ["path", "generator"],
+        "type": "object"
+      },
+      "type": "array",
+      "uniqueItems": true,
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTRESULTSCHEMA-2012-004",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_result.schema rule 4"
+      }
+    },
+    "ignored_diff_entries": {
+      "description": "v2.9.118 (P0 внешнего аудита v2.9.117): структурированное, поимённое исключение из равенства changed_files == фактический git diff — напр. файл IDE/локальной среды, случайно попавший в diff. Свободный текст запрещён как обход — каждая запись требует path/reason/approved_by, не оставляется на честное слово агента.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "approved_by": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "reason": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": ["path", "reason", "approved_by"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "implementation_commit": {
+      "type": "string"
+    },
+    "lease_id": {
+      "type": "string"
+    },
+    "limitations": {
+      "description": "Известные ограничения/сознательно не покрытый scope — обязателен и непуст, если status=PARTIAL (v2.9.110)",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "non_blocking_caveats": {
+      "description": "v2.9.123 (P1 внешнего аудита v2.9.122, A-3 — «серьёзность оговорок классифицирует сам исполнитель», прямое противоречие reference/SUCCESS_PATTERNS.md extractor-agent-never-self-certifies): при status=COMPLETED_WITH_CAVEATS каждый unverified_claims[] обязан быть классифицирован — либо как blocking_caveats[] (дословная строка), либо здесь, с явным claim (дословное совпадение строки из unverified_claims)/reason/approved_by — тот же идиома, что уже применена к ignored_diff_entries (structured, не свободный текст на честное слово). Молчание (claim, отсутствующий и там, и там) больше не значит «не блокирует» — это находка.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "approved_by": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "claim": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "reason": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": ["claim", "reason", "approved_by"],
+        "type": "object"
+      },
+      "type": "array",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTRESULTSCHEMA-2012-006",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_result.schema rule 6"
+      }
+    },
+    "open_questions": {
+      "description": "Вопросы, оставшиеся открытыми после выполнения задачи (v2.9.110)",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "public_contract_changed": {
+      "description": "v2.9.116: изменился ли публичный контракт (сигнатуры, API, формат данных, error contract) по факту выполнения. При task_type=refactoring и значении true — status=COMPLETED запрещён (REFACTORING_SAFETY_STANDARD.md §5, §7): изменённый публичный контракт означает задача либо неверно классифицирована как refactoring, либо требует пересмотра.",
+      "type": "boolean"
+    },
+    "registry_changes": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "registry_updates": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "status": {
+      "description": "COMPLETED — всё подтверждено, unverified_claims обязан быть пуст; COMPLETED_WITH_CAVEATS — есть неподтверждённые утверждения, см. unverified_claims; PARTIAL — выполнена только часть scope, остаток обязан быть перечислен в limitations (v2.9.110, AI_TO_AI_COMMUNICATION_STANDARD.md)",
+      "enum": ["COMPLETED", "COMPLETED_WITH_CAVEATS", "PARTIAL", "BLOCKED", "FAILED"],
+      "type": "string",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTRESULTSCHEMA-2012-001",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_result.schema rule 1"
+      }
+    },
+    "structural_changes": {
+      "description": "обязательно при task_type=refactoring (v2.9.116): фактически выполненные структурные шаги (rename, extract, move, replace algorithm и т.п.). См. REFACTORING_SAFETY_STANDARD.md §4, §7.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTRESULTSCHEMA-2012-011",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_result.schema rule 11"
+      }
+    },
+    "summary": {
+      "description": "Одна строка человекочитаемого резюме результата (v2.9.110)",
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "task_origin": {
+      "description": "v2.9.122 (P1 внешнего аудита v2.9.121 §10, репродуцировано: агент, удаливший СВОЙ agent_tasks/<id>.json целиком, обходит required_checks/task_type-специфичные инварианты, и graph DONE не отличает эту ситуацию от легитимной human-origin задачи, у которой формального контракта никогда и не было — AI_TO_AI_COMMUNICATION_STANDARD.md §14). Опционально — отсутствие поля не ломает уже принятое решение «DONE не требует task contract» (см. CHANGELOG v2.9.120 §8): без task_origin поведение НЕ меняется. Если явно указан 'machine' — docs/registry/agent_tasks/<task_id>.json ОБЯЗАН существовать (check_agent_results()); 'human' — поведение как раньше, task contract остаётся опциональным. Не выводится из факта отсутствия каталога — заявляется явно.",
+      "enum": ["human", "machine"],
+      "type": "string",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTRESULTSCHEMA-2012-002",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_result.schema rule 2"
+      }
+    },
+    "test_evidence": {
+      "type": "object"
+    },
+    "tests": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "node_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "result": {
+            "enum": ["passed", "failed", "skipped"],
+            "type": "string"
+          }
+        },
+        "required": ["node_id", "result"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "tests_before": {
+      "description": "обязательно при task_type=refactoring (v2.9.116): test_ref'ы или проверки, которыми фактически подтверждено поведение до начала работы. См. REFACTORING_SAFETY_STANDARD.md §2-3, §7.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-AGENTRESULTSCHEMA-2012-010",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "agent_result.schema rule 10"
+      }
+    },
+    "unverified_claims": {
+      "description": "Честно перечисленные утверждения, которые агент не смог подтвердить тестом/выполнением — не скрывать в тексте отчёта",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "verification_evidence_ref": {
+      "description": "Путь к docs/registry/verification_evidence/<task_id>.json.",
+      "minLength": 1,
+      "type": "string"
+    },
+    "verification_profile": {
+      "enum": ["FAST", "ASSURED", "CRITICAL"],
+      "type": "string"
+    }
+  },
+  "required": ["status", "changed_files", "tests", "registry_updates", "unverified_claims"],
+  "title": "Структурированный результат работы AI-агента (не свободный текст)",
+  "type": "object"
+}

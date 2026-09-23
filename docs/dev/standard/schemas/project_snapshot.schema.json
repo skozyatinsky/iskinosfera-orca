@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project_snapshot.schema.json",
+  "title": "Машинная карта проекта (понимание за 10 секунд)",
+  "type": "object",
+  "required": [
+    "project_id",
+    "title",
+    "summary",
+    "audience",
+    "status",
+    "language_profile",
+    "spec_dir",
+    "critical_user_functions",
+    "entry_points",
+    "must_not_break",
+    "required_checks",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "project_id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 5 },
+    "audience": { "type": "array", "items": { "type": "string" } },
+    "status": { "type": "string" },
+    "language_profile": { "type": "string", "enum": ["ru_internal", "en_public", "mixed"] },
+    "spec_dir": { "type": "string" },
+    "critical_user_functions": { "type": "array", "items": { "type": "string" } },
+    "entry_points": { "type": "array", "items": { "type": "object" } },
+    "must_not_break": { "type": "array", "items": { "type": "string" } },
+    "required_checks": { "type": "array", "items": { "type": "string" } },
+    "updated_at": { "type": "string" }
+  }
+}

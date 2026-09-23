@@ -1,0 +1,241 @@
+{
+  "$id": "https://agent-project-standard.local/schemas/prompt_registry.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "prompts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "applies_to": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "automation_policy": {
+            "enum": ["MANUAL", "SUGGEST_ONLY", "AUTO_READ_ONLY", "APPROVAL_REQUIRED"],
+            "type": "string"
+          },
+          "capabilities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "capability_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "category": {
+            "enum": ["audit", "remediation", "migration", "verification", "incident"],
+            "type": "string"
+          },
+          "component_ids": {
+            "items": {
+              "pattern": "^[A-Z0-9_-]+$",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "content_sha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "dependency_lock_sha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "expected_outputs": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "generated": {
+            "type": "boolean"
+          },
+          "id": {
+            "pattern": "^[A-Z][A-Z0-9_-]{2,127}$",
+            "type": "string"
+          },
+          "introduced_in": {
+            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+            "type": "string"
+          },
+          "last_changed_in": {
+            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+            "type": "string"
+          },
+          "mode": {
+            "enum": [
+              "AUDIT_ONLY",
+              "INCIDENT",
+              "MIGRATION",
+              "READ_ONLY",
+              "READ_ONLY_EXTENSION",
+              "REMEDIATION",
+              "VERIFICATION"
+            ],
+            "type": "string"
+          },
+          "optional_inputs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "outputs": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "path": {
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[a-zA-Z0-9_./-]+\\.md$",
+            "type": "string"
+          },
+          "prerequisites": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "prohibited_actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "project_instructions_required": {
+            "type": "boolean"
+          },
+          "prompt_id": {
+            "pattern": "^[A-Z][A-Z0-9_-]{2,127}$",
+            "type": "string"
+          },
+          "recommended_triggers": {
+            "items": {
+              "minLength": 3,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "required_inputs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "requires_prompt_id": {
+            "pattern": "^[A-Z][A-Z0-9_-]{2,127}$",
+            "type": ["string", "null"]
+          },
+          "risk_level": {
+            "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+            "type": "string"
+          },
+          "role": {
+            "enum": ["INDEPENDENT_AUDITOR", "ARCHITECT", "IMPLEMENTER", "RELEASE_VERIFIER"],
+            "type": "string"
+          },
+          "rule_ids": {
+            "items": {
+              "pattern": "^APS-[A-Z0-9]+(?:-[A-Z0-9]+)+$",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "runtime_profile": {
+            "enum": ["STANDALONE", "CHATGPT_PROJECT", "REPOSITORY_AGENT"],
+            "type": "string"
+          },
+          "scope": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "side_effects_allowed": {
+            "type": "boolean"
+          },
+          "status": {
+            "enum": ["DRAFT", "PILOT", "APPROVED", "DEPRECATED"],
+            "type": "string"
+          },
+          "superseded_by": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "supersedes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "target_kind": {
+            "enum": ["STANDARD_PACKAGE", "EXTERNAL_PROJECT_ADOPTION", "CANDIDATE_RELEASE"],
+            "type": "string"
+          },
+          "test_ids": {
+            "items": {
+              "pattern": "^test_[A-Za-z0-9_]+$",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "minLength": 3,
+            "type": "string"
+          },
+          "version": {
+            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "version",
+          "path",
+          "category",
+          "mode",
+          "status",
+          "recommended_triggers",
+          "prerequisites",
+          "expected_outputs",
+          "prohibited_actions",
+          "automation_policy",
+          "risk_level",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    }
+  },
+  "required": ["schema_version", "prompts"],
+  "title": "Prompt catalog registry",
+  "type": "object"
+}

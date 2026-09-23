@@ -1,0 +1,181 @@
+{
+  "$defs": {
+    "action": {
+      "additionalProperties": false,
+      "properties": {
+        "action_id": {
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$",
+          "type": "string"
+        },
+        "action_schema_version": {
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "type": "string"
+        },
+        "compensation": {
+          "additionalProperties": false,
+          "properties": {
+            "procedure": {
+              "minLength": 3,
+              "type": "string"
+            },
+            "supported": {
+              "type": "boolean"
+            }
+          },
+          "required": ["supported", "procedure"],
+          "type": "object"
+        },
+        "confirmation_policy": {
+          "enum": [
+            "NOT_REQUIRED",
+            "PROJECT_POLICY",
+            "EXPLICIT_HUMAN",
+            "EXTERNAL_TRUSTED_CONTROL",
+            "FORBIDDEN"
+          ]
+        },
+        "description": {
+          "minLength": 10,
+          "type": "string"
+        },
+        "executor": {
+          "additionalProperties": false,
+          "properties": {
+            "operation": {
+              "minLength": 2,
+              "type": "string"
+            },
+            "service": {
+              "minLength": 2,
+              "type": "string"
+            }
+          },
+          "required": ["service", "operation"],
+          "type": "object"
+        },
+        "idempotency": {
+          "additionalProperties": false,
+          "properties": {
+            "key_required": {
+              "type": "boolean"
+            },
+            "supported": {
+              "type": "boolean"
+            },
+            "unknown_result_policy": {
+              "enum": ["SAFE_TO_RETRY", "VERIFY_BEFORE_RETRY", "DO_NOT_RETRY"]
+            }
+          },
+          "required": ["supported", "key_required", "unknown_result_policy"],
+          "type": "object"
+        },
+        "input_schema_ref": {
+          "minLength": 3,
+          "type": "string"
+        },
+        "mutation": {
+          "type": "boolean"
+        },
+        "owner": {
+          "minLength": 2,
+          "type": "string"
+        },
+        "related_rule_ids": {
+          "items": {
+            "pattern": "^APS-[A-Z0-9_-]+$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "required_permissions": {
+          "items": {
+            "minLength": 2,
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "risk_class": {
+          "enum": ["READ_ONLY", "LOW", "MEDIUM", "HIGH", "PROHIBITED"]
+        },
+        "verification": {
+          "additionalProperties": false,
+          "properties": {
+            "operation": {
+              "type": ["string", "null"]
+            },
+            "required": {
+              "type": "boolean"
+            },
+            "success_condition": {
+              "minLength": 3,
+              "type": "string"
+            }
+          },
+          "required": ["required", "operation", "success_condition"],
+          "type": "object"
+        }
+      },
+      "required": [
+        "action_id",
+        "action_schema_version",
+        "owner",
+        "description",
+        "executor",
+        "input_schema_ref",
+        "required_permissions",
+        "risk_class",
+        "confirmation_policy",
+        "mutation",
+        "idempotency",
+        "verification",
+        "compensation",
+        "related_rule_ids"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://agent-project-standard.local/schemas/trusted_action_catalog.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actions": {
+      "items": {
+        "$ref": "#/$defs/action"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "catalog_id": {
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$",
+      "type": "string"
+    },
+    "catalog_status": {
+      "enum": ["REFERENCE_PROFILE", "PROJECT_ACTIVE", "PROJECT_DRAFT"]
+    },
+    "catalog_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "standard_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "catalog_id",
+    "catalog_version",
+    "standard_version",
+    "catalog_status",
+    "actions"
+  ],
+  "title": "Trusted action catalog",
+  "type": "object"
+}

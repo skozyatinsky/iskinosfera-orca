@@ -1,0 +1,28 @@
+{
+  "project_id": "iskinosfera_orca",
+  "title": "iskinosfera-orca",
+  "summary": "Десктопный клиент и IDE для агентной разработки Искиносферы (форк Orca/StablyAI).",
+  "audience": ["разработчики", "пользователи десктопной среды"],
+  "status": "active",
+  "language_profile": "mixed",
+  "spec_dir": "docs/specs",
+  "critical_user_functions": ["run-orca-desktop", "validate-project-structure"],
+  "entry_points": [
+    {
+      "type": "cli",
+      "command": "pnpm run dev",
+      "description": "Запуск dev-сервера Electron/Vite"
+    },
+    {
+      "type": "cli",
+      "command": "python docs/dev/standard/tools/validate_structure.py --root . --profile target-project --check-paths --check-registry --check-schemas --check-project-snapshot",
+      "description": "Проверка структуры стандарта"
+    }
+  ],
+  "must_not_break": ["run-orca-desktop"],
+  "required_checks": [
+    "python docs/dev/standard/tools/validate_structure.py --root . --profile target-project --check-paths --check-registry --check-schemas --check-project-snapshot",
+    "pnpm test"
+  ],
+  "updated_at": "2026-09-23"
+}

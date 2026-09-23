@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "runtime_resource_safety.schema.json",
+  "title": "Runtime resource safety policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "standard_version",
+    "project_id",
+    "policy_version",
+    "applicability",
+    "operations",
+    "rollout"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "standard_version": { "const": "3.1.1" },
+    "project_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "policy_version": { "type": "string", "minLength": 1 },
+    "applicability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["heavy_local_operations", "reason"],
+      "properties": {
+        "heavy_local_operations": { "type": "boolean" },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "operations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/operation" }
+    },
+    "rollout": { "$ref": "#/$defs/rollout" }
+  },
+  "$defs": {
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "kind",
+        "resource_classes",
+        "thresholds_path",
+        "check_immediately_before_allocation",
+        "safe_boundaries",
+        "states",
+        "confirmation",
+        "coordination",
+        "audit",
+        "warning_message"
+      ],
+      "properties": {
+        "operation_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+        "kind": {
+          "enum": ["model_load", "index_load", "training", "ocr", "batch_processing", "custom"]
+        },
+        "resource_classes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["memory", "swap", "disk", "cpu", "gpu", "accelerator_memory"] }
+        },
+        "thresholds_path": { "type": "string", "minLength": 1 },
+        "check_immediately_before_allocation": { "const": true },
+        "safe_boundaries": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["request", "batch", "epoch", "stage"] }
+        },
+        "states": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["safe", "warning", "critical"],
+          "properties": {
+            "safe": { "const": "auto_start" },
+            "warning": { "const": "explicit_single_use_confirmation" },
+            "critical": { "const": "deny_without_override" }
+          }
+        },
+        "confirmation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "single_use",
+            "ttl_seconds",
+            "binds",
+            "background_result_code",
+            "separate_confirmed_command",
+            "permanent_disable_allowed"
+          ],
+          "properties": {
+            "single_use": { "const": true },
+            "ttl_seconds": { "type": "integer", "minimum": 1, "maximum": 3600 },
+            "binds": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "enum": ["operation_id", "policy_version"] },
+              "allOf": [
+                { "contains": { "const": "operation_id" } },
+                { "contains": { "const": "policy_version" } }
+              ]
+            },
+            "background_result_code": { "const": "RESOURCE_CONFIRMATION_REQUIRED" },
+            "separate_confirmed_command": { "const": true },
+            "permanent_disable_allowed": { "const": false }
+          }
+        },
+        "coordination": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "shared_machine",
+            "mode",
+            "reservation",
+            "reservation_ttl_seconds",
+            "heartbeat",
+            "concurrency_limit",
+            "unavailable_behavior"
+          ],
+          "properties": {
+            "shared_machine": { "type": "boolean" },
+            "mode": { "enum": ["common_admission_coordinator", "single_product_local"] },
+            "reservation": { "type": "boolean" },
+            "reservation_ttl_seconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+            "heartbeat": { "type": "boolean" },
+            "concurrency_limit": { "type": "integer", "minimum": 1 },
+            "unavailable_behavior": { "const": "local_measurement_fail_closed" }
+          }
+        },
+        "audit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fields"],
+          "properties": {
+            "fields": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "operation_id",
+                  "resource_snapshot",
+                  "thresholds",
+                  "policy_version",
+                  "human_decision",
+                  "timestamp",
+                  "correlation_id"
+                ]
+              }
+            }
+          }
+        },
+        "warning_message": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["shows_current_and_limits", "explains_risks", "blame_free"],
+          "properties": {
+            "shows_current_and_limits": { "const": true },
+            "explains_risks": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "enum": ["hang", "restart", "unsaved_data_loss"] },
+              "allOf": [
+                { "contains": { "const": "hang" } },
+                { "contains": { "const": "restart" } },
+                { "contains": { "const": "unsaved_data_loss" } }
+              ]
+            },
+            "blame_free": { "const": true }
+          }
+        }
+      }
+    },
+    "rollout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "standard_version",
+        "release_commit",
+        "main_ref",
+        "release_archive",
+        "release_sha256",
+        "consumer_source"
+      ],
+      "properties": {
+        "status": { "enum": ["not_rolled_out", "rolled_out"] },
+        "standard_version": { "const": "3.1.1" },
+        "release_commit": { "type": ["string", "null"], "pattern": "^[0-9a-f]{40,64}$" },
+        "main_ref": { "type": ["string", "null"], "minLength": 1 },
+        "release_archive": {
+          "type": ["string", "null"],
+          "pattern": "^agent_project_standard_v3_1_1\\.zip$"
+        },
+        "release_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "consumer_source": { "type": ["string", "null"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "rolled_out" } } },
+          "then": {
+            "properties": {
+              "release_commit": { "type": "string", "pattern": "^[0-9a-f]{40,64}$" },
+              "main_ref": { "const": "main" },
+              "release_archive": { "const": "agent_project_standard_v3_1_1.zip" },
+              "release_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "consumer_source": { "const": "docs/dev/standard/SOURCE.json" }
+            }
+          },
+          "else": {
+            "properties": {
+              "release_commit": { "const": null },
+              "main_ref": { "const": null },
+              "release_archive": { "const": null },
+              "release_sha256": { "const": null },
+              "consumer_source": { "const": null }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

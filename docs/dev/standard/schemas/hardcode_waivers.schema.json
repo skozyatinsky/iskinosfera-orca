@@ -1,0 +1,69 @@
+{
+  "$id": "https://agent-project-standard.local/schemas/hardcode_waivers.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "type": "integer"
+    },
+    "waivers": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "enum": [
+              "parser_intrinsic",
+              "dev_script",
+              "documented_example",
+              "external_contract",
+              "vendor_pin"
+            ]
+          },
+          "created_in_version": {
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+            "type": "string"
+          },
+          "literal": {
+            "description": "Конкретный литерал, если исключается он один, а не весь файл.",
+            "type": ["string", "null"]
+          },
+          "owner": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "path": {
+            "description": "Файл или каталог-префикс, к которому относится исключение.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "reason": {
+            "minLength": 20,
+            "type": "string"
+          },
+          "review_version": {
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+            "type": "string"
+          },
+          "waiver_id": {
+            "pattern": "^APS-HCW-[0-9]{3,}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "waiver_id",
+          "path",
+          "category",
+          "reason",
+          "owner",
+          "created_in_version",
+          "review_version"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": ["schema_version", "waivers"],
+  "type": "object"
+}

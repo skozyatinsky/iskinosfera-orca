@@ -1,0 +1,194 @@
+{
+  "$id": "https://agent-project-standard.local/schemas/dead_code_public_api.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apis": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "api_id": {
+            "pattern": "^APS-DC-API-[A-Z0-9-]+$",
+            "type": "string"
+          },
+          "contract_kind": {
+            "enum": ["compatibility_api", "plugin_hook", "library_api", "external_contract"]
+          },
+          "evidence": {
+            "items": {
+              "oneOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "contract_type": {
+                      "enum": [
+                        "entrypoint",
+                        "public_api",
+                        "migration",
+                        "deprecation",
+                        "trusted_manifest",
+                        "behavioral_test"
+                      ]
+                    },
+                    "kind": {
+                      "const": "json_pointer"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "pointer": {
+                      "pattern": "^(/.*)?$",
+                      "type": "string"
+                    },
+                    "subject": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "not": {
+                            "pattern": "\\*|(^|/)\\.\\.(/|$)|^/|\\\\"
+                          },
+                          "type": "string"
+                        },
+                        "symbol": {
+                          "minLength": 1,
+                          "not": {
+                            "pattern": "\\*"
+                          },
+                          "type": "string"
+                        }
+                      },
+                      "required": ["path", "symbol"],
+                      "type": "object"
+                    }
+                  },
+                  "required": ["kind", "contract_type", "subject", "path", "pointer"],
+                  "type": "object"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "anchor": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "contract_type": {
+                      "enum": [
+                        "entrypoint",
+                        "public_api",
+                        "migration",
+                        "deprecation",
+                        "trusted_manifest",
+                        "behavioral_test"
+                      ]
+                    },
+                    "kind": {
+                      "const": "markdown_anchor"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "subject": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "not": {
+                            "pattern": "\\*|(^|/)\\.\\.(/|$)|^/|\\\\"
+                          },
+                          "type": "string"
+                        },
+                        "symbol": {
+                          "minLength": 1,
+                          "not": {
+                            "pattern": "\\*"
+                          },
+                          "type": "string"
+                        }
+                      },
+                      "required": ["path", "symbol"],
+                      "type": "object"
+                    }
+                  },
+                  "required": ["kind", "contract_type", "subject", "path", "anchor"],
+                  "type": "object"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "contract_type": {
+                      "const": "behavioral_test"
+                    },
+                    "kind": {
+                      "const": "test_node"
+                    },
+                    "node_id": {
+                      "pattern": "^tests/[^\\[]+::[A-Za-z_][A-Za-z0-9_:]*$",
+                      "type": "string"
+                    },
+                    "subject": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "not": {
+                            "pattern": "\\*|(^|/)\\.\\.(/|$)|^/|\\\\"
+                          },
+                          "type": "string"
+                        },
+                        "symbol": {
+                          "minLength": 1,
+                          "not": {
+                            "pattern": "\\*"
+                          },
+                          "type": "string"
+                        }
+                      },
+                      "required": ["path", "symbol"],
+                      "type": "object"
+                    }
+                  },
+                  "required": ["kind", "contract_type", "subject", "node_id"],
+                  "type": "object"
+                }
+              ]
+            },
+            "minItems": 2,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "owner": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "not": {
+              "pattern": "\\*"
+            },
+            "type": "string"
+          },
+          "symbol": {
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+            "type": "string"
+          }
+        },
+        "required": ["api_id", "path", "symbol", "contract_kind", "owner", "evidence"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "standard_version": {
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "type": "string"
+    }
+  },
+  "required": ["schema_version", "standard_version", "apis"],
+  "title": "Dead Code Public API Contracts",
+  "type": "object"
+}

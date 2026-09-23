@@ -1,0 +1,107 @@
+{
+  "$id": "dependency_decisions.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "description": "Машиночитаемая история решений по НОВЫМ внешним зависимостям: почему выбрана конкретная библиотека, какой у неё maintenance status, какие альтернативы рассмотрены. Опциональный слой. См. DEPENDENCY_MANAGEMENT_STANDARD §6.",
+  "properties": {
+    "decisions": {
+      "description": "по одной записи на каждую новую внешнюю зависимость",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "alternatives_considered": {
+            "description": "какие альтернативы рассматривались до решения; элементы — непустые строки (пустая строка не считается названной альтернативой)",
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "decision": {
+            "description": "risky maintenance_status допускает только accepted_with_waiver, не тихий accepted. Для accepted/accepted_with_waiver check_dependency_selection_policy (код, не эта схема — subset-валидатор не поддерживает conditional required) требует непустые selected_version/source_checked_at/last_release_date/license/rationale/source_reference + alternatives_considered из ≥1 непустой строки",
+            "enum": ["accepted", "rejected", "accepted_with_waiver"],
+            "type": "string",
+            "x-aps-rule": {
+              "id": "APS-SCHEMA-DEPENDENCYDECISION-1A3E-001",
+              "semantic_contract_version": 1,
+              "status": "DOCUMENTED",
+              "title": "dependency_decisions.schema rule 1"
+            }
+          },
+          "ecosystem": {
+            "enum": ["pypi", "npm", "cargo", "go", "rubygems", "nuget", "other"],
+            "type": "string"
+          },
+          "last_release_date": {
+            "description": "дата последнего релиза на момент проверки",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "type": "string"
+          },
+          "license": {
+            "description": "лицензия пакета (SPDX-идентификатор, если известен)",
+            "type": "string"
+          },
+          "maintenance_status": {
+            "description": "maintained = активно поддерживается; low_activity = релизы редкие, но проект жив; archived/deprecated/unmaintained = risky-статусы, требуют waiver при decision=accepted_with_waiver",
+            "enum": ["maintained", "low_activity", "archived", "deprecated", "unmaintained"],
+            "type": "string"
+          },
+          "name": {
+            "description": "имя пакета в реестре экосистемы",
+            "minLength": 1,
+            "type": "string"
+          },
+          "purpose": {
+            "description": "зачем добавлена — конкретная задача, не общие слова",
+            "minLength": 1,
+            "type": "string"
+          },
+          "rationale": {
+            "description": "почему принято это решение",
+            "type": "string"
+          },
+          "selected_version": {
+            "description": "версия на момент решения",
+            "type": "string"
+          },
+          "source_checked_at": {
+            "description": "когда проверяли официальный источник (registry/GitHub)",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "type": "string"
+          },
+          "source_reference": {
+            "description": "ГДЕ проверяли (PyPI project page, GitHub releases, официальная документация) — дополняет source_checked_at (КОГДА проверяли)",
+            "type": "string"
+          },
+          "waiver_reason": {
+            "description": "обязателен при decision=accepted_with_waiver — почему риск принят и нет замены сейчас",
+            "type": "string"
+          }
+        },
+        "required": ["name", "ecosystem", "purpose", "maintenance_status", "decision"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "freshness_policy": {
+      "additionalProperties": false,
+      "description": "опционально: deterministic staleness-порог — checked_against_date фиксирован в записи (не 'сейчас'), поэтому проверка не зависит от системных часов",
+      "properties": {
+        "checked_against_date": {
+          "description": "дата, относительно которой считается возраст — фиксированная строка, не текущая дата валидатора",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "type": "string"
+        },
+        "max_age_months": {
+          "description": "максимальный возраст last_release_date в месяцах, после которого decision=accepted (без waiver) считается устаревшим",
+          "type": "integer"
+        }
+      },
+      "required": ["max_age_months", "checked_against_date"],
+      "type": "object"
+    }
+  },
+  "required": ["decisions"],
+  "title": "Журнал решений о выборе внешних библиотек",
+  "type": "object"
+}

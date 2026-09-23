@@ -1,0 +1,31 @@
+{
+  "$id": "project_profile.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "description": "Опциональный слой: объявляет, какие опциональные механизмы стандарта должны быть ОБЯЗАТЕЛЬНЫМИ для этого конкретного проекта, а не просто доступными. Первое поле — parallel_ai_development (v2.9.115, MODULE_BOUNDARIES_STANDARD.md §11): без него module_registry/code_ownership/work_package_graph/active_work_packages остаются полностью опциональными — проект может запускать несколько AI-помощников параллельно, не имея ни одного из этих реестров, и пройти CI чисто.",
+  "properties": {
+    "autonomy_level": {
+      "description": "Проектный уровень автономности; A2-A4 требуют только trusted check_ref, legacy argv запрещён.",
+      "enum": ["A0", "A1", "A2", "A3", "A4"],
+      "type": "string"
+    },
+    "parallel_ai_development": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "description": "true: module_registry.json, code_ownership.json, work_package_graph.json и active_work_packages.json обязаны существовать и проходить собственные проверки — см. --check-parallel-ai-development",
+          "type": "boolean",
+          "x-aps-rule": {
+            "id": "APS-SCHEMA-PROJECTPROFILESCHE-AE80-001",
+            "semantic_contract_version": 1,
+            "status": "DOCUMENTED",
+            "title": "project_profile.schema rule 1"
+          }
+        }
+      },
+      "type": "object"
+    }
+  },
+  "title": "Профиль возможностей проекта",
+  "type": "object"
+}

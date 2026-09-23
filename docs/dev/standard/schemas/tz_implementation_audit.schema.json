@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "tz_implementation_audit.schema.json",
+  "title": "Technical specification implementation audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "audit_id",
+    "audit_type",
+    "source",
+    "documents",
+    "requirements",
+    "summary",
+    "status"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "audit_id": { "type": "string" },
+    "audit_type": { "enum": ["MANUAL", "SCHEDULED"] },
+    "source": { "type": "object" },
+    "documents": { "type": "array", "items": { "type": "object" } },
+    "requirements": { "type": "array", "items": { "type": "object" } },
+    "summary": { "type": "object" },
+    "status": {
+      "enum": [
+        "ГОТОВ К ПРИЁМКЕ",
+        "ГОТОВ К ПРИЁМКЕ С ОГОВОРКАМИ",
+        "НЕ ГОТОВ К ПРИЁМКЕ",
+        "АУДИТ НЕ МОЖЕТ БЫТЬ ЗАВЕРШЁН"
+      ]
+    }
+  }
+}

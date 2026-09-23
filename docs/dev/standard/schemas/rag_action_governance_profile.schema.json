@@ -1,0 +1,347 @@
+{
+  "$id": "https://agent-project-standard.local/schemas/rag_action_governance_profile.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action_catalog": {
+      "additionalProperties": false,
+      "properties": {
+        "exact_catalog_version_required": {
+          "const": true
+        },
+        "new_actions_require_separate_review": {
+          "const": true
+        },
+        "path": {
+          "minLength": 3,
+          "type": "string"
+        },
+        "schema_validation_required": {
+          "const": true
+        },
+        "typed_commands_only": {
+          "const": true
+        }
+      },
+      "required": [
+        "path",
+        "exact_catalog_version_required",
+        "schema_validation_required",
+        "typed_commands_only",
+        "new_actions_require_separate_review"
+      ],
+      "type": "object"
+    },
+    "allowed_modes": {
+      "items": {
+        "enum": ["ANSWER", "PROPOSE", "EXECUTE", "VERIFY"]
+      },
+      "minItems": 4,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "component_boundaries": {
+      "additionalProperties": false,
+      "properties": {
+        "automation_server_is_deterministic_executor": {
+          "const": true
+        },
+        "domain_system_owns_live_state_and_business_rules": {
+          "const": true
+        },
+        "gatekeeper_is_policy_enforcement_point": {
+          "const": true
+        },
+        "obsidian_role": {
+          "const": "OPTIONAL_KNOWLEDGE_AUTHORING_UI"
+        },
+        "rag_is_knowledge_service": {
+          "const": true
+        },
+        "result_verifier_is_separate": {
+          "const": true
+        }
+      },
+      "required": [
+        "rag_is_knowledge_service",
+        "gatekeeper_is_policy_enforcement_point",
+        "domain_system_owns_live_state_and_business_rules",
+        "automation_server_is_deterministic_executor",
+        "result_verifier_is_separate",
+        "obsidian_role"
+      ],
+      "type": "object"
+    },
+    "default_mode": {
+      "const": "ANSWER"
+    },
+    "execution_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "executor_success_is_business_verification": {
+          "const": false
+        },
+        "idempotency_policy_required_for_mutation": {
+          "const": true
+        },
+        "retry_after_unknown_requires_live_verification": {
+          "const": true
+        },
+        "rollback_or_compensation_required_for_partial_mutation": {
+          "const": true
+        },
+        "statuses": {
+          "items": {
+            "enum": ["COMMAND_ACCEPTED", "COMMAND_EXECUTED", "BUSINESS_RESULT_VERIFIED"]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "unverified_final_status": {
+          "const": "EXECUTED_RESULT_NOT_VERIFIED"
+        }
+      },
+      "required": [
+        "statuses",
+        "executor_success_is_business_verification",
+        "unverified_final_status",
+        "idempotency_policy_required_for_mutation",
+        "retry_after_unknown_requires_live_verification",
+        "rollback_or_compensation_required_for_partial_mutation"
+      ],
+      "type": "object"
+    },
+    "freshness_and_conflicts": {
+      "additionalProperties": false,
+      "properties": {
+        "answer_or_propose_with_warning_allowed": {
+          "const": true
+        },
+        "conflicting_sources_execute_policy": {
+          "const": "BLOCK"
+        },
+        "missing_citations_execute_policy": {
+          "const": "BLOCK"
+        },
+        "revoked_source_execute_policy": {
+          "const": "BLOCK"
+        },
+        "stale_source_execute_policy": {
+          "const": "BLOCK"
+        }
+      },
+      "required": [
+        "stale_source_execute_policy",
+        "revoked_source_execute_policy",
+        "conflicting_sources_execute_policy",
+        "missing_citations_execute_policy",
+        "answer_or_propose_with_warning_allowed"
+      ],
+      "type": "object"
+    },
+    "knowledge_feedback": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_direct_canonical_write_allowed": {
+          "const": false
+        },
+        "proposal_required": {
+          "const": true
+        },
+        "reindex_and_validation_required": {
+          "const": true
+        },
+        "review_and_approval_required": {
+          "const": true
+        }
+      },
+      "required": [
+        "agent_direct_canonical_write_allowed",
+        "proposal_required",
+        "review_and_approval_required",
+        "reindex_and_validation_required"
+      ],
+      "type": "object"
+    },
+    "knowledge_state_boundary": {
+      "additionalProperties": false,
+      "properties": {
+        "execution_receipt_source": {
+          "const": "DETERMINISTIC_EXECUTOR"
+        },
+        "live_state_source": {
+          "const": "DOMAIN_SYSTEM_OR_TRUSTED_LIVE_API"
+        },
+        "rag_may_prove_live_state": {
+          "const": false
+        },
+        "rag_role": {
+          "const": "REFERENCE_KNOWLEDGE"
+        },
+        "verification_source": {
+          "const": "INDEPENDENT_READ_BACK_OR_TRUSTED_CONTROL"
+        }
+      },
+      "required": [
+        "rag_role",
+        "rag_may_prove_live_state",
+        "live_state_source",
+        "execution_receipt_source",
+        "verification_source"
+      ],
+      "type": "object"
+    },
+    "mode_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "execute_requires_explicit_intent_or_approved_policy": {
+          "const": true
+        },
+        "explicit_transition_to_execute_required": {
+          "const": true
+        },
+        "retrieved_text_may_change_mode": {
+          "const": false
+        },
+        "verify_is_separate_from_execute": {
+          "const": true
+        }
+      },
+      "required": [
+        "explicit_transition_to_execute_required",
+        "retrieved_text_may_change_mode",
+        "execute_requires_explicit_intent_or_approved_policy",
+        "verify_is_separate_from_execute"
+      ],
+      "type": "object"
+    },
+    "quality_gates": {
+      "additionalProperties": false,
+      "properties": {
+        "execute_requires_project_threshold_profile": {
+          "const": true
+        },
+        "model_confidence_is_authorization": {
+          "const": false
+        },
+        "required_dimensions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "execute_requires_project_threshold_profile",
+        "required_dimensions",
+        "model_confidence_is_authorization"
+      ],
+      "type": "object"
+    },
+    "retrieval_trust": {
+      "additionalProperties": false,
+      "properties": {
+        "arbitrary_command_generation": {
+          "const": false
+        },
+        "candidate_action_ids_must_exist": {
+          "const": true
+        },
+        "direct_tool_call_from_retrieval": {
+          "const": false
+        },
+        "retrieved_content_authority": {
+          "const": "DATA_ONLY"
+        },
+        "trusted_action_catalog_required": {
+          "const": true
+        }
+      },
+      "required": [
+        "retrieved_content_authority",
+        "direct_tool_call_from_retrieval",
+        "arbitrary_command_generation",
+        "trusted_action_catalog_required",
+        "candidate_action_ids_must_exist"
+      ],
+      "type": "object"
+    },
+    "risk_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_may_lower_risk": {
+          "const": false
+        },
+        "classes": {
+          "items": {
+            "enum": ["READ_ONLY", "LOW", "MEDIUM", "HIGH", "PROHIBITED"]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "gatekeeper_required": {
+          "const": true
+        },
+        "high_requires_explicit_confirmation_or_external_control": {
+          "const": true
+        },
+        "prohibited_may_execute": {
+          "const": false
+        }
+      },
+      "required": [
+        "classes",
+        "agent_may_lower_risk",
+        "high_requires_explicit_confirmation_or_external_control",
+        "prohibited_may_execute",
+        "gatekeeper_required"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "standard_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "traceability": {
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "const": true
+        },
+        "required_fields": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": ["required", "required_fields"],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "standard_version",
+    "default_mode",
+    "allowed_modes",
+    "mode_policy",
+    "knowledge_state_boundary",
+    "retrieval_trust",
+    "action_catalog",
+    "traceability",
+    "freshness_and_conflicts",
+    "risk_policy",
+    "execution_policy",
+    "quality_gates",
+    "knowledge_feedback",
+    "component_boundaries"
+  ],
+  "title": "RAG-to-action governance profile",
+  "type": "object"
+}

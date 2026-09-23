@@ -1,0 +1,203 @@
+{
+  "$id": "standard_capabilities.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "capabilities": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "applicable_profiles": {
+            "items": {
+              "enum": [
+                "development",
+                "diagnostic",
+                "human_supervised",
+                "parallel_ai_reference_pilot",
+                "parallel_ai",
+                "controlled_automatic_merge",
+                "autonomous_ai",
+                "release"
+              ]
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "audit_findings": {
+            "items": {
+              "pattern": "^APS-[0-9]{3}-[0-9]{3}$",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "description": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "enforcement": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "evidence_level": {
+            "enum": ["DOCUMENTED", "IMPLEMENTED", "EXECUTABLE_EVIDENCE", "NEGATIVE_TESTED"]
+          },
+          "external_control_required": {
+            "type": "boolean"
+          },
+          "id": {
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "negative_test_ids": {
+            "items": {
+              "pattern": "^test_[A-Za-z0-9_]+$",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "negative_tested": {
+            "type": "boolean"
+          },
+          "normative_docs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "positive_test_ids": {
+            "items": {
+              "pattern": "^test_[A-Za-z0-9_]+$",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "prompt_paths": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "release_enforced": {
+            "type": "boolean"
+          },
+          "release_gates": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "rule_ids": {
+            "items": {
+              "pattern": "^APS-[A-Z0-9]+(?:-[A-Z0-9]+)+$",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "schemas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "security_boundary_claimed": {
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "DOCUMENTED_ONLY",
+              "IMPLEMENTED",
+              "PARTIALLY_ENFORCED",
+              "FULLY_ENFORCED",
+              "PLANNED_NOT_IMPLEMENTED"
+            ]
+          },
+          "test_ids": {
+            "items": {
+              "pattern": "^test_[A-Za-z0-9_]+$",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "tests": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "validator_flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "validators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "enforcement",
+          "status",
+          "evidence_level",
+          "release_enforced",
+          "negative_tested",
+          "external_control_required",
+          "security_boundary_claimed",
+          "applicable_profiles",
+          "test_ids",
+          "positive_test_ids",
+          "negative_test_ids",
+          "normative_docs",
+          "schemas",
+          "validators",
+          "validator_flags",
+          "tests",
+          "release_gates",
+          "limitations",
+          "prompt_paths"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "generated_markdown": {
+      "const": "CAPABILITIES.md",
+      "type": "string"
+    },
+    "schema_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    }
+  },
+  "required": ["schema_version", "generated_markdown", "capabilities"],
+  "title": "Machine-readable standard capability registry",
+  "type": "object"
+}

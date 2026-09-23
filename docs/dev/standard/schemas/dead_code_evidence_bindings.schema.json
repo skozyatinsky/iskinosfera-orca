@@ -1,0 +1,71 @@
+{
+  "$id": "https://agent-project-standard.local/schemas/dead_code_evidence_bindings.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "bindings": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "binding_id": {
+            "pattern": "^APS-DC-EVID-[A-Z0-9-]+$",
+            "type": "string"
+          },
+          "contract_type": {
+            "enum": ["entrypoint", "public_api", "migration", "deprecation", "trusted_manifest"]
+          },
+          "owner": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "rationale": {
+            "minLength": 20,
+            "type": "string"
+          },
+          "status": {
+            "const": "ACTIVE"
+          },
+          "supporting_references": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "symbol": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "binding_id",
+          "contract_type",
+          "path",
+          "symbol",
+          "owner",
+          "rationale",
+          "status",
+          "supporting_references"
+        ],
+        "type": "object"
+      },
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "standard_version": {
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "type": "string"
+    }
+  },
+  "required": ["schema_version", "standard_version", "bindings"],
+  "title": "Dead Code Evidence Bindings",
+  "type": "object"
+}

@@ -1,0 +1,80 @@
+{
+  "$id": "license_integration_policy.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "description": "Собирает в одном месте, что уже описано по частям в ENTITLEMENTS_STANDARD (зеркало прав) и ENCRYPTED_ENV_STANDARD (секреты): runtime-проверка прав, поведение при недоступности Hub. Опциональный слой — только у проектов, реально ходящих в License-сервер в рантайме.",
+  "properties": {
+    "audit_log_required": {
+      "description": "обязательно ли логировать события проверки прав (выдано/отказано/fallback). Default — true; false требует audit_waiver_reason",
+      "type": "boolean",
+      "x-aps-rule": {
+        "id": "APS-SCHEMA-LICENSEINTEGRATION-7033-001",
+        "semantic_contract_version": 1,
+        "status": "DOCUMENTED",
+        "title": "license_integration_policy.schema rule 1"
+      }
+    },
+    "audit_waiver_reason": {
+      "description": "обязателен при audit_log_required=false — почему отсутствие audit trail для контроля доступа приемлемо",
+      "minLength": 1,
+      "type": "string"
+    },
+    "cache_ttl_seconds": {
+      "description": "сколько секунд рантайм кэширует ответ Hub, прежде чем спросить снова",
+      "type": "integer"
+    },
+    "encrypted_env_ref": {
+      "description": "путь до docs/registry/encrypted_env_policy.json, если секреты для доступа к Hub идут через .env.enc, см. ENCRYPTED_ENV_STANDARD",
+      "type": "string"
+    },
+    "entitlements_ref": {
+      "description": "путь до отображающего манифеста прав (docs/registry/entitlements.json), см. ENTITLEMENTS_STANDARD",
+      "type": "string"
+    },
+    "example_ref_waiver_reason": {
+      "description": "обязателен, если entitlements_ref/encrypted_env_ref указывают на *.example.json — почему для этого проекта это осознанно (например reference/демо-проект)",
+      "minLength": 1,
+      "type": "string"
+    },
+    "fail_mode": {
+      "description": "поведение при недоступности Hub: fail-closed — доступ к функциональности блокируется, fail-open — доступ разрешается по последнему известному/дефолтному состоянию",
+      "enum": ["fail-closed", "fail-open"],
+      "type": "string"
+    },
+    "fail_open_reason": {
+      "description": "обязателен при fail_mode=fail-open — почему тихий отказ в разрешительную сторону приемлем для этого проекта",
+      "minLength": 1,
+      "type": "string"
+    },
+    "hub_url_env": {
+      "description": "имя env-переменной с адресом Hub (UPPER_SNAKE); НЕ литеральный URL",
+      "type": "string"
+    },
+    "provider": {
+      "description": "поставщик прав (например license-hub)",
+      "type": "string"
+    },
+    "request_timeout_seconds": {
+      "description": "сколько ждать ответа Hub на один запрос, прежде чем считать недоступным",
+      "type": "number"
+    },
+    "retry": {
+      "additionalProperties": false,
+      "description": "повторные попытки перед тем, как считать Hub недоступным и применять fail_mode",
+      "properties": {
+        "attempts": {
+          "description": "число повторных попыток (не считая первой)",
+          "type": "integer"
+        },
+        "backoff_seconds": {
+          "description": "пауза между попытками в секундах",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": ["hub_url_env", "entitlements_ref", "fail_mode", "cache_ttl_seconds"],
+  "title": "Обзорная политика интеграции с License-сервером",
+  "type": "object"
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-project-standard.local/schemas/architect_work_materials.schema.json",
+  "title": "Architect work materials registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "materials"],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "materials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "classification", "related_tz", "notes"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "classification": {
+            "enum": ["released", "open_tz", "reference_material", "audit_archive", "other_project"]
+          },
+          "related_tz": { "type": ["string", "null"] },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

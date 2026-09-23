@@ -1,0 +1,398 @@
+{
+  "$id": "ecosystem_project_profile.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "accessibility": {
+      "additionalProperties": false,
+      "properties": {
+        "automatic_test_path": { "minLength": 1, "type": "string" },
+        "manual_checks": {
+          "items": {
+            "enum": [
+              "keyboard",
+              "visible_focus",
+              "accessible_names",
+              "contrast",
+              "zoom_200",
+              "tables",
+              "forms",
+              "modals",
+              "error_messages",
+              "not_color_only"
+            ],
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "manual_review_path": { "minLength": 1, "type": "string" },
+        "target": { "const": "WCAG 2.2 AA", "type": "string" }
+      },
+      "required": ["target", "automatic_test_path", "manual_review_path", "manual_checks"],
+      "type": "object"
+    },
+    "component": {
+      "additionalProperties": false,
+      "properties": {
+        "accessibility": { "$ref": "#/$defs/accessibility" },
+        "business_ecosystem_member": { "type": "boolean" },
+        "component_id": { "pattern": "^[a-z0-9][a-z0-9._-]*$", "type": "string" },
+        "controller_profile": { "$ref": "#/$defs/controllerProfile" },
+        "runtime_forms": {
+          "items": {
+            "enum": [
+              "web_pwa",
+              "desktop_shell",
+              "background_service",
+              "edge_agent",
+              "embedded_ui",
+              "cli_tool",
+              "library_package"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "http_contracts": {
+          "items": { "$ref": "#/$defs/httpContract" },
+          "type": "array"
+        },
+        "integration_boundaries": { "$ref": "#/$defs/integrationBoundaries" },
+        "localization": { "$ref": "#/$defs/localization" },
+        "portability": { "$ref": "#/$defs/portability" },
+        "purpose": {
+          "enum": [
+            "business_workspace",
+            "public_site",
+            "customer_portal",
+            "learning_product",
+            "knowledge_platform",
+            "automation_platform",
+            "controller_project",
+            "developer_tool"
+          ],
+          "type": "string"
+        },
+        "ui": { "$ref": "#/$defs/ui" },
+        "web_boundary": { "$ref": "#/$defs/webBoundary" }
+      },
+      "required": [
+        "component_id",
+        "runtime_forms",
+        "purpose",
+        "business_ecosystem_member",
+        "http_contracts",
+        "ui",
+        "portability"
+      ],
+      "type": "object"
+    },
+    "controllerProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "direct_public_network_access": { "type": "boolean" },
+        "hardware_failure_test_path": { "minLength": 1, "type": "string" },
+        "local_journal": { "type": "boolean" },
+        "local_state": { "type": "boolean" },
+        "manual_fallback": { "type": "boolean" },
+        "offline_operation": { "type": "boolean" },
+        "safe_update_and_rollback": { "type": "boolean" },
+        "ui_controller_boundary": { "type": "boolean" }
+      },
+      "required": [
+        "ui_controller_boundary",
+        "offline_operation",
+        "local_state",
+        "local_journal",
+        "manual_fallback",
+        "safe_update_and_rollback",
+        "direct_public_network_access",
+        "hardware_failure_test_path"
+      ],
+      "type": "object"
+    },
+    "httpContract": {
+      "additionalProperties": false,
+      "properties": {
+        "legacy_record": {
+          "additionalProperties": false,
+          "properties": {
+            "adr": { "minLength": 1, "type": "string" },
+            "migration_plan": { "minLength": 5, "type": "string" },
+            "owner": { "minLength": 2, "type": "string" },
+            "recorded_on": { "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "type": "string" }
+          },
+          "required": ["adr", "owner", "recorded_on", "migration_plan"],
+          "type": "object"
+        },
+        "lifecycle": { "enum": ["new", "changed", "legacy"], "type": "string" },
+        "path": { "minLength": 1, "type": "string" },
+        "waiver": {
+          "additionalProperties": false,
+          "properties": {
+            "adr": { "minLength": 1, "type": "string" },
+            "expires_on": { "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "type": "string" },
+            "migration_target": { "const": "3.2.0", "type": "string" },
+            "owner": { "minLength": 2, "type": "string" },
+            "reason": { "minLength": 10, "type": "string" }
+          },
+          "required": ["adr", "owner", "expires_on", "reason", "migration_target"],
+          "type": "object"
+        }
+      },
+      "required": ["path", "lifecycle"],
+      "type": "object"
+    },
+    "integrationBoundaries": {
+      "additionalProperties": false,
+      "properties": {
+        "executor_contract_ref": { "$ref": "#/$defs/ownerReference" },
+        "observability_contract_ref": { "$ref": "#/$defs/ownerReference" },
+        "orchestrator_port_ref": { "$ref": "#/$defs/ownerReference" },
+        "product_port_refs": {
+          "items": { "$ref": "#/$defs/ownerReference" },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": ["product_port_refs"],
+      "type": "object"
+    },
+    "ownerReference": {
+      "additionalProperties": false,
+      "properties": {
+        "git_commit": { "pattern": "^[a-fA-F0-9]{7,64}$", "type": "string" },
+        "owner": { "minLength": 2, "type": "string" },
+        "path": { "minLength": 1, "type": "string" },
+        "projection": {
+          "additionalProperties": false,
+          "properties": {
+            "dereferenced": { "const": true, "type": "boolean" },
+            "generator": { "minLength": 1, "type": "string" },
+            "mode": { "const": "generated", "type": "string" },
+            "path": { "minLength": 1, "type": "string" },
+            "sha256": { "pattern": "^[a-fA-F0-9]{64}$", "type": "string" },
+            "source_sha256": { "pattern": "^[a-fA-F0-9]{64}$", "type": "string" }
+          },
+          "required": ["mode", "path", "generator", "source_sha256", "sha256", "dereferenced"],
+          "type": "object"
+        },
+        "repository": { "minLength": 1, "type": "string" },
+        "sha256": { "pattern": "^[a-fA-F0-9]{64}$", "type": "string" },
+        "version": { "minLength": 1, "type": "string" }
+      },
+      "required": ["owner", "repository", "path", "version"],
+      "type": "object"
+    },
+    "localization": {
+      "additionalProperties": false,
+      "properties": {
+        "base_locale": { "minLength": 2, "type": "string" },
+        "catalogs": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "locale": { "minLength": 2, "type": "string" },
+              "path": { "minLength": 1, "type": "string" }
+            },
+            "required": ["locale", "path"],
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "fallback_locale": { "minLength": 2, "type": "string" },
+        "formatting": {
+          "additionalProperties": false,
+          "properties": {
+            "currency": { "const": "locale_aware", "type": "string" },
+            "date": { "const": "locale_aware", "type": "string" },
+            "number": { "const": "locale_aware", "type": "string" },
+            "time": { "const": "locale_aware", "type": "string" }
+          },
+          "required": ["date", "time", "number", "currency"],
+          "type": "object"
+        },
+        "hardcoded_strings_check_path": { "minLength": 1, "type": "string" },
+        "overflow_or_pseudolocale_test_path": { "minLength": 1, "type": "string" },
+        "supported_locales": {
+          "items": { "minLength": 2, "type": "string" },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "text_directions": {
+          "additionalProperties": { "enum": ["ltr", "rtl"], "type": "string" },
+          "type": "object"
+        }
+      },
+      "required": [
+        "base_locale",
+        "supported_locales",
+        "fallback_locale",
+        "formatting",
+        "text_directions",
+        "catalogs",
+        "hardcoded_strings_check_path",
+        "overflow_or_pseudolocale_test_path"
+      ],
+      "type": "object"
+    },
+    "platform": {
+      "additionalProperties": false,
+      "properties": {
+        "architectures": {
+          "items": { "minLength": 2, "type": "string" },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "browsers": {
+          "items": { "minLength": 2, "type": "string" },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "evidence": {
+          "additionalProperties": false,
+          "properties": {
+            "commit": { "pattern": "^[a-fA-F0-9]{7,64}$", "type": "string" },
+            "kind": { "enum": ["ci", "external_lab"], "type": "string" },
+            "path": { "minLength": 1, "type": "string" }
+          },
+          "required": ["kind", "path", "commit"],
+          "type": "object"
+        },
+        "install_modes": {
+          "items": { "minLength": 2, "type": "string" },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "mutable_data": {
+          "additionalProperties": false,
+          "properties": {
+            "strategy": { "enum": ["environment", "user_data_api", "relative"], "type": "string" },
+            "value": { "minLength": 1, "type": "string" }
+          },
+          "required": ["strategy", "value"],
+          "type": "object"
+        },
+        "offline_mode": { "enum": ["supported", "degraded", "not_supported"], "type": "string" },
+        "os": {
+          "enum": ["windows", "macos", "linux", "ios", "android", "browser", "embedded"],
+          "type": "string"
+        },
+        "rollback": { "minLength": 3, "type": "string" },
+        "update": { "minLength": 3, "type": "string" }
+      },
+      "required": [
+        "os",
+        "architectures",
+        "install_modes",
+        "mutable_data",
+        "update",
+        "rollback",
+        "offline_mode",
+        "evidence"
+      ],
+      "type": "object"
+    },
+    "portability": {
+      "additionalProperties": false,
+      "properties": {
+        "platforms": {
+          "items": { "$ref": "#/$defs/platform" },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": ["platforms"],
+      "type": "object"
+    },
+    "ui": {
+      "additionalProperties": false,
+      "properties": {
+        "domain_operations": { "type": "boolean" },
+        "iskin_integration": {
+          "additionalProperties": false,
+          "properties": {
+            "iskin_actions_path": { "minLength": 1, "type": "string" },
+            "mutating_actions_enabled": { "const": false, "type": "boolean" },
+            "readiness": {
+              "enum": [
+                "not_connected",
+                "catalog_only",
+                "read_only_pilot",
+                "security_review_pending"
+              ],
+              "type": "string"
+            },
+            "risk_policy_path": { "minLength": 1, "type": "string" }
+          },
+          "required": [
+            "iskin_actions_path",
+            "readiness",
+            "mutating_actions_enabled",
+            "risk_policy_path"
+          ],
+          "type": "object"
+        },
+        "manual_mode_without_iskinosfera": { "type": "boolean" },
+        "operation_catalog_path": { "minLength": 1, "type": "string" },
+        "operations": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "operation_id": { "pattern": "^[A-Za-z][A-Za-z0-9._-]*$", "type": "string" },
+              "ui_action_ref": { "minLength": 1, "type": "string" }
+            },
+            "required": ["operation_id", "ui_action_ref"],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "present": { "type": "boolean" }
+      },
+      "required": ["present", "domain_operations"],
+      "type": "object"
+    },
+    "webBoundary": {
+      "additionalProperties": false,
+      "properties": {
+        "authentication": { "enum": ["none", "optional", "required"], "type": "string" },
+        "direct_business_database_access": { "type": "boolean" },
+        "product_port_refs": {
+          "items": { "$ref": "#/$defs/ownerReference" },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "tenant_isolation": { "type": "boolean" },
+        "uses_customer_data": { "type": "boolean" }
+      },
+      "required": [
+        "authentication",
+        "uses_customer_data",
+        "tenant_isolation",
+        "direct_business_database_access",
+        "product_port_refs"
+      ],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Проект состоит из одной или нескольких поверхностей. Каждая поверхность имеет собственные независимые оси исполнения и назначения.",
+  "properties": {
+    "components": {
+      "items": { "$ref": "#/$defs/component" },
+      "minItems": 1,
+      "type": "array"
+    },
+    "project_id": { "minLength": 1, "type": "string" },
+    "schema_version": { "const": "1.0.0", "type": "string" }
+  },
+  "required": ["schema_version", "project_id", "components"],
+  "title": "Многокомпонентный профиль проекта экосистемы",
+  "type": "object"
+}

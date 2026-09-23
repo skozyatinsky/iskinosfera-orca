@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "test_coverage.schema.json",
+  "title": "Реестр покрытия: публичный символ -> защищающий тест (regression-guard)",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["symbol_id", "coverage_status", "test_refs"],
+    "additionalProperties": false,
+    "properties": {
+      "symbol_id": { "type": "string", "minLength": 1 },
+      "coverage_status": { "type": "string", "enum": ["active", "planned", "waived"] },
+      "summary": { "type": "string" },
+      "waiver_reason": { "type": "string" },
+      "test_refs": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["kind", "path"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "type": "string", "enum": ["pytest", "cli", "manual", "integration", "e2e"] },
+            "path": { "type": "string" },
+            "command": { "type": "string" },
+            "scope": { "type": "string", "enum": ["symbol", "module", "suite"] },
+            "required": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  }
+}

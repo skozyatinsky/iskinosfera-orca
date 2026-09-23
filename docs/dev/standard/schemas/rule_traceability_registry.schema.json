@@ -1,0 +1,321 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "APS rule traceability registry v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "standard_version",
+    "normative_roots",
+    "previous_release",
+    "migration",
+    "reserved_rule_ids",
+    "rules"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0.0"
+    },
+    "standard_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "normative_roots": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "kind"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["markdown", "markdown_tree", "json_schema_tree"]
+          }
+        }
+      }
+    },
+    "previous_release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "registry_path", "registry_sha256"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "registry_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registry_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "migration_task_id",
+        "inventory_decrease_approved",
+        "documents_reviewed",
+        "rule_blocks_assigned",
+        "non_normative_documents"
+      ],
+      "properties": {
+        "migration_task_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inventory_decrease_approved": {
+          "type": "boolean"
+        },
+        "documents_reviewed": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "rule_blocks_assigned": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "non_normative_documents": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "reserved_rule_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^APS-[A-Z0-9]+(?:-[A-Z0-9]+)+$"
+      }
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    }
+  },
+  "$defs": {
+    "nullableVersion": {
+      "type": ["string", "null"],
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "testEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_id", "expected_diagnostic_code"],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "pattern": "^tests/.+::test_[A-Za-z0-9_]+$"
+        },
+        "expected_diagnostic_code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]+$"
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule_id",
+        "title",
+        "status",
+        "security_relevant",
+        "fail_closed",
+        "human_source",
+        "semantic_contract_version",
+        "introduced_in",
+        "last_changed_in",
+        "supersedes",
+        "deprecated_in",
+        "replacement_rule_id",
+        "change_reason",
+        "implementation",
+        "diagnostics",
+        "tests",
+        "capability_ids"
+      ],
+      "properties": {
+        "rule_id": {
+          "type": "string",
+          "pattern": "^APS-[A-Z0-9]+(?:-[A-Z0-9]+)+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "DOCUMENTED",
+            "PLANNED",
+            "PARTIALLY_IMPLEMENTED",
+            "IMPLEMENTED",
+            "DEPRECATED",
+            "SUPERSEDED",
+            "EXTERNAL_CONTROL_REQUIRED"
+          ]
+        },
+        "security_relevant": {
+          "type": "boolean"
+        },
+        "fail_closed": {
+          "type": "boolean"
+        },
+        "human_source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "path", "anchor", "json_pointer", "rule_text_sha256"],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": ["markdown", "schema_description"]
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "anchor": {
+              "type": ["string", "null"]
+            },
+            "json_pointer": {
+              "type": ["string", "null"]
+            },
+            "rule_text_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "semantic_contract_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "introduced_in": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "last_changed_in": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "supersedes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^APS-[A-Z0-9]+(?:-[A-Z0-9]+)+$"
+          }
+        },
+        "deprecated_in": {
+          "$ref": "#/$defs/nullableVersion"
+        },
+        "replacement_rule_id": {
+          "type": ["string", "null"],
+          "pattern": "^APS-[A-Z0-9]+(?:-[A-Z0-9]+)+$"
+        },
+        "change_reason": {
+          "type": ["string", "null"]
+        },
+        "implementation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["symbol", "annotation", "gate_symbols"],
+            "properties": {
+              "symbol": {
+                "type": "string",
+                "pattern": "^[A-Za-z_][A-Za-z0-9_.]*:[A-Za-z_][A-Za-z0-9_]*$"
+              },
+              "annotation": {
+                "const": "enforces_rule"
+              },
+              "gate_symbols": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_.]*:[A-Za-z_][A-Za-z0-9_]*$"
+                }
+              }
+            }
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code"],
+            "properties": {
+              "code": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]+$"
+              }
+            }
+          }
+        },
+        "tests": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["positive", "negative", "bypass"],
+          "properties": {
+            "positive": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/testEntry"
+              }
+            },
+            "negative": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/testEntry"
+              }
+            },
+            "bypass": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/testEntry"
+              }
+            }
+          }
+        },
+        "capability_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "cost": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "description": "Чего стоит соблюдение правила: что оно делает труднее, медленнее или дороже и когда перестаёт окупаться. Условия заполнения — APS-RULE-INTENT-001."
+        },
+        "observable_effect": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "description": "Что меняется в работе, когда правило действует: утверждение о мире, а не о соблюдении. Условия заполнения — APS-RULE-INTENT-001."
+        }
+      }
+    }
+  }
+}

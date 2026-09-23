@@ -1,0 +1,36 @@
+name: Validate Standard (agent_project_standard baseline)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-standard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install jsonschema
+        run: pip install jsonschema
+
+      - name: Validate project structure (agent_project_standard)
+        run: |
+          python docs/dev/standard/tools/validate_structure.py \
+            --root . \
+            --profile target-project \
+            --language-profile mixed \
+            --schemas-root docs/dev/standard/schemas \
+            --check-paths \
+            --check-registry \
+            --check-schemas \
+            --check-project-snapshot

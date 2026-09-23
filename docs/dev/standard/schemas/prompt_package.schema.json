@@ -1,0 +1,113 @@
+{
+  "$id": "https://agent-project-standard.local/schemas/prompt_package.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "components": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "pattern": "^[A-Z0-9_-]+$",
+            "type": "string"
+          },
+          "path": {
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[a-zA-Z0-9_./-]+\\.md$",
+            "type": "string"
+          }
+        },
+        "required": ["id", "path"],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "entrypoints": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "component_ids": {
+            "items": {
+              "pattern": "^[A-Z0-9_-]+$",
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "mode": {
+            "enum": ["READ_ONLY", "REMEDIATION", "VERIFICATION"],
+            "type": "string"
+          },
+          "output_path": {
+            "pattern": "^prompts/generated/[a-zA-Z0-9_./-]+\\.md$",
+            "type": "string"
+          },
+          "project_instructions_required": {
+            "type": "boolean"
+          },
+          "prompt_id": {
+            "pattern": "^[A-Z][A-Z0-9_-]{2,127}$",
+            "type": "string"
+          },
+          "required_identity_tokens": {
+            "items": {
+              "pattern": "^[A-Z][A-Z0-9_]+$",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "role": {
+            "enum": ["INDEPENDENT_AUDITOR", "ARCHITECT", "IMPLEMENTER", "RELEASE_VERIFIER"],
+            "type": "string"
+          },
+          "rule_id": {
+            "pattern": "^APS-[A-Z0-9]+(?:-[A-Z0-9]+)+$",
+            "type": "string"
+          },
+          "runtime_profile": {
+            "enum": ["STANDALONE", "CHATGPT_PROJECT", "REPOSITORY_AGENT"],
+            "type": "string"
+          },
+          "target_kind": {
+            "enum": ["STANDARD_PACKAGE", "EXTERNAL_PROJECT_ADOPTION", "CANDIDATE_RELEASE"],
+            "type": "string"
+          },
+          "title": {
+            "minLength": 3,
+            "type": "string"
+          }
+        },
+        "required": [
+          "prompt_id",
+          "rule_id",
+          "title",
+          "output_path",
+          "runtime_profile",
+          "target_kind",
+          "role",
+          "mode",
+          "project_instructions_required",
+          "component_ids",
+          "required_identity_tokens"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "schema_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "standard_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    }
+  },
+  "required": ["schema_version", "standard_version", "components", "entrypoints"],
+  "title": "Prompt runtime profile package",
+  "type": "object"
+}

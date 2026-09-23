@@ -1,0 +1,152 @@
+{
+  "$id": "check_registry.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "checks": {
+      "description": "v2.9.122 (P1 внешнего аудита v2.9.121 §9, третий цикл подряд с новыми argv-обходами — env -u/timeout --signal/chrt/ionice/doas/bare xargs — принято решение прекратить расширять blocklist-эвристику и построить доверенный реестр): agent_task_contract.required_checks[].check_ref ссылается на id здесь ВМЕСТО свободного argv в самом task contract — implementation-ветка (или агент, пишущий task contract) может выбрать только УЖЕ утверждённую команду, не изобрести новую на лету. argv здесь по-прежнему проверяется той же эвристикой (shell-метасимволы + interpreter+inline-flag), т.к. это defense-in-depth, а не полноценный sandbox — но теперь она применяется ОДИН раз к утверждённому набору команд, а не бесконечно к любому argv, который решит написать любой task contract.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "approved_at": {
+            "description": "ISO-8601 datetime с timezone.",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
+            "type": "string"
+          },
+          "approved_by": {
+            "description": "Кто утвердил именно эту команду для автоматического исполнения оркестратором.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "argv": {
+            "description": "Команда как массив аргументов (argv), НЕ shell-строка. Проверяется тем же кодом, что и agent_task_contract.required_checks[].argv (check_check_registry() переиспользует _SHELL_METACHAR_RE/_argv_interpreter_inline_flags) — регистрация в этом файле НЕ снимает требование безопасного argv, наоборот: именно ЗДЕСЬ, в одном месте, argv утверждается один раз, а task contract'ы только ссылаются на утверждённый id.",
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "cwd": {
+            "description": "опционально, по умолчанию корень проекта.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "description": "Что проверяет эта команда — для человека, читающего реестр.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "evidence_kind": {
+            "description": "Structured evidence kind.",
+            "enum": ["validator", "test"],
+            "type": "string"
+          },
+          "expected_exit_codes": {
+            "description": "опционально, по умолчанию [0].",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "expected_node_ids": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "id": {
+            "description": "Уникальный id проверки — agent_task_contract.required_checks[].check_ref ссылается на него.",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$",
+            "type": "string"
+          },
+          "minimum_test_count": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "skip_allowlist": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "approver": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "expiry": {
+                  "minLength": 10,
+                  "type": "string"
+                },
+                "justification": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "node_id": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "policy_reference": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "reason_code": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "node_id",
+                "reason_code",
+                "policy_reference",
+                "expiry",
+                "approver",
+                "justification"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "test_role": {
+            "description": "Required trusted test role when evidence_kind=test.",
+            "enum": [
+              "targeted_tests",
+              "affected_tests",
+              "full_regression",
+              "post_merge_validation"
+            ],
+            "type": "string",
+            "x-aps-rule": {
+              "id": "APS-SCHEMA-CHECKREGISTRYSCHEM-3E3B-001",
+              "semantic_contract_version": 1,
+              "status": "DOCUMENTED",
+              "title": "check_registry.schema rule 1"
+            }
+          },
+          "tool_ref": {
+            "description": "Опциональная ссылка на закреплённый инструмент из docs/registry/approved_tools.json.",
+            "pattern": "^TOOL-[A-Za-z0-9._-]+$",
+            "type": "string"
+          },
+          "timeout_seconds": {
+            "description": "опционально — предельное время выполнения.",
+            "exclusiveMinimum": 0,
+            "type": "number"
+          }
+        },
+        "required": ["id", "description", "argv", "approved_by", "approved_at"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "version": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": ["checks"],
+  "title": "Реестр утверждённых машинных проверок (trusted check registry)",
+  "type": "object"
+}
